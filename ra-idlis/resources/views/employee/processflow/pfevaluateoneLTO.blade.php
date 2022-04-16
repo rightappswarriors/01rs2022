@@ -159,13 +159,13 @@
               <input type="" id="token" value="{{ Session::token() }}" hidden>
               
               @if($office == 'xray')
-              <a href="{{asset('employee/dashboard/processflow/pre-assessment/FDA/xray')}}">
+              <button class="btn btn-primary" onclick="window.history.back();">Back</button>
               @elseif($office == 'pharma')
               <a href="{{asset('employee/dashboard/processflow/pre-assessment/FDA/pharma')}}">
               @else
                <a href="{{asset('/employee/dashboard/processflow/evaluate/technical')}}">
                @endif
-                   <button class="btn btn-primary" >Back</button></a>
+                 
                Evaluation 
                @if($office == 'pharma')
                     <div style="float: right;">
@@ -558,16 +558,27 @@
              } else {
                 let count = 0;
                 let tables = {!!$tables!!};
+
+                if(classTOCall == 'ApproveApplication'){
+                  approve = 1;
+                } else {
+                  approve = 0;
+                }
+
+                
+
                 ifCheck.forEach(function(index, el) {
                     // setTimeout(function () {
                       $.ajax({
                         url:'{{asset('employee/dashboard/processflow/LTO/evaluate/')}}',
                         method: "post",
-                        data: {_token:$("input[name=_token]").val(), appid:apid, table: tables[count], eval:ifCheck[count], remarks:chckRmrks[count]}
+                        data: {_token:$("input[name=_token]").val(), appid:apid, table: tables[count], eval:ifCheck[count], remarks:chckRmrks[count], approve: approve, requestFor: '{{$office}}'}
                       })
                     // }, 1000);
                   count++;
                 });
+
+
                 window[classTOCall]();
              }
               // if (allIsNull == false) {

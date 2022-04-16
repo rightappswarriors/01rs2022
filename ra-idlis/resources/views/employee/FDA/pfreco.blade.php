@@ -16,6 +16,8 @@
     $recoDate = $AppData->recommendeddateFDA;
     $recoIp = $AppData->recommendedippaddrFDA;
 
+    $preApproveTime = $AppData->preApproveTimeFDA;
+    $preApproveDate = $AppData->preApproveDateFDA;
 
     //order of payment
     $oop = $AppData->isPayEvalFDA;
@@ -24,16 +26,12 @@
     $oopDate = $AppData->payEvaldateFDA;
     $oopIp = $AppData->payEvalipFDA;
 
-
-
-
     //cashier
     $cashier = $AppData->isCashierApproveFDA;;
     $cashierEvalBy = $AppData->CashierApproveByFDA;
     $cashierTime = $AppData->CashierApproveTimeFDA;
     $cashierDate = $AppData->CashierApproveDateFDA;
     $cashierIp = $AppData->CashierApproveIpFDA;
-
 
     //approval
     $approve = $AppData->isApproveFDA;
@@ -49,7 +47,12 @@
     $recoDate = $AppData->recommendeddateFDAPharma;
     $recoIp = $AppData->recommendedippaddrFDAPharma;
 
+    $approveBy = $AppData->approvedByFDAPharma;
+    $approveTime = $AppData->approvedTimeFDAPharma;
+    $approveDate = $AppData->approvedDateFDAPharma;
 
+    $preApproveTime = $AppData->preApproveTimeFDAPharma;
+    $preApproveDate = $AppData->preApproveDateFDAPharma;
 
     //order of payment
     $oop = $AppData->isPayEvalFDAPharma;
@@ -58,16 +61,12 @@
     $oopDate = $AppData->payEvaldateFDAPharma;
     $oopIp = $AppData->payEvalipFDAPharma;
 
-
-
-
     //cashier
     $cashier = $AppData->isCashierApprovePharma;
     $cashierEvalBy = $AppData->CashierApproveByPharma;
     $cashierTime = $AppData->CashierApproveTimePharma;
     $cashierDate = $AppData->CashierApproveDatePharma;
     $cashierIp = $AppData->CashierApproveIpPharma;
-
 
     //approval
     $approve = $AppData->isApproveFDAPharma;
@@ -79,7 +78,7 @@
 
 ?>
 
-<div class="content p-4">
+<div class="content p-4 {{$AppData->appid}}">
     <div class="card">
         <div class="card-header bg-white font-weight-bold">
           @isset($APPID)<input type="text" id="APPID" value="{{$APPID}}" hidden>@endisset
@@ -120,7 +119,86 @@
             <div class="card-header @isset($AppData) @if($reco == null) list-group-item-info @elseif($reco == 1) list-group-item-success  @else list-group-item-danger @endif @endisset" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="">
               <div class="mb-0">
                 <button class="btn btn-link @isset($AppData) @if($reco == null) list-group-item-info @elseif($reco == 1) list-group-item-success  @else list-group-item-danger @endif @endisset" type="button" style="text-decoration:none">
-                  <h3>Evaluation</h3>
+                  <h3>Pre Assesment</h3>
+                </button>
+              </div>
+            </div>
+             {{-- END HEAD --}}
+             {{-- START BODY --}}
+            <div id="collapseOne"  class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-5">
+                      <table class="table table-borderless table-sm">
+                        <thead><tr><th width="40%"></th><th width="60%"></th></tr></thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">Status :</th>
+                            {{-- @isset($PreAss)<span style="color:green;font-weight: bolder">Already Taken</span>@else<span style="color:red;font-weight: bolder">Not yet taken</span>@endisset --}}
+                            <td>@isset($AppData) @if($reco == null) <span style="color:blue;font-weight: bolder">Not Evaluated</span> @elseif($reco == 1)<span style="color:green;font-weight: bolder">Accepted Evaluation</span>@else<span style="color:red;font-weight: bolder">Disapproved Evaluation</span>@endif @endisset</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Time :</th>
+                            <td>@isset($preApproveTime) <span style="color:green;font-weight: bolder">{{date('H:i A', strtotime($preApproveTime))}} </span> @else <span style="color:red;font-weight: bolder">Not Available</span> @endisset</td>
+                          </tr>
+                           <tr>
+                            <th scope="row">Date :</th>
+                            <td>@isset($preApproveDate) <span style="color:green;font-weight: bolder">{{date('M d, Y', strtotime($preApproveDate))}}</span> @else <span style="color:red;font-weight: bolder">Not Available</span> @endisset</td>
+                          </tr>
+                          
+                          <tr>
+                            <th scope="row">Evaluated by:</th>
+                            <td>@isset($recoEvalBy) <span style="color:green;font-weight: bolder">
+                            <!-- <td>isset($AppData->recommendedbyFDA) <span style="color:green;font-weight: bolder"> -->
+                            <!-- {{$AppData->recommendedbyFDA}} -->
+
+                            {{$AppData->evalby_pre}}
+                            {{$AppData->evalby_fname}}
+                            {{$AppData->evalby_lname}}
+                            {{$AppData->evalby_suf}}
+                            
+
+                             <!-- {{$AppData->recfdaval_pre}}
+                            {{$AppData->recfdaval_fname}}
+                            {{$AppData->recfdaval_lname}}
+                            {{$AppData->recfdaval_suf}} -->
+                            
+                          </span> @else <span style="color:red;font-weight: bolder">Not Available</span> @endisset</td>
+                            
+
+
+
+
+                           
+                            <!-- <td>@isset($AppData->recommendedbyFDA) <span style="color:green;font-weight: bolder">{{$AppData->recommendedbyFDA}}</span> @else <span style="color:red;font-weight: bolder">Not Available</span> @endisset</td> -->
+                            <!-- <td>@isset($AppData->recommendedbyFDA) <span style="color:green;font-weight: bolder">{{$AppData->recommendedbyFDA}}</span> @else <span style="color:red;font-weight: bolder">Not Available</span> @endisset</td> -->
+                          </tr> 
+                        </tbody>
+                      </table>   
+                  </div>
+                  <div class="col-sm-7">
+                    <center>
+                      @isset($AppData)
+                        @if($reco != null)
+                        <button class="btn btn-primarys" onclick="window.location.href='{{ asset('employee/dashboard/processflow/evaluate/') }}/{{$AppData->appid}}/xray'"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp;View Pre-Assesment</button>
+                        @else
+                        &nbsp;
+                        @endif
+                        @endisset
+                    </center>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {{-- END BODY --}}
+          </div>
+
+          <div class="card">
+            {{-- START HEAD --}}
+            <div class="card-header @isset($AppData) @if($reco == null) list-group-item-info @elseif($reco == 1) list-group-item-success  @else list-group-item-danger @endif @endisset" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="">
+              <div class="mb-0">
+                <button class="btn btn-link @isset($AppData) @if($reco == null) list-group-item-info @elseif($reco == 1) list-group-item-success  @else list-group-item-danger @endif @endisset" type="button" style="text-decoration:none">
+                  <h3>Inspection</h3>
                 </button>
               </div>
             </div>
@@ -168,15 +246,7 @@
                             {{$AppData->recfdaval_suf}} -->
                             
                           </span> @else <span style="color:red;font-weight: bolder">Not Available</span> @endisset</td>
-                            
-
-
-
-
-                           
-                            <!-- <td>@isset($AppData->recommendedbyFDA) <span style="color:green;font-weight: bolder">{{$AppData->recommendedbyFDA}}</span> @else <span style="color:red;font-weight: bolder">Not Available</span> @endisset</td> -->
-                            <!-- <td>@isset($AppData->recommendedbyFDA) <span style="color:green;font-weight: bolder">{{$AppData->recommendedbyFDA}}</span> @else <span style="color:red;font-weight: bolder">Not Available</span> @endisset</td> -->
-                          </tr> 
+                        </tr> 
                         </tbody>
                       </table>   
                   </div>
@@ -196,6 +266,7 @@
             </div>
             {{-- END BODY --}}
           </div>
+
           {{-- /////////////////// --}}
           {{-- /////////////////// --}}
          {{--  <div class="card">

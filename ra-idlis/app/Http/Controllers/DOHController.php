@@ -3851,9 +3851,40 @@ use FunctionsClientController;
 		public function evaluateLTOReq(Request $request){
 			try {
 				$ret = DB::table($request->table)->where('appid',$request->appid)->update(['evaluation' => $request->eval, 'remarks' => $request->remarks]);
+				
+
+				if($request->approve == 1){
+
+					$uData = AjaxController::getCurrentUserAllData();
+
+					if($request->requestFor == 'pharma'){ 
+						$forAppform = [
+							'preApproveTimeFDAPharma',
+							'preApproveDateFDAPharma'
+						];
+					}  else {
+						$forAppform = [
+							'preApproveTimeFDA',
+							'preApproveDateFDA'
+						];
+					}
+					
+					$answers = [
+						$uData['time'],
+						$uData['date']
+					];
+					
+					DB::table('appform')->where('appid', $request->appid)->update(array_combine($forAppform, $answers));
+
+				}
+				
+				
 				if($ret){
 					return 'done';
 				} 
+
+				
+
 				// else {
 				// 	return $request->all();
 				// 	return 'error';
@@ -7998,8 +8029,6 @@ use FunctionsClientController;
 						if(isset($canView[0])){
 							$canView[0] = false;
 						}
-
-						
 
 						if($chk->isRecoDecision != "Return for Correction"){
 

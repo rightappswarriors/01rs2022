@@ -1985,7 +1985,7 @@ use FunctionsClientController;
 				try 
 				{
 					$last = DB::table('region')->max('sort') + 1;
-					DB::table('region')->insert(['rgnid' => $request->id, 'rgn_desc' => $request->name, 'office' => $request->office, 'director' => $request->director, 'directorDesc' => $request->directorDesc, 'sort' => $last]);
+					DB::table('region')->insert(['rgnid' => $request->id, 'rgn_desc' => $request->name, 'office' => $request->office, 'address' => $request->address,  'director' => $request->director, 'iso_desc' => $request->iso_desc, 'directorDesc' => $request->directorDesc, 'sort' => $last]);
 					return 'DONE';
 				} 
 				catch (Exception $e) 

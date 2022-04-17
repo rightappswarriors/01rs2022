@@ -3758,6 +3758,8 @@ public function fdacertN(Request $request, $appid, $requestOfClient = null) {
 						case 'getChargesPerApplication':
 							$retArr1 = [];
 							if(isset($request->hgpid) && isset($request->aptid)) {
+
+								//var_dump($request); exit;
 								$retArr1 = FunctionsClientController::getChargesPerApplication($request->hgpid, $request->aptid, $request->hfser_id);
 								session()->put('appcharge', [FunctionsClientController::getSessionParamObj("uData", "uid") => [$retArr1, $request->appid]]);
 							}

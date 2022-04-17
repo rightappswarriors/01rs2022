@@ -213,7 +213,7 @@ class ClientDashboardController extends Controller
 
         $faclArr = [];
         $facl_grp = FACLGroup::where('hfser_id', $hfser_id)->select('hgpid')->get();
-		var_dump($facl_grp);
+		//var_dump($facl_grp);
         foreach ($facl_grp as $f) {
             array_push($faclArr, $f->hgpid);
         }

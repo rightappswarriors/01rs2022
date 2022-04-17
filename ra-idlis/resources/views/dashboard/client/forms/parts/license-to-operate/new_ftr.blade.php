@@ -206,11 +206,16 @@ var mserv_cap = JSON.parse('{!!addslashes($serv_cap)!!}')
 
 
     function getChargesPerApplication() {
+
+        //mhfser_id = Type of Application: LTO, COA, CON, PTC, COR, etc.
+        //document.getElementById("aptidnew").value or aptid: IN for initial or R for Renewal
         let sArr = ['_token=' + document.getElementsByName('_token')[0].value, 'appid=' + curAppid, 'aptid=' + document.getElementById("aptidnew").value, 'hfser_id=' + mhfser_id],
             ghgpid = document.getElementsByName('hgpid');
+           
         if (ghgpid != null || ghgpid != undefined) {
             for (let i = 0; i < ghgpid.length; i++) {
                 if (ghgpid[i].checked) {
+                    //ghgpid[i].value=Type of Facilities/Categories
                     sArr.push('hgpid[]=' + ghgpid[i].value);
                 }
             }
@@ -305,14 +310,19 @@ setTimeout(function(){
                     }
 
                 var l3 = document.getElementById("H3ADC");
+                
                     //if(l3 || chkad == 'yes'){
-                        if(l3.checked == true || chkad == 'yes'){
-                        document.getElementById("noDal").removeAttribute("hidden")
-                        document.getElementById("noDal").removeAttribute("class")
-                        }else{
-                            document.getElementById("noDal").setAttribute("hidden", "hidden")
-                            document.getElementById("noofdialysis").value = null;
+                        if(13!=null)
+                        {
+                            if(l3.checked == true || chkad == 'yes'){
+                            document.getElementById("noDal").removeAttribute("hidden")
+                            document.getElementById("noDal").removeAttribute("class")
+                            }else{
+                                document.getElementById("noDal").setAttribute("hidden", "hidden")
+                                document.getElementById("noofdialysis").value = null;
+                            }
                         }
+                        
                    // }else{
                     //        document.getElementById("noDal").setAttribute("hidden", "hidden")
                    //         document.getElementById("noofdialysis").value = null;
@@ -421,9 +431,10 @@ setTimeout(function(){
                                                             }
                                                             
                                                         }
+                                                        //Services Fee Display
                                                         if(distinctArr[i]['chgapp_id']){
                                                             ta.push({reference : distinctArr[i]['facname'],amount: amt, chgapp_id:  distinctArr[i]['chgapp_id'] }) //appcharge
-                                                            serv_chg.innerHTML += '<tr><td>' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas(subclass == "ND" ? 0 : (parseInt(amt)).toFixed(2)) + '</span></td></tr>';
+                                                            serv_chg.innerHTML += '<tr><td>test' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas(subclass == "ND" ? 0 : (parseInt(amt)).toFixed(2)) + '</span></td></tr>';
                                                         }
                                                 }
                                             }

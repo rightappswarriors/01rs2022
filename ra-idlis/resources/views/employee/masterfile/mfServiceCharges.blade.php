@@ -85,11 +85,10 @@
 		</div>
 	</div>
 	{{-- Add --}}
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-		<div class="modal-dialog" role="document">
+	<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-xl" role="document">
 			<div class="modal-content" style="border-radius: 0px;border: none;">
-				<div class="modal-body text-justify" style=" background-color: #272b30;
-				color: white;">
+				<div class="modal-body text-justify" >
 					<h5 class="modal-title text-center"><strong>Add New Service Charge</strong></h5>
 					<hr>
 					<div class="container">
@@ -142,7 +141,7 @@
 									@endforeach
 								</select>
 							</div>
-							<div class="col-sm-4">Hospital Level for for Hospital based:</div>
+							<div class="col-sm-4">Hospital Level:</div>
 							<div class="col-sm-8" style="margin:0 0 .8em 0;">
 								<select name="" id="extrahgpid" class="form-control">
 									<option value>Please select</option>
@@ -181,9 +180,24 @@
 							<div class="col-sm-8" style="margin:0 0 .8em 0;">
 								<input type="text" id="new_chg_rmks" class="form-control" data-parsley-required-message="*<strong>Charge</strong> required" disabled>
 							</div>
-							<div class="col-sm-4">Charge Amount:</div>
+							<div class="col-sm-4">Initial New Amt:</div>
 							<div class="col-sm-8" style="margin:0 0 .8em 0;">
 								<input type="text" id="new_chg_amt" class="form-control" data-parsley-required-message="*<strong>Charge</strong> required" disabled>
+							</div>
+
+							<div class="col-sm-4">Renewal Amount:</div>
+							<div class="col-sm-8" style="margin:0 0 .8em 0;">
+								<input type="text" id="new_chg_amt_renew" class="form-control" data-parsley-required-message="*<strong>Charge</strong> required" disabled>
+							</div>
+
+							<div class="col-sm-4">Renewable Period</div>
+							<div class="col-sm-8" style="margin:0 0 .8em 0;">
+								<input type="text" id="renew_year" class="form-control" data-parsley-required-message="*<strong>Charge</strong> required" disabled>
+							</div>
+
+							<div class="col-sm-4">Penalty</div>
+							<div class="col-sm-8" style="margin:0 0 .8em 0;">
+								<input type="checkbox" id="chk_penalty" class="form-control" data-parsley-required-message="*<strong>Charge</strong> required" >
 							</div>
 
 							{{-- <div class="col-sm-4">Update to:</div>
@@ -199,6 +213,9 @@
 									@endisset
 								</select>
 							</div> --}}
+							<div class="col-sm-12">
+								&nbsp;
+							</div> 
 							<div class="col-sm-12">
 								<button type="submit" class="btn btn-outline-success form-control"  style="border-radius:0;"><span class="fa fa-sign-up"></span>Save</button>
 							</div> 

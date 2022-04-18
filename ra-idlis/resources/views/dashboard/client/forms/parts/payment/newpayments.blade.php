@@ -23,7 +23,7 @@
                         <tr ><td colspan="2"><center><b>Facility Registration Fee</b></center></td></tr>
                         <tbody id="not_serv_chgN">
                             <tr>
-                                <td colspan="2">No Facility Type selected.</td>
+                                <td colspan="2">{{--- No Facility Type selected. ---}} </td>
                             </tr>
                         </tbody>
                         <tr ><td colspan="2"><center><b>Services Fee</b></center></td></tr>

@@ -456,6 +456,19 @@
                         </tbody>
                       </table>  
                   </div>
+                  <div class="col-sm-7">
+                    <center>
+
+                    @if(!$canjudge)
+                      <button type="button" onclick="$('#AccepttGodModal').modal('hide')" class="btn btn-primary" data-toggle="modal" data-target="#showCOCRLoption">Issue COC/RL</button>
+                      @else
+               
+
+                      <button class="btn btn-primarys" onclick="window.open('{{url('client1/fdacertificate/new/'.$AppData->appid.'/'.$request)}}', '_blank');"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp;View Certification</button>
+                      @endif
+                 
+                    </center>
+                  </div>
                 </div>
               </div>
             </div>
@@ -838,21 +851,13 @@
                     </div> --}}
                     @endif
 
-                    <div class="row pt-3">
+                    {{-- <div class="row pt-3">
                        <div class="col-sm-4">COC/RL:<span style="color:red;font-weight: bolder">*</span> </div>
                         <div class="col-sm-8" id="acceptCert">
-                          @if(!$canjudge)
-                          <button type="button" onclick="$('#AccepttGodModal').modal('hide')" class="btn btn-primary" data-toggle="modal" data-target="#showCOCRLoption">Issue COC/RL</button>
-                          @else
-                          <div class="text-center text-success">
-                            <i class="fa fa-check-circle" aria-hidden="true"> Already Issued Certificate</i><br>
-                            <a href="{{url('client1/fdacertificate/new/'.$AppData->appid.'/'.$request)}}" target="_blank">View Certificate</a>
-                            <!-- <a href="{{url('client1/fdacertificate/'.$AppData->appid.'/'.$request)}}" target="_blank">View Certificate</a> -->
-                          </div>
-                          @endif
+                          
 
                         </div>
-                    </div>
+                    </div> --}}
 
                   
                 <hr>

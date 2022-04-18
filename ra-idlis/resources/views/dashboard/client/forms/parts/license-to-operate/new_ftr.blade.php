@@ -147,6 +147,7 @@ var mserv_cap = JSON.parse('{!!addslashes($serv_cap)!!}')
         })
     }
    
+    //display subfacilities/services/add ons
     function type_of_fac(selected) {
         
         var nm = document.getElementById("noofmain")
@@ -197,6 +198,7 @@ var mserv_cap = JSON.parse('{!!addslashes($serv_cap)!!}')
             document.getElementById("noofdialysis").value = null;
         }
         
+        //No charges with subclasses
          if(selected != 5) 
          {
 			// alert('getcharges here');
@@ -220,7 +222,7 @@ var mserv_cap = JSON.parse('{!!addslashes($serv_cap)!!}')
                 }
             }
         }
-     
+        
         sendRequestRetArr(sArr, "{{asset('client1/request/customQuery/getChargesPerApplication')}}", "POST", true, {
             functionProcess: function(arr) {
 
@@ -246,7 +248,7 @@ var mserv_cap = JSON.parse('{!!addslashes($serv_cap)!!}')
                         not_serv_chg.innerHTML = '';
                         for (let i = 0; i < arr.length; i++) {
                             ta.push({reference : distinctArr[i]['chg_desc'],amount: distinctArr[i]['amt'], chgapp_id:  distinctArr[i]['chgapp_id'] }) //appcharge
-                            not_serv_chg.innerHTML += '<tr><td>' + distinctArr[i]['chg_desc'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas(subclass == "ND" ? 0 : (parseInt(distinctArr[i]['amt'])).toFixed(2)) + '</span></td></tr>';
+                            not_serv_chg.innerHTML += '<tr><td>[' + distinctArr[i]['chgapp_id'] +' '+ distinctArr[i]['chg_code'] + ']' + distinctArr[i]['chg_desc'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas(subclass == "ND" ? 0 : (parseInt(distinctArr[i]['amt'])).toFixed(2)) + '</span></td></tr>';
                         }
                     } else {
                         not_serv_chg.innerHTML = '<tr><td colspan="2">Chosen facility has no Registration fee Required.</td></tr>';
@@ -355,6 +357,7 @@ setTimeout(function(){
         var arrCol2 = anxsel;
 
         let serv_chg = document.getElementById('serv_chg');
+
 				if(arrCol.length > 0){
 					let thisFacid = [], appendToPayment = ['groupThis'], hospitalFaci = ['H','H2','H3'];
 					let sArr = ['_token='+document.getElementsByName('_token')[0].value, 'appid='+curAppid, 'hfser_id='+mhfser_id, 'aptid='+ document.getElementById("aptidnew").value];
@@ -434,7 +437,7 @@ setTimeout(function(){
                                                         //Services Fee Display
                                                         if(distinctArr[i]['chgapp_id']){
                                                             ta.push({reference : distinctArr[i]['facname'],amount: amt, chgapp_id:  distinctArr[i]['chgapp_id'] }) //appcharge
-                                                            serv_chg.innerHTML += '<tr><td>test' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas(subclass == "ND" ? 0 : (parseInt(amt)).toFixed(2)) + '</span></td></tr>';
+                                                            serv_chg.innerHTML += '<tr><td>['  + distinctArr[i]['chgapp_id'] + '] ' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas(subclass == "ND" ? 0 : (parseInt(amt)).toFixed(2)) + '</span></td></tr>';
                                                         }
                                                 }
                                             }

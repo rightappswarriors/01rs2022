@@ -5,7 +5,7 @@
 <head>
 
 	<title>@yield('title') | Integrated DOH Online Licensing and Regulatory System</title>
-
+	
 	@include('employee.cmp._head') {{-- LINKS --}}
 
 	@include('employee.cmp._style') {{-- CUSTOM STYLES --}}

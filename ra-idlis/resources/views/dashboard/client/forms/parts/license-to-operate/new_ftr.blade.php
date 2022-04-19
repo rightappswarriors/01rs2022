@@ -437,7 +437,7 @@ setTimeout(function(){
                                                         //Services Fee Display
                                                         if(distinctArr[i]['chgapp_id']){
                                                             ta.push({reference : distinctArr[i]['facname'],amount: amt, chgapp_id:  distinctArr[i]['chgapp_id'] }) //appcharge
-                                                            serv_chg.innerHTML += '<tr><td>['  + distinctArr[i]['chgapp_id'] + '] ' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas(subclass == "ND" ? 0 : (parseInt(amt)).toFixed(2)) + '</span></td></tr>';
+                                                            serv_chg.innerHTML += '<tr><td>[<strong>'  + distinctArr[i]['chgapp_id'] + '</strong>] ' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas(subclass == "ND" ? 0 : (parseInt(amt)).toFixed(2)) + '</span></td></tr>';
                                                         }
                                                 }
                                             }

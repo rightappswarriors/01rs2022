@@ -2005,8 +2005,8 @@ public static function checkConmem($appid)
 		{
 			try 
 			{
-				$data = DB::table('forAmbulance')
-				->join('hfaci_grp','hfaci_grp.hgpid','forAmbulance.hgpid')
+				$data = DB::table('forambulance')
+				->join('hfaci_grp','hfaci_grp.hgpid','forambulance.hgpid')
 				->select($select)
 				->get();
 				return ($tojson ? json_encode($data) : $data);

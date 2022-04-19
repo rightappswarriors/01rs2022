@@ -1985,7 +1985,7 @@ use FunctionsClientController;
 				try 
 				{
 					$last = DB::table('region')->max('sort') + 1;
-					DB::table('region')->insert(['rgnid' => $request->id, 'rgn_desc' => $request->name, 'office' => $request->office, 'address' => $request->address,  'director' => $request->director, 'iso_desc' => $request->iso_desc, 'directorDesc' => $request->directorDesc, 'sort' => $last]);
+					DB::table('region')->insert(['rgnid' => $request->id, 'rgn_desc' => $request->name, 'office' => $request->office, 'director' => $request->director, 'directorDesc' => $request->directorDesc, 'sort' => $last]);
 					return 'DONE';
 				} 
 				catch (Exception $e) 
@@ -2209,6 +2209,7 @@ use FunctionsClientController;
 					$data3 = AjaxController::getAllApplicationStatus();
 					$data4 = AjaxController::getAllCategory();
 					$data5 = AjaxController::getAllApplicationType();
+					
 					return view('employee.masterfile.mfManageCharges', ['OOPs'=>$data1, 'Chrgs' => $data2, 'BigData' => $data, 'TotalNumber' => count($data), 'IniRen' => $data3,'Cats' => $data4, 'Hfaci'=>$data5]);
 				} 
 				catch (Exception $e) 
@@ -2445,7 +2446,7 @@ use FunctionsClientController;
 				if(!isset($request->action)){
 					try 
 					{
-						$id = DB::table('forAmbulance')->insertGetId(['hgpid'=> $request->name]);
+						$id = DB::table('forambulance')->insertGetId(['hgpid'=> $request->name]);
 						return $id;
 					} 
 					catch (Exception $e) {
@@ -2453,7 +2454,7 @@ use FunctionsClientController;
 						return 'ERROR';
 					}
 				} else if(strtolower($request->action) == 'delete'){
-					return DB::table('forAmbulance')->where('ambid',$request->id)->delete();
+					return DB::table('forambulance')->where('ambid',$request->id)->delete();
 				}
 			}
 		}
@@ -2788,7 +2789,6 @@ use FunctionsClientController;
 					->get();
 
 // hew
-
 					return view('employee.masterfile.mfServiceFees', ['factypes' =>$allfactypes,'data' =>$data,'allcat' =>$allcat,'type' =>"service", 'hfser'=>$allapptye, 'apptype'=>$allapptye]);
 				} 
 				catch (Exception $e) 
@@ -2817,7 +2817,7 @@ use FunctionsClientController;
 
 					$allcat = DB::table('hfaci_grp')->select('hfaci_grp.*')->get();
 					// $allcat = DB::table('category')->select('category.*')->get();
-
+					$allapptye = AjaxController::getAllApplicationType();
 
 					$data = DB::table('service_fees')
 					->leftJoin('hfaci_grp', 'service_fees.service_id', '=', 'hfaci_grp.hgpid' )
@@ -2837,7 +2837,7 @@ use FunctionsClientController;
 
 
 
-					return view('employee.masterfile.mfCategoryFees', ['factypes' =>$allfactypes,'data' =>$data,'allcat' =>$allcat,'type' =>"category"]);
+					return view('employee.masterfile.mfCategoryFees', ['factypes' =>$allfactypes,'data' =>$data,'allcat' =>$allcat,'type' =>"category", 'apptype'=>$allapptye]);
 				} 
 				catch (Exception $e) 
 				{
@@ -3851,40 +3851,9 @@ use FunctionsClientController;
 		public function evaluateLTOReq(Request $request){
 			try {
 				$ret = DB::table($request->table)->where('appid',$request->appid)->update(['evaluation' => $request->eval, 'remarks' => $request->remarks]);
-				
-
-				if($request->approve == 1){
-
-					$uData = AjaxController::getCurrentUserAllData();
-
-					if($request->requestFor == 'pharma'){ 
-						$forAppform = [
-							'preApproveTimeFDAPharma',
-							'preApproveDateFDAPharma'
-						];
-					}  else {
-						$forAppform = [
-							'preApproveTimeFDA',
-							'preApproveDateFDA'
-						];
-					}
-					
-					$answers = [
-						$uData['time'],
-						$uData['date']
-					];
-					
-					DB::table('appform')->where('appid', $request->appid)->update(array_combine($forAppform, $answers));
-
-				}
-				
-				
 				if($ret){
 					return 'done';
 				} 
-
-				
-
 				// else {
 				// 	return $request->all();
 				// 	return 'error';
@@ -8029,6 +7998,8 @@ use FunctionsClientController;
 						if(isset($canView[0])){
 							$canView[0] = false;
 						}
+
+						
 
 						if($chk->isRecoDecision != "Return for Correction"){
 

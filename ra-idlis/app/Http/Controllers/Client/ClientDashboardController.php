@@ -226,7 +226,7 @@ class ClientDashboardController extends Controller
         // $apptype = $appGet ? $appGet[0]->hfser_id : null;
 
         $proceesedAmb = [];
-        foreach (AjaxController::getForAmbulanceList(false, 'forAmbulance.hgpid') as $key => $value) {
+        foreach (AjaxController::getForAmbulanceList(false, 'forambulance.hgpid') as $key => $value) {
             array_push($proceesedAmb, $value->hgpid);
         }
 

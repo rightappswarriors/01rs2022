@@ -2009,6 +2009,7 @@ public static function checkConmem($appid)
 				->join('hfaci_grp','hfaci_grp.hgpid','forambulance.hgpid')
 				->select($select)
 				->get();
+				
 				return ($tojson ? json_encode($data) : $data);
 			} 
 			catch (Exception $e) 

@@ -530,7 +530,7 @@ use FunctionsClientController;
 			{
 				$updateData = array('token'=>NULL);
 				$table = DB::table("x08")->where("token", "=", $id)->update($updateData);
-				
+
 				if ($table) // Check if x08 is Updated
 				{
 					session()->flash('dohUser_logout','Successfully verified account');
@@ -7824,15 +7824,28 @@ use FunctionsClientController;
 		{
 			try 
 			{
-				$Cur_useData = AjaxController::getCurrentUserAllData();
-				$data = AjaxController::getAllApplicantsProcessFlow();
-				return view('employee.processflow.pfapproval', ['BigData'=>$data,'uilastname'=> $Cur_useData['lastname'],'uiposition'=> $Cur_useData['position'],'uirgnid'=> $Cur_useData['rgnid'] ]);
+				if(session()->has('employee_login')){
+					
+					$Cur_useData = AjaxController::getCurrentUserAllData();
+					//dd($Cur_useData);
+					$data = AjaxController::getAllApplicantsProcessFlow();
+					return view('employee.processflow.pfapproval', ['BigData'=>$data,'uilastname'=> $Cur_useData['lastname'],'uiposition'=> $Cur_useData['position'],'uirgnid'=> $Cur_useData['rgnid'] ]);
+				}
+				else {
+					return redirect()->route('employee');
+				}
+				
 			} 
 			catch (Exception $e) 
 			{
-				AjaxController::SystemLogs($e);
-				session()->flash('system_error','ERROR');
-				return view('employee.processflow.pfapproval');
+				if(session()->has('employee_login')){
+					AjaxController::SystemLogs($e);
+					session()->flash('system_error','ERROR');
+					return view('employee.processflow.pfapproval');
+				}
+				else {
+					return redirect()->route('employee');
+				}
 			}
 		}
 		public function RecommendationProcessFlowFDA(Request $request, $clientRequest = 'machines')
@@ -7899,12 +7912,12 @@ use FunctionsClientController;
 					}
 					$canView = AjaxController::canViewFDAOOP($appid);
 					$data2 = AjaxController::getAssignedMembersInTeam4Recommendation($appid);
-					 dd($data);
+					 //dd($data);
 					return view('employee.processflow.pfapprovalone', ['AppData'=>$data,'apdat'=>$apdata,/*'PreAss'=>$data1, */'APPID' => $appid, 'Teams4theApplication' => $data2, 'otherDetails' => $otherDetails, 'canView' => $canView, 'hfser_id' => $data->hfser_id]);
 				} 
 				catch (Exception $e) 
 				{
-					dd($e);
+					//dd($e);
 					AjaxController::SystemLogs($e);
 					session()->flash('system_error','ERROR');
 					return view('employee.processflow.pfapprovalone');
@@ -8042,7 +8055,7 @@ use FunctionsClientController;
 				} 
 				catch (Exception $e) 
 				{
-					dd($e);
+					//dd($e);
 					AjaxController::SystemLogs($e);
 					session()->flash('system_error','ERROR');
 					return view('employee.FDA.pfreco');
@@ -8235,7 +8248,7 @@ use FunctionsClientController;
 				} 
 				catch (Exception $e) 
 				{
-					dd($e);
+					//dd($e);
 					AjaxController::SystemLogs($e);
 					session()->flash('system_error','ERROR');
 					return view('employee.FDA.pfapprovaloneFDA');
@@ -8619,7 +8632,7 @@ use FunctionsClientController;
 					} 
 					catch (Exception $e) 
 					{
-						dd($e);
+						//dd($e);
 						AjaxController::SystemLogs($e);
 						session()->flash('system_error', 'ERROR');
 						return view('employee.others.Monitoring')	;
@@ -8935,7 +8948,7 @@ use FunctionsClientController;
 				} 
 				catch (Exception $e) 
 				{
-					dd($e);
+					//dd($e);
 					AjaxController::SystemLogs($e);
 					session()->flash('system_error', 'ERROR');
 					return view('employee.others.Monitoring')	;

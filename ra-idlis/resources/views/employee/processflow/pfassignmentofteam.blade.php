@@ -17,8 +17,8 @@
       <div class="card">
           <div class="card-header bg-white font-weight-bold">
              Assignment of Teams
-             <a style="float: right;" href="https://idlis.infoadvance.com.ph/employee/dashboard/mf/team" class="btn btn-primary"> Team</a>
-             <a style="float: right; margin-left:10px;" href="https://idlis.infoadvance.com.ph/employee/dashboard/mf/manage/teams" class="btn btn-primary"> Manage Team</a>
+             <a style="float: right; margin-left:10px;" href="https://idlis.infoadvance.com.ph/employee/dashboard/mf/team" class="btn btn-primary"> Team</a>
+             <a style="float: right;" href="https://idlis.infoadvance.com.ph/employee/dashboard/mf/manage/teams" class="btn btn-primary"> Manage Team</a>
                      
           </div>
           <div class="card-body table-responsive">

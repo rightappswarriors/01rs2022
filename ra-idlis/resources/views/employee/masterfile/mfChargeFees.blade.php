@@ -187,7 +187,41 @@
 
                 <div class="col-lg-6">
                   <div class="row">
-                    <div class="col-lg-4">Hospital Level</div>
+                    <div class="col-lg-4">Hospital Level:</div>
+                    <div class="col-lg-8" style="margin:0 0 .8em 0;">
+                      <select class="form-control" id="new_cat" data-parsley-required-message="*<strong>Category</strong> required" required>
+                          <option value="">Select Category ...</option>
+                          @if ($Categorys)
+                            @foreach ($Categorys as $data)
+                              <option value="{{$data->cat_id}}">{{$data->cat_id}} - {{$data->cat_desc}} </option>
+                            @endforeach
+                      @endif
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-12 row">
+                <div class="col-lg-6">
+                   <div class="row">
+                    <div class="col-lg-4">Ownership:</div>
+                    <div class="col-lg-8" style="margin:0 0 .8em 0;">
+                      <select class="form-control" id="new_hgpid" data-parsley-required-message="*<strong>Category</strong> required" required>
+                          <option value="">Select Facility Type ...</option>
+                          @if ($Facility)
+                            @foreach ($Facility as $data1)
+                              <option value="{{$data1->hgpid}}">{{$data1->hgpdesc}} </option>
+                            @endforeach
+                      @endif
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="row">
+                    <div class="col-lg-4">Character</div>
                     <div class="col-lg-8" style="margin:0 0 .8em 0;">
                       <select class="form-control" id="new_cat" data-parsley-required-message="*<strong>Category</strong> required" required>
                           <option value="">Select Category ...</option>
@@ -222,37 +256,103 @@
                 </div>
               </div>
 
-              <div class="col-lg-4">Explanation:</div>
-              <div class="col-lg-8" style="margin:0 0 .8em 0;">
-              <textarea type="text" rows="4" id="new_explanation" class="form-control" data-parsley-required-message="*<strong>Explanation</strong> required" required></textarea>
-              </div>
 
-              <div class="col-lg-4">Remarks:</div>
-              <div class="col-lg-8" style="margin:0 0 .8em 0;">
-              <textarea type="text" rows="2" id="new_remark" class="form-control"></textarea>
+              <div class="col-lg-12 row">
+                <div class="col-lg-6">
+                  <div class="row">
+                    <div class="col-lg-4">Explanation:</div>
+                    <div class="col-lg-8" style="margin:0 0 .8em 0;">
+                    <textarea type="text" rows="4" id="new_explanation" class="form-control" data-parsley-required-message="*<strong>Explanation</strong> required" required></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="row">
+                    <div class="col-lg-4">Remarks:</div>
+                    <div class="col-lg-8" style="margin:0 0 .8em 0;">
+                    <textarea type="text" rows="4" id="new_remark" class="form-control"></textarea>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               
-             
-              <div class="col-lg-4">for Floor Plan Re-Evaluation?:</div>
-              <div class="col-lg-8 d-flex justify-content-center" style="margin:0 0 .8em 0;">
-                <div class="row">
-                  <div class="col-lg-6">
-                    {{-- <div class="row"> --}}
-                      <div class="col-md">
-                        <label class="form-check-label" for="exampleRadios1">
-                          Yes
-                          <input type="radio" class="form-control" id="exampleRadios1" name="isAssess" value="1">
-                        </label>
+              <div class="col-lg-12 row">
+                <div class="col-lg-6">
+                  <div class="row">
+                    <div class="col-lg-4">for Floor Plan?:</div>
+                    <div class="col-lg-8 d-flex justify-content-center" style="margin:0 0 .8em 0;">
+                      <div class="row">
+                        <div class="col-lg-6">
+                          {{-- <div class="row"> --}}
+                            <div class="col-md">
+                              <label class="form-check-label" for="exampleRadios1">
+                                Yes
+                                <input type="radio" class="form-control" id="exampleRadios1" name="isAssess" value="1">
+                              </label>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="col-md">
+                              <label class="form-check-label" for="exampleRadios2">
+                                No
+                                <input type="radio" class="form-control" id="exampleRadios2" name="isAssess" value="0" checked="">
+                              </label>
+                            </div>
+                        </div>
                       </div>
+                    </div>                    
                   </div>
-                  <div class="col-lg-6">
-                      <div class="col-md">
-                        <label class="form-check-label" for="exampleRadios2">
-                          No
-                          <input type="radio" class="form-control" id="exampleRadios2" name="isAssess" value="0" checked="">
-                        </label>
-                      </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="row">
+                    <div class="col-lg-4">For Monitoring?</div>
+                    <div class="col-lg-8" style="margin:0 0 .8em 0;">
+                      <input type="text" id="new_rgn_desc" class="form-control" data-parsley-required-message="*<strong>For Monitoring</strong> required" required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-12 row">
+                <div class="col-lg-6">
+                  <div class="row">
+                    <div class="col-lg-4"><input class="form-control" type="checkbox">&nbsp;Initial New</div>
+                    <div class="col-lg-8">
+                      <input type="text" id="new_rgn_desc" class="form-control" data-parsley-required-message="*<strong>Initial New Amount</strong> required" required>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="row">
+                    <div class="col-lg-4"><input class="form-control" type="checkbox">&nbsp;Initial Change</div>
+                    <div class="col-lg-8">
+                      <input type="text" id="new_rgn_desc" class="form-control" data-parsley-required-message="*<strong>Initial Change Amount</strong> required" required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-12 row">
+                <div class="col-lg-6">
+                  <div class="row">
+                    <div class="col-lg-4"><input class="form-control" type="checkbox">&nbsp;Renewal</div>
+                    <div class="col-lg-8">
+                      <input type="text" id="new_rgn_desc" class="form-control" data-parsley-required-message="*<strong>Renewal Amount</strong> required" required>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="row">
+                    <div class="col-lg-4"><input class="form-control" type="checkbox">&nbsp;Penalty</div>
+                    <div class="col-lg-8">
+                      <input type="text" id="new_rgn_desc" class="form-control" data-parsley-required-message="*<strong>Penalty Amount</strong> required" required>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -263,6 +363,7 @@
                 <button type="submit" class="btn btn-success form-control"  style="border-radius:0;"><span class="fa fa-sign-up"></span>Save</button>
               </div> 
             </form>
+            
          </div>
         </div>
       </div>

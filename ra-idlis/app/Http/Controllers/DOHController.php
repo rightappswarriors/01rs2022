@@ -428,49 +428,55 @@ use FunctionsClientController;
 			
 			try 
 			{	
-				// dd(AjaxController::isPasswordExpired('abfhospital'));
-				// dd(AjaxController::getAllFromCond('x08',['']));
-				$Cur_data = AjaxController::getCurrentUserAllData();
-				//dd($Cur_data);
-				$data = AjaxController::getAllApplicants($Cur_data['grpid']);
-				
-				foreach ($data as $key => $value) {
-					if(!in_array($value->status, $filterer)){
-						$filterer[$value->status]['color'] = $value->statColor;
-						$filterer[$value->status]['original'] = $value->trns_desc;
-						$filterer[$value->status]['statID'] = $value->status;
+				if(session()->has('employee_login')){				
+					// dd(AjaxController::isPasswordExpired('abfhospital'));
+					// dd(AjaxController::getAllFromCond('x08',['']));
+					$Cur_data = AjaxController::getCurrentUserAllData();
+					//dd($Cur_data);
+					$data = AjaxController::getAllApplicants($Cur_data['grpid']);
+					
+					foreach ($data as $key => $value) {
+						if(!in_array($value->status, $filterer)){
+							$filterer[$value->status]['color'] = $value->statColor;
+							$filterer[$value->status]['original'] = $value->trns_desc;
+							$filterer[$value->status]['statID'] = $value->status;
+						}
 					}
-				}
-				$dataJson = json_decode($data, true);
-				$allID = array();
-				
-				foreach ($data as $key) {
-					$curAppid = $key->appid;
-					array_push($allID, [DB::select("SELECT hgpdesc FROM hfaci_grp WHERE hgpid IN (SELECT hgpid FROM facilitytyp WHERE facid IN (SELECT facid FROM x08_ft WHERE appid = '$curAppid') GROUP BY hgpid)"), DB::select("SELECT facname FROM facilitytyp WHERE facid IN (SELECT facid FROM x08_ft WHERE appid = '$curAppid')")]);
-				}
-				// dd($data);
-				$x08 = FunctionsClientController::getCol('x08', [['uid', FunctionsClientController::getSessionParamObj('employee_login', 'uid')]]);
-		        $grp = ((count($x08) > 0) ? FunctionsClientController::getCol('x07', [['grp_id', $x08[0]->grpid]]) : []);
+					$dataJson = json_decode($data, true);
+					$allID = array();
+					
+					foreach ($data as $key) {
+						$curAppid = $key->appid;
+						array_push($allID, [DB::select("SELECT hgpdesc FROM hfaci_grp WHERE hgpid IN (SELECT hgpid FROM facilitytyp WHERE facid IN (SELECT facid FROM x08_ft WHERE appid = '$curAppid') GROUP BY hgpid)"), DB::select("SELECT facname FROM facilitytyp WHERE facid IN (SELECT facid FROM x08_ft WHERE appid = '$curAppid')")]);
+					}
+					// dd($data);
+					$x08 = FunctionsClientController::getCol('x08', [['uid', FunctionsClientController::getSessionParamObj('employee_login', 'uid')]]);
+					$grp = ((count($x08) > 0) ? FunctionsClientController::getCol('x07', [['grp_id', $x08[0]->grpid]]) : []);
 
-		        $hfaci_serv_type = DB::table('hfaci_serv_type')->get();
-		        $surv = AjaxController::getAllSurveillanceForm();
-		        $mon = AjaxController::getAllMonitoringForm();
-		        $new_data = array("surv"=>$surv, "mon"=>$mon);
+					$hfaci_serv_type = DB::table('hfaci_serv_type')->get();
+					$surv = AjaxController::getAllSurveillanceForm();
+					$mon = AjaxController::getAllMonitoringForm();
+					$new_data = array("surv"=>$surv, "mon"=>$mon);
 
-				$employeeData = session('employee_login');
-                $grpid = isset($employeeData->grpid) ? $employeeData->grpid : 'NONE';
+					$employeeData = session('employee_login');
+					$grpid = isset($employeeData->grpid) ? $employeeData->grpid : 'NONE';
 
-				if($grpid == 'NA'){
-					$appcount = DB::select("SELECT COUNT(appid) as ctr, hfser_id FROM `appform` WHERE savingStat = 'final' GROUP BY hfser_id");
-				}else{
-					$appcount = DB::select("SELECT COUNT(appid) as ctr, hfser_id FROM `appform` WHERE savingStat = 'final' AND assignedRgn = '".$employeeData->rgnid."' GROUP BY hfser_id");
+					if($grpid == 'NA'){
+						$appcount = DB::select("SELECT COUNT(appid) as ctr, hfser_id FROM `appform` WHERE savingStat = 'final' GROUP BY hfser_id");
+					}else{
+						$appcount = DB::select("SELECT COUNT(appid) as ctr, hfser_id FROM `appform` WHERE savingStat = 'final' AND assignedRgn = '".$employeeData->rgnid."' GROUP BY hfser_id");
+					}
+					
+					return view('employee.dashboard', ['BigData'=> $data, 'grpid' => $Cur_data['grpid'], 'subdesc' => $allID, 'filters' => $filterer, 'n_grpid' => $x08, 'r_grpid' => $grp, 'hfaci_serv_type'=>$hfaci_serv_type, 'new_data'=>$new_data, 'appcount'=>$appcount]);
 				}
-				
-				return view('employee.dashboard', ['BigData'=> $data, 'grpid' => $Cur_data['grpid'], 'subdesc' => $allID, 'filters' => $filterer, 'n_grpid' => $x08, 'r_grpid' => $grp, 'hfaci_serv_type'=>$hfaci_serv_type, 'new_data'=>$new_data, 'appcount'=>$appcount]);
+				else {
+					return redirect()->route('employee');
+				}
+			
 			} 
 			catch (Exception $e) 
 			{
-				dd($e);
+				//dd($e);
 				// return $e->getMessage();
 				AjaxController::SystemLogs($e);
 				session()->flash('system_error','ERROR');
@@ -482,10 +488,12 @@ use FunctionsClientController;
 			try 
 			{
 				$data = DB::table('x08')->where('uid', '=', $id)->first();
+
 				if ($data) // Check if user is registered
 				{
 					$name = AjaxController::NameSorter($data->fname, $data->fname, $data->lname);
 					$dataToBeSend = array('name'=>$name, 'token'=>$data->token);
+
 					try 
 					{
 						Mail::send('mail4SystemUsers', $dataToBeSend, function($message) use ($data) 
@@ -522,6 +530,7 @@ use FunctionsClientController;
 			{
 				$updateData = array('token'=>NULL);
 				$table = DB::table("x08")->where("token", "=", $id)->update($updateData);
+				
 				if ($table) // Check if x08 is Updated
 				{
 					session()->flash('dohUser_logout','Successfully verified account');
@@ -2757,43 +2766,49 @@ use FunctionsClientController;
 			// {
 				try  // mfServiceCharges
 				{
-					$allfactypes = DB::table('facilitytyp')
-					->leftJoin('facilitytyp as specified', 'specified.facid', '=', 'facilitytyp.specified' )
-					->leftJoin('serv_type', 'facilitytyp.servtype_id', '=', 'serv_type.servtype_id' )
-					->leftJoin('hfaci_grp', 'facilitytyp.hgpid', '=', 'hfaci_grp.hgpid' )
-					->select('facilitytyp.*', 'specified.facname as spec', 'hfaci_grp.hgpdesc', 'serv_type.anc_name')
-					->orderBy('facilitytyp.facname')
-					->get();
-
-					$allcat = DB::table('category')->select('category.*')->get();
+					if(session()->has('employee_login')){
 					
-					$allapptye = AjaxController::getAllApplicationType();
+						$allfactypes = DB::table('facilitytyp')
+						->leftJoin('facilitytyp as specified', 'specified.facid', '=', 'facilitytyp.specified' )
+						->leftJoin('serv_type', 'facilitytyp.servtype_id', '=', 'serv_type.servtype_id' )
+						->leftJoin('hfaci_grp', 'facilitytyp.hgpid', '=', 'hfaci_grp.hgpid' )
+						->select('facilitytyp.*', 'specified.facname as spec', 'hfaci_grp.hgpdesc', 'serv_type.anc_name')
+						->orderBy('facilitytyp.facname')
+						->get();
 
+						$allcat = DB::table('category')->select('category.*')->get();
+						
+						$allapptye = AjaxController::getAllApplicationType();
 
-					$data = DB::table('service_fees')
-					->leftJoin('facilitytyp', 'service_fees.service_id', '=', 'facilitytyp.facid' )
-					->leftJoin('facilitytyp as specified', 'specified.facid', '=', 'facilitytyp.specified' )
-					->leftJoin('serv_type', 'facilitytyp.servtype_id', '=', 'serv_type.servtype_id' )
-					->leftJoin('hfaci_grp', 'facilitytyp.hgpid', '=', 'hfaci_grp.hgpid')
-					->leftJoin('facmode', 'service_fees.facmode', '=', 'facmode.facmid')
-					->leftJoin('funcapf', 'service_fees.funcid', '=', 'funcapf.funcdesc')
-					->where('service_fees.type', 'service')
-					->select('service_fees.*', 'facilitytyp.*', 
-					'specified.facname as spec', 'hfaci_grp.hgpdesc', 'serv_type.anc_name','facmode.facmdesc', 'funcapf.funcdesc',
-					)
-					
-					// ->select('service_fees.*', 'facilitytyp.*', 
-					// 'specified.facname as spec', 'hfaci_grp.hgpdesc', 'serv_type.anc_name','facmode.facmdesc', 'funcapf.funcdesc',
-					// DB::raw('CONCAT(user_details.first_name," " , user_details.last_name) as prepare')
-					// )
-					->get();
+						$data = DB::table('service_fees')
+						->leftJoin('facilitytyp', 'service_fees.service_id', '=', 'facilitytyp.facid' )
+						->leftJoin('facilitytyp as specified', 'specified.facid', '=', 'facilitytyp.specified' )
+						->leftJoin('serv_type', 'facilitytyp.servtype_id', '=', 'serv_type.servtype_id' )
+						->leftJoin('hfaci_grp', 'facilitytyp.hgpid', '=', 'hfaci_grp.hgpid')
+						->leftJoin('facmode', 'service_fees.facmode', '=', 'facmode.facmid')
+						->leftJoin('funcapf', 'service_fees.funcid', '=', 'funcapf.funcdesc')
+						->where('service_fees.type', 'service')
+						->select('service_fees.*', 'facilitytyp.*', 
+						'specified.facname as spec', 'hfaci_grp.hgpdesc', 'serv_type.anc_name','facmode.facmdesc', 'funcapf.funcdesc',
+						)
+						
+						// ->select('service_fees.*', 'facilitytyp.*', 
+						// 'specified.facname as spec', 'hfaci_grp.hgpdesc', 'serv_type.anc_name','facmode.facmdesc', 'funcapf.funcdesc',
+						// DB::raw('CONCAT(user_details.first_name," " , user_details.last_name) as prepare')
+						// )
+						->get();
 
-// hew
-					return view('employee.masterfile.mfServiceFees', ['factypes' =>$allfactypes,'data' =>$data,'allcat' =>$allcat,'type' =>"service", 'hfser'=>$allapptye, 'apptype'=>$allapptye]);
+						// hew
+						return view('employee.masterfile.mfServiceFees', ['factypes' =>$allfactypes,'data' =>$data,'allcat' =>$allcat,'type' =>"service", 'hfser'=>$allapptye, 'apptype'=>$allapptye]);
+					}
+					else {
+						return redirect()->route('employee');
+					}
+				
 				} 
 				catch (Exception $e) 
 				{
-					dd($e);
+					//dd($e);
 					AjaxController::SystemLogs($e);
 					session()->flash('system_error','ERROR');
 					return view('employee.masterfile.mfServiceFees');

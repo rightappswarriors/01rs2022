@@ -2760,6 +2760,62 @@ use FunctionsClientController;
 			}
 		}
 
+		public static function ChargeFees(Request $request)
+		{
+			// if ($request->isMethod('get')) 
+			// {
+				try  // mfServiceCharges
+				{
+					if(session()->has('employee_login')){
+					
+						$allfactypes = DB::table('facilitytyp')
+						->leftJoin('facilitytyp as specified', 'specified.facid', '=', 'facilitytyp.specified' )
+						->leftJoin('serv_type', 'facilitytyp.servtype_id', '=', 'serv_type.servtype_id' )
+						->leftJoin('hfaci_grp', 'facilitytyp.hgpid', '=', 'hfaci_grp.hgpid' )
+						->select('facilitytyp.*', 'specified.facname as spec', 'hfaci_grp.hgpdesc', 'serv_type.anc_name')
+						->orderBy('facilitytyp.facname')
+						->get();
+
+						$allcat = DB::table('category')->select('category.*')->get();
+						
+						$allapptye = AjaxController::getAllApplicationType();
+
+						$data = DB::table('service_fees')
+						->leftJoin('facilitytyp', 'service_fees.service_id', '=', 'facilitytyp.facid' )
+						->leftJoin('facilitytyp as specified', 'specified.facid', '=', 'facilitytyp.specified' )
+						->leftJoin('serv_type', 'facilitytyp.servtype_id', '=', 'serv_type.servtype_id' )
+						->leftJoin('hfaci_grp', 'facilitytyp.hgpid', '=', 'hfaci_grp.hgpid')
+						->leftJoin('facmode', 'service_fees.facmode', '=', 'facmode.facmid')
+						->leftJoin('funcapf', 'service_fees.funcid', '=', 'funcapf.funcdesc')
+						->where('service_fees.type', 'service')
+						->select('service_fees.*', 'facilitytyp.*', 
+						'specified.facname as spec', 'hfaci_grp.hgpdesc', 'serv_type.anc_name','facmode.facmdesc', 'funcapf.funcdesc',
+						)
+						
+						// ->select('service_fees.*', 'facilitytyp.*', 
+						// 'specified.facname as spec', 'hfaci_grp.hgpdesc', 'serv_type.anc_name','facmode.facmdesc', 'funcapf.funcdesc',
+						// DB::raw('CONCAT(user_details.first_name," " , user_details.last_name) as prepare')
+						// )
+						->get();
+
+						// hew
+						return view('employee.masterfile.mfChargeFees', ['factypes' =>$allfactypes,'data' =>$data,'allcat' =>$allcat,'type' =>"service", 'hfser'=>$allapptye, 'apptype'=>$allapptye]);
+					}
+					else {
+						return redirect()->route('employee');
+					}
+				
+				} 
+				catch (Exception $e) 
+				{
+					//dd($e);
+					AjaxController::SystemLogs($e);
+					session()->flash('system_error','ERROR');
+					return view('employee.masterfile.mfServiceFees');
+				}
+			// }
+		}
+
 		public static function ServiceFees(Request $request)
 		{
 			// if ($request->isMethod('get')) 

@@ -389,12 +389,12 @@ class LtoAppController extends Controller
         $arrRet = [
             // 'grpid' =>  $grpid,
             'nameofcomp' =>  $nameofcomp,
-
-            'hfser' =>  $hfser_id,
             'user'=> $user_data,
+            'appFacName'            => FunctionsClientController::getDistinctByFacilityName(),
             'regions' => Regions::orderBy('sort')->get(),
             'hfaci_service_type'    => HFACIGroup::whereIn('hgpid', $faclArr)->get(),
-            'appFacName'            => FunctionsClientController::getDistinctByFacilityName(),
+            'hfser' =>  $hfser_id,
+            
             'userInf'=>FunctionsClientController::getUserDetails(),
             'hfaci_serv_type'=>DB::select($hfaci_sql),
             'serv_cap'=>json_encode(DB::table('facilitytyp')->where('servtype_id',1)->get()),
@@ -411,10 +411,11 @@ class LtoAppController extends Controller
             'addresses'=>$hfLocs,
             'hfer' => $hfser_id,
             'hideExtensions'=>null,
-            'ambcharges'=>$ambConv,
+            'ambcharges'=>DB::table('chg_app')->whereIn('chgapp_id', ['284', '472'])->get(),//$ambConv,
             'aptid'=>null,
             'group' => json_encode(DB::table('facilitytyp')->where('servtype_id','>',1)->whereNotNull('grphrz_name')->get()),
             'forAmbulance' => json_encode($proceesedAmb),
+            
             'apptypenew'=> $ptcapp->aptid ?  $ptcapp->aptid : 'IN'
         ];
 

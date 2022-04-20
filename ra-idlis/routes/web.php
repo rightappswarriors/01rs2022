@@ -438,6 +438,7 @@ Route::match(['get', 'post'], 'employee/dashboard/mf/service_fees', 'DOHControll
 Route::match(['get', 'post'], 'employee/dashboard/mf/category_fees', 'DOHController@CategoryFees'); // Main, Add
 Route::get('employee/mf/assessment/get_ServiceCharges', 'AjaxController@getServiceCharges'); // Get
 Route::post('employee/mf/assessment/del_ServiceCharges', 'AjaxController@delServiceCharges'); // Del
+Route::match(['get', 'post'], 'employee/dashboard/mf/charge_fees', 'DOHController@ChargeFees'); // Main, Add
 // Assessment Category
 Route::match(['get', 'post'], 'employee/dashboard/mf/cat_assessment', 'DOHController@AssessmentCategory'); // Main, Add
 Route::post('employee/mf/assessment/save_category', 'AjaxController@saveAssessmentCategory'); // Update 

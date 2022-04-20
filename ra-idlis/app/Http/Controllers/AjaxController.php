@@ -4655,6 +4655,8 @@ public static function checkConmem($appid)
 							->orderBy('appform.appid','desc')
 							->orderBy('appform.t_date','desc')
 							->get();
+
+							//dd($anotherData);
 						break;
 					case 'FDA':
 							$anotherData = DB::table('appform')
@@ -4851,6 +4853,8 @@ public static function checkConmem($appid)
 						$anotherData[$i]->hasAssessors = 'F';
 					}
 				}
+				
+				//dd($anotherData);
 				return $anotherData;
 			} 
 			catch (Exception $e) 

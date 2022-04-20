@@ -2762,58 +2762,41 @@ use FunctionsClientController;
 
 		public static function ChargeFees(Request $request)
 		{
-			// if ($request->isMethod('get')) 
-			// {
-				try  // mfServiceCharges
+			if(session()->has('employee_login')){
+
+				if ($request->ismethod('get')) 
 				{
-					if(session()->has('employee_login')){
-					
-						$allfactypes = DB::table('facilitytyp')
-						->leftJoin('facilitytyp as specified', 'specified.facid', '=', 'facilitytyp.specified' )
-						->leftJoin('serv_type', 'facilitytyp.servtype_id', '=', 'serv_type.servtype_id' )
-						->leftJoin('hfaci_grp', 'facilitytyp.hgpid', '=', 'hfaci_grp.hgpid' )
-						->select('facilitytyp.*', 'specified.facname as spec', 'hfaci_grp.hgpdesc', 'serv_type.anc_name')
-						->orderBy('facilitytyp.facname')
-						->get();
-
-						$allcat = DB::table('category')->select('category.*')->get();
-						
-						$allapptye = AjaxController::getAllApplicationType();
-
-						$data = DB::table('service_fees')
-						->leftJoin('facilitytyp', 'service_fees.service_id', '=', 'facilitytyp.facid' )
-						->leftJoin('facilitytyp as specified', 'specified.facid', '=', 'facilitytyp.specified' )
-						->leftJoin('serv_type', 'facilitytyp.servtype_id', '=', 'serv_type.servtype_id' )
-						->leftJoin('hfaci_grp', 'facilitytyp.hgpid', '=', 'hfaci_grp.hgpid')
-						->leftJoin('facmode', 'service_fees.facmode', '=', 'facmode.facmid')
-						->leftJoin('funcapf', 'service_fees.funcid', '=', 'funcapf.funcdesc')
-						->where('service_fees.type', 'service')
-						->select('service_fees.*', 'facilitytyp.*', 
-						'specified.facname as spec', 'hfaci_grp.hgpdesc', 'serv_type.anc_name','facmode.facmdesc', 'funcapf.funcdesc',
-						)
-						
-						// ->select('service_fees.*', 'facilitytyp.*', 
-						// 'specified.facname as spec', 'hfaci_grp.hgpdesc', 'serv_type.anc_name','facmode.facmdesc', 'funcapf.funcdesc',
-						// DB::raw('CONCAT(user_details.first_name," " , user_details.last_name) as prepare')
-						// )
-						->get();
-
-						// hew
-						return view('employee.masterfile.mfChargeFees', ['factypes' =>$allfactypes,'data' =>$data,'allcat' =>$allcat,'type' =>"service", 'hfser'=>$allapptye, 'apptype'=>$allapptye]);
+					try 
+					{
+						$data = AjaxController::getAllChargesWithCategory();
+						$data1 = AjaxController::getAllCategory();
+						$data2 = AjaxController::getAllFacilityGroup();
+						return view('employee.masterfile.mfChargeFees', ['Chrges'=>$data,'Categorys'=>$data1,'Facility'=>$data2]);
+					} 
+					catch (Exception $e) 
+					{
+						AjaxController::SystemLogs($e);
+						session()->flash('system_error','ERROR');
+						return view('employee.masterfile.mfChargeFees');
 					}
-					else {
-						return redirect()->route('employee');
-					}
-				
-				} 
-				catch (Exception $e) 
-				{
-					//dd($e);
-					AjaxController::SystemLogs($e);
-					session()->flash('system_error','ERROR');
-					return view('employee.masterfile.mfServiceFees');
 				}
-			// }
+				if ($request->isMethod('post')) 
+				{
+					try 
+					{
+						DB::table('charges')->insert(['chg_code'=> strtoupper($request->id), 'cat_id' => $request->cat_id, 'chg_desc'=> $request->name, 'chg_exp' => $request->exp,'chg_rmks' => $request->rmk,'hgpid' => $request->hgpid, 'fprevision' => $request->isAssess]);
+						return 'DONE';		
+					} 
+					catch (Exception $e) {
+						return $e;
+						AjaxController::SystemLogs($e);
+						return 'ERROR';
+					}
+				}
+			}
+			else {
+				return redirect()->route('employee');
+			}
 		}
 
 		public static function ServiceFees(Request $request)
@@ -4748,6 +4731,7 @@ use FunctionsClientController;
 				{
 					$data = AjaxController::getAllApplicantsProcessFlow();
 					$data1 = AjaxController::getAllRegion();
+					
 					return view('employee.processflow.pfassignmentofteam', ['BigData' => $data, 'regions'=> $data1]);
 				} 
 				catch (Exception $e) 

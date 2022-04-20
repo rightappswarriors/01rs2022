@@ -51,7 +51,7 @@
                     <script>
 						console.log("{!! $data->hasAssessors.'---'. $data->facilityname.'---' . AjaxController::canProcessNextStepFDA($data->appid,'isCashierApproveFDA','isCashierApprovePharma') !!}")
 						</script>
-                      @if($data->aptid != 'R' && $data->isPayEval == 1 && $data->isCashierApprove == 1 && in_array($data->hfser_id, ['LTO','COA']) && AjaxController::canProcessNextStepFDA($data->appid,'isCashierApproveFDA','isCashierApprovePharma'))
+                      @if($data->isPayEval == 1 && $data->isCashierApprove == 1 && in_array($data->hfser_id, ['LTO','COA']) )
                     @php
                       $status = ''; $color = '';
                       $paid = $data->appid_payment;

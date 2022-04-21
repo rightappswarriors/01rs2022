@@ -235,6 +235,40 @@
                   </div>
                 </div>
               </div>
+
+              <div class="col-lg-12 row">
+                <div class="col-lg-6">
+                   <div class="row">
+                    <div class="col-lg-4">UACS Link:</div>
+                    <div class="col-lg-8" style="margin:0 0 .8em 0;">
+                      <select class="form-control" id="new_hgpid" data-parsley-required-message="*<strong>Category</strong> required" required>
+                          <option value="">Select Facility Type ...</option>
+                          @if ($Facility)
+                            @foreach ($Facility as $data1)
+                              <option value="{{$data1->hgpid}}">{{$data1->hgpdesc}} </option>
+                            @endforeach
+                      @endif
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="row">
+                    <div class="col-lg-4">Character</div>
+                    <div class="col-lg-8" style="margin:0 0 .8em 0;">
+                      <select class="form-control" id="new_cat" data-parsley-required-message="*<strong>Category</strong> required" required>
+                          <option value="">Select Category ...</option>
+                          @if ($Categorys)
+                            @foreach ($Categorys as $data)
+                              <option value="{{$data->cat_id}}">{{$data->cat_id}} - {{$data->cat_desc}} </option>
+                            @endforeach
+                      @endif
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
                   
               <div class="col-lg-12 row">
                 <div class="col-lg-6">
@@ -276,7 +310,6 @@
                   </div>
                 </div>
               </div>
-
               
               <div class="col-lg-12 row">
                 <div class="col-lg-6">
@@ -363,7 +396,7 @@
                 <button type="submit" class="btn btn-success form-control"  style="border-radius:0;"><span class="fa fa-sign-up"></span>Save</button>
               </div> 
             </form>
-            
+
          </div>
         </div>
       </div>

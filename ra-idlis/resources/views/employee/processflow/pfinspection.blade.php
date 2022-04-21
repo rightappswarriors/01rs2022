@@ -30,8 +30,7 @@
 						</script>
 					  
 
-                      @if($apply->isrecommended == 1 && $apply->isPayEval == 1 && $apply->isCashierApprove == 1 && in_array($apply->hfser_id, ['LTO','COA']))					
-					  {{-- if($apply->isrecommended == 1 && $apply->isPayEval == 1 && $apply->isCashierApprove == 1 && in_array($apply->hfser_id, ['LTO','COA']) && AjaxController::canProcessNextStepFDA($apply->appid,'isCashierApproveFDA','isCashierApprovePharma')) -- }}
+                      	@if($apply->isrecommended == 1 && $apply->isPayEval == 1 && $apply->isCashierApprove == 1 && in_array($apply->hfser_id, ['LTO','COA']))					
 
                      		@if($apply->hasAssessors == 'T')
             							<tr style="padding-right: 20px!important;">
@@ -44,8 +43,8 @@
             									</center>
             								</td>
             							</tr>
-  						          @endif
-                      @endif
+  						    @endif
+                      	@endif
 
                    	@endforeach
                   </tbody>

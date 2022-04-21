@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Schema;
 use App\Http\Controllers\EvaluationController;
+use Illuminate\Support\Facades\Cache;
 use FunctionsClientController;
 use DOHController;
 use AjaxController;
@@ -22,6 +23,7 @@ use App\Models\FACLGroup;
 use App\Models\HFACIGroup;
 use App\Models\Regions;
 use QrCode;
+
 class NewClientController extends Controller {
 	protected static $curUser;
 	public function __index(Request $request) {
@@ -3264,6 +3266,8 @@ public function fdacertN(Request $request, $appid, $requestOfClient = null) {
 							session()->forget('appcharge');
 							session()->forget('ambcharge');
 							session()->forget('directorSettings');
+							Cache::flush();
+							
 							return json_encode(true);
 							break;
 						case 'checkFile':

@@ -65,7 +65,7 @@
 
                             @endphp
 
-                            @if(strtolower($uirgnid) == 'hfsrb')
+                            {{-- @if(strtolower($uirgnid) == 'hfsrb')
                               @if($lname == 'eugenio' && ($position == 'directoriii' || $position == 'director3') && $data->hfser_id == 'PTC')
                                   @if($data->pbedcap >= 100)
                                       @php continue; @endphp
@@ -76,7 +76,7 @@
                                       @php continue; @endphp
                                   @endif
                               @endif
-                            @endif
+                            @endif  --}}
 
 
 

@@ -2768,10 +2768,16 @@ use FunctionsClientController;
 				{
 					try 
 					{
-						$data = AjaxController::getAllChargesWithCategory();
-						$data1 = AjaxController::getAllCategory();
-						$data2 = AjaxController::getAllFacilityGroup();
-						return view('employee.masterfile.mfChargeFees', ['Chrges'=>$data,'Categorys'=>$data1,'Facility'=>$data2]);
+						$datalist = AjaxController::getAllChargeFees();
+						$dataCategory = AjaxController::getAllCategory();
+						$dataFacility = AjaxController::getAllFacilityGroup();
+						$allapptye = AjaxController::getAllApplicationType();
+						$dataOwnership = AjaxController::getAllOwnership();
+						$dataIC = AjaxController::getAllInstitutionalCharacter(); //
+						$dataUACS = AjaxController::getAllUACS();
+						$dataAssign = AjaxController::applyLocation();
+
+						return view('employee.masterfile.mfChargeFees', ['list'=>$datalist,'Categorys'=>$dataCategory,'Facility'=>$dataFacility, 'AppType'=>$allapptye, 'listOwnership'=>$dataOwnership,'listIC'=>$dataIC,'listUACS'=>$dataUACS, 'listAssign'=>$dataAssign]);
 					} 
 					catch (Exception $e) 
 					{
@@ -2780,6 +2786,7 @@ use FunctionsClientController;
 						return view('employee.masterfile.mfChargeFees');
 					}
 				}
+
 				if ($request->isMethod('post')) 
 				{
 					try 
@@ -7869,6 +7876,8 @@ use FunctionsClientController;
 					$Cur_useData = AjaxController::getCurrentUserAllData();
 					//dd($Cur_useData);
 					$data = AjaxController::getAllApplicantsProcessFlow();
+
+					dd($data);
 					return view('employee.processflow.pfapproval', ['BigData'=>$data,'uilastname'=> $Cur_useData['lastname'],'uiposition'=> $Cur_useData['position'],'uirgnid'=> $Cur_useData['rgnid'] ]);
 				}
 				else {
@@ -10115,17 +10124,22 @@ use FunctionsClientController;
 
 
 		public function printOR($appid){
+
 			$check = DB::table('appform')->where('appid',$appid)->select('isCashierApprove')->first()->isCashierApprove;
+
 			if($check > 0){
+
 				$applicationData = DB::table('appform')
 				->leftJoin('city_muni','appform.cmid','city_muni.cmid')
 				->leftJoin('province','appform.provid','province.provid')
 				->where('appid',$appid)
 				->select('appform.street_number','appform.street_name','city_muni.cmname','province.provname')
 				->first();
-				$sql = "SELECT fname, mname, lname, authorizedsignature FROM x08 WHERE uid = (SELECT uid FROM appform WHERE appid = '$appid')";
+
+				$sql = "SELECT facilityname FROM appform WHERE appid='$appid';"; //"SELECT fname, mname, lname, authorizedsignature FROM x08 WHERE uid = (SELECT uid FROM appform WHERE appid = '$appid')";
 				$payor = DB::select($sql);
-				$payor = (!empty(array($payor[0]->fname.$payor[0]->mname.$payor[0]->lname)[0]) ? $payor[0]->fname . " " . $payor[0]->mname . " " . $payor[0]->lname : $payor[0]->authorizedsignature);
+				$payor =  $payor[0]->facilityname;
+				//$payor = (!empty(array($payor[0]->fname.$payor[0]->mname.$payor[0]->lname)[0]) ? $payor[0]->fname . " " . $payor[0]->mname . " " . $payor[0]->lname : $payor[0]->authorizedsignature);
 				$applicationData = $applicationData->street_number. " " . $applicationData->street_name. " " . $applicationData->cmname . " " . $applicationData->provname;
 				$currentUser = $cur_user = AjaxController::getCurrentUserAllData();
 				$payments = AjaxController::getAllDataOrderOfPaymentUploads($appid ,5);

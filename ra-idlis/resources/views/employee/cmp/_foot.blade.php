@@ -31,9 +31,7 @@
 </div>
 
 
-<style>
-    .content { width: 85%; margin: 0 auto;}
-  </style>
+
 
 <script type="text/javascript">
   var __ftAll = 0;

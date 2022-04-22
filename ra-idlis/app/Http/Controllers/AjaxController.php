@@ -3306,6 +3306,23 @@ public static function checkConmem($appid)
 				return 'ERROR';
 			}
 		}
+
+		public static function getAllChargeFees() // Get All Charges (with Category)
+		{
+			try 
+			{
+				$data = DB::table('chargefees')
+				//->join('category', 'charges.cat_id', '=', 'category.cat_id')
+				->get();
+				return $data;
+			} 
+			catch (Exception $e) 
+			{
+				AjaxController::SystemLogs($e->getMessage());
+				return 'ERROR';
+			}
+		}
+
 		public static function getAllCharges() // Get All Charges
 		{
 			try 

@@ -47,8 +47,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @if(isset($Chrges))
-                  @foreach ($Chrges as $Chrge)
+                  @if(isset($list))
+                  @foreach ($list as $Chrge)
                     <tr>
                       <td scope="row" style="font-weight: bold"> {{$Chrge->chg_code}}</td>
                       <td>{{$Chrge->chg_desc}}</td>
@@ -137,13 +137,13 @@
               <div class="col-lg-12 row">
                 <div class="col-lg-6">
                    <div class="row">
-                    <div class="col-lg-4">Type:</div>
+                    <div class="col-lg-4">App Type:</div>
                     <div class="col-lg-8" style="margin:0 0 .8em 0;">
                       <select class="form-control" id="new_cat" data-parsley-required-message="*<strong>Category</strong> required" required>
-                          <option value="">Select Category ...</option>
-                          @if ($Categorys)
-                            @foreach ($Categorys as $data)
-                              <option value="{{$data->cat_id}}">{{$data->cat_id}} - {{$data->cat_desc}} </option>
+                          <option value="">Select Application Type ...</option>
+                          @if ($AppType)
+                            @foreach ($AppType as $data)
+                              <option value="{{$data->hfser_id}}">{{$data->hfser_id}} - {{$data->hfser_desc}} </option>
                             @endforeach
                       @endif
                       </select>
@@ -177,7 +177,7 @@
                           <option value="">Select Facility Type ...</option>
                           @if ($Facility)
                             @foreach ($Facility as $data1)
-                              <option value="{{$data1->hgpid}}">{{$data1->hgpdesc}} </option>
+                              <option value="{{$data1->hgpid}}">{{$data1->hgpid}} - {{$data1->hgpdesc}} </option>
                             @endforeach
                       @endif
                       </select>
@@ -208,10 +208,10 @@
                     <div class="col-lg-4">Ownership:</div>
                     <div class="col-lg-8" style="margin:0 0 .8em 0;">
                       <select class="form-control" id="new_hgpid" data-parsley-required-message="*<strong>Category</strong> required" required>
-                          <option value="">Select Facility Type ...</option>
-                          @if ($Facility)
-                            @foreach ($Facility as $data1)
-                              <option value="{{$data1->hgpid}}">{{$data1->hgpdesc}} </option>
+                          <option value="">Select Ownership Type ...</option>
+                          @if ($listOwnership)
+                            @foreach ($listOwnership as $data1)
+                              <option value="{{$data1->ocid}}">{{$data1->ocid}} - {{$data1->ocdesc}} </option>
                             @endforeach
                       @endif
                       </select>
@@ -224,10 +224,10 @@
                     <div class="col-lg-4">Character</div>
                     <div class="col-lg-8" style="margin:0 0 .8em 0;">
                       <select class="form-control" id="new_cat" data-parsley-required-message="*<strong>Category</strong> required" required>
-                          <option value="">Select Category ...</option>
-                          @if ($Categorys)
-                            @foreach ($Categorys as $data)
-                              <option value="{{$data->cat_id}}">{{$data->cat_id}} - {{$data->cat_desc}} </option>
+                          <option value="">Select Institutional Character ...</option>
+                          @if ($listIC)
+                            @foreach ($listIC as $data)
+                              <option value="{{$data->facmid}}">{{$data->facmdesc}} </option>
                             @endforeach
                       @endif
                       </select>
@@ -235,17 +235,16 @@
                   </div>
                 </div>
               </div>
-
               <div class="col-lg-12 row">
                 <div class="col-lg-6">
                    <div class="row">
                     <div class="col-lg-4">UACS Link:</div>
                     <div class="col-lg-8" style="margin:0 0 .8em 0;">
                       <select class="form-control" id="new_hgpid" data-parsley-required-message="*<strong>Category</strong> required" required>
-                          <option value="">Select Facility Type ...</option>
-                          @if ($Facility)
-                            @foreach ($Facility as $data1)
-                              <option value="{{$data1->hgpid}}">{{$data1->hgpdesc}} </option>
+                          <option value="">Select UACS Link ...</option>
+                          @if ($listUACS)
+                            @foreach ($listUACS as $data1)
+                              <option value="{{$data1->m04ID}}">{{$data1->m04ID}} - {{$data1->m04Desc}} </option>
                             @endforeach
                       @endif
                       </select>
@@ -255,21 +254,14 @@
 
                 <div class="col-lg-6">
                   <div class="row">
-                    <div class="col-lg-4">Character</div>
+                    <div class="col-lg-4">Assigned To</div>
                     <div class="col-lg-8" style="margin:0 0 .8em 0;">
-                      <select class="form-control" id="new_cat" data-parsley-required-message="*<strong>Category</strong> required" required>
-                          <option value="">Select Category ...</option>
-                          @if ($Categorys)
-                            @foreach ($Categorys as $data)
-                              <option value="{{$data->cat_id}}">{{$data->cat_id}} - {{$data->cat_desc}} </option>
-                            @endforeach
-                      @endif
-                      </select>
+                      
                     </div>
                   </div>
                 </div>
               </div>
-                  
+
               <div class="col-lg-12 row">
                 <div class="col-lg-6">
                   <div class="row">
@@ -344,7 +336,26 @@
                   <div class="row">
                     <div class="col-lg-4">For Monitoring?</div>
                     <div class="col-lg-8" style="margin:0 0 .8em 0;">
-                      <input type="text" id="new_rgn_desc" class="form-control" data-parsley-required-message="*<strong>For Monitoring</strong> required" required>
+                    <div class="row">
+                        <div class="col-lg-6">
+                          {{-- <div class="row"> --}}
+                            <div class="col-md">
+                              <label class="form-check-label" for="exampleRadios1">
+                                Yes
+                                <input type="radio" class="form-control" id="exampleRadios1" name="isAssess" value="1">
+                              </label>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="col-md">
+                              <label class="form-check-label" for="exampleRadios2">
+                                No
+                                <input type="radio" class="form-control" id="exampleRadios2" name="isAssess" value="0" checked="">
+                              </label>
+                            </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -353,7 +364,8 @@
               <div class="col-lg-12 row">
                 <div class="col-lg-6">
                   <div class="row">
-                    <div class="col-lg-4"><input class="form-control" type="checkbox">&nbsp;Initial New</div>
+                    <div class="col-lg-4">
+                        <input class="form-control" type="checkbox">&nbsp;Initial New</div>
                     <div class="col-lg-8">
                       <input type="text" id="new_rgn_desc" class="form-control" data-parsley-required-message="*<strong>Initial New Amount</strong> required" required>
                     </div>
@@ -362,7 +374,8 @@
 
                 <div class="col-lg-6">
                   <div class="row">
-                    <div class="col-lg-4"><input class="form-control" type="checkbox">&nbsp;Initial Change</div>
+                    <div class="col-lg-4">
+                        <input class="form-control" type="checkbox">&nbsp;Initial Change</div>
                     <div class="col-lg-8">
                       <input type="text" id="new_rgn_desc" class="form-control" data-parsley-required-message="*<strong>Initial Change Amount</strong> required" required>
                     </div>

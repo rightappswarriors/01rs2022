@@ -14,7 +14,7 @@
           <div class="card-header bg-white font-weight-bold">
              HFERC Assignment
              <div style="float: right;">
-             @if($grpid == 'NA' || $grpid == 'DC')
+             @if($grpid == 'NA' || $grpid == 'DC' || $grpid == 'PO1')
              <a style="float: right;" href="{{asset('/employee/dashboard/processflow/manage/ptc/team')}}"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;<button class="btn btn-primary" >Manage Team</button></a>
         
              @endif

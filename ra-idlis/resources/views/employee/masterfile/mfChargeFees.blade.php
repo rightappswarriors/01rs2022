@@ -235,9 +235,6 @@
                   </div>
                 </div>
               </div>
-<<<<<<< Updated upstream
-=======
-
               <div class="col-lg-12 row">
                 <div class="col-lg-6">
                    <div class="row">
@@ -264,8 +261,7 @@
                   </div>
                 </div>
               </div>
->>>>>>> Stashed changes
-                  
+
               <div class="col-lg-12 row">
                 <div class="col-lg-6">
                   <div class="row">
@@ -306,7 +302,6 @@
                   </div>
                 </div>
               </div>
-
               
               <div class="col-lg-12 row">
                 <div class="col-lg-6">
@@ -414,7 +409,7 @@
                 <button type="submit" class="btn btn-success form-control"  style="border-radius:0;"><span class="fa fa-sign-up"></span>Save</button>
               </div> 
             </form>
-            
+
          </div>
         </div>
       </div>

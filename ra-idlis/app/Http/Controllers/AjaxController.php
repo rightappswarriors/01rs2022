@@ -4803,8 +4803,14 @@ public static function checkConmem($appid)
 					$newT = Carbon::parse($time);
 					$anotherData[$i]->formattedTime = $newT->format('g:i A');
 					$date = $anotherData[$i]->t_date;
-					$newD = Carbon::parse($date);
-					$anotherData[$i]->formattedDate = $newD->toFormattedDateString();
+
+					if($date){
+						$newD = Carbon::parse($date);
+						$anotherData[$i]->formattedDate = $newD->toFormattedDateString();
+					} else {
+						$anotherData[$i]->formattedDate = 'N/A';
+					}
+					
 					
 					//updated
 					$time = $anotherData[$i]->updated_at;

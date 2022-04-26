@@ -235,8 +235,6 @@
                   </div>
                 </div>
               </div>
-<<<<<<< Updated upstream
-=======
 
               <div class="col-lg-12 row">
                 <div class="col-lg-6">
@@ -257,14 +255,13 @@
 
                 <div class="col-lg-6">
                   <div class="row">
-                    <div class="col-lg-4">Assigned To</div>
+                    <div class="col-lg-4">Penalty</div>
                     <div class="col-lg-8" style="margin:0 0 .8em 0;">
-                      
+                      <input class="form-control" type="checkbox">
                     </div>
                   </div>
                 </div>
               </div>
->>>>>>> Stashed changes
                   
               <div class="col-lg-12 row">
                 <div class="col-lg-6">
@@ -370,7 +367,7 @@
                 <div class="col-lg-6">
                   <div class="row">
                     <div class="col-lg-4">
-                        <input class="form-control" type="checkbox">&nbsp;Initial New</div>
+                        Initial New</div>
                     <div class="col-lg-8">
                       <input type="text" id="new_rgn_desc" class="form-control" data-parsley-required-message="*<strong>Initial New Amount</strong> required" required>
                     </div>
@@ -380,7 +377,7 @@
                 <div class="col-lg-6">
                   <div class="row">
                     <div class="col-lg-4">
-                        <input class="form-control" type="checkbox">&nbsp;Initial Change</div>
+                        Initial Change</div>
                     <div class="col-lg-8">
                       <input type="text" id="new_rgn_desc" class="form-control" data-parsley-required-message="*<strong>Initial Change Amount</strong> required" required>
                     </div>
@@ -391,7 +388,7 @@
               <div class="col-lg-12 row">
                 <div class="col-lg-6">
                   <div class="row">
-                    <div class="col-lg-4"><input class="form-control" type="checkbox">&nbsp;Renewal</div>
+                    <div class="col-lg-4">Renewal</div>
                     <div class="col-lg-8">
                       <input type="text" id="new_rgn_desc" class="form-control" data-parsley-required-message="*<strong>Renewal Amount</strong> required" required>
                     </div>
@@ -400,7 +397,7 @@
 
                 <div class="col-lg-6">
                   <div class="row">
-                    <div class="col-lg-4"><input class="form-control" type="checkbox">&nbsp;Penalty</div>
+                    <div class="col-lg-4">Penalty</div>
                     <div class="col-lg-8">
                       <input type="text" id="new_rgn_desc" class="form-control" data-parsley-required-message="*<strong>Penalty Amount</strong> required" required>
                     </div>

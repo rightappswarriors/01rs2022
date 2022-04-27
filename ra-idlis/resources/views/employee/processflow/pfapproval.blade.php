@@ -65,6 +65,7 @@
 
                             @endphp
 
+<<<<<<< Updated upstream
                             {{-- @if(strtolower($uirgnid) == 'hfsrb')
                               @if($lname == 'eugenio' && ($position == 'directoriii' || $position == 'director3') && $data->hfser_id == 'PTC')
                                   @if($data->pbedcap >= 100)
@@ -82,6 +83,8 @@
 
 
 
+=======
+>>>>>>> Stashed changes
                             <tr>
                               <!-- <td class="text-center">{{$data->pbedcap}}</td> -->
                               <td class="text-center">{{$data->hfser_id}}</td>

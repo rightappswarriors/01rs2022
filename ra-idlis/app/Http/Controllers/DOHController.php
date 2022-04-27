@@ -4815,169 +4815,171 @@ use FunctionsClientController;
 
 		public function hfercTeamAssignment(Request $request,$appid, $revision = null)
 		{
-			if(DB::table('appform')->where('appid',$appid)->exists()){
+			if(session()->has('employee_login')){
+				if(DB::table('appform')->where('appid',$appid)->exists()){
 
-				// $revision = $revision == 1 ? 0 : $revision;
-
-				if( $revision > 2 && AjaxController::isRequredToPayPTC($revision) && !FunctionsClientController::existOnDB('chgfil',array(['appform_id',$appid],['uid',AjaxController::getUidFrom($appid)],['revision',$revision],['isPaid',1])) && !AjaxController::isSessionExist(['employee_login'])){
-					return redirect('employee/dashboard/processflow/assignmentofhferc/'.$appid.'/'.(AjaxController::maxRevisionFor($appid) != 0 ? AjaxController::maxRevisionFor($appid)-1 : 1))->with('errRet', ['errAlt'=>'danger', 'errMsg'=>'Payment is not settled.']);
-				}
-
-				if(isset($revision)){
-					if ($request->isMethod('get')) 
-					{
-						$membersDoneEv = array();
-						try 
+					// $revision = $revision == 1 ? 0 : $revision;
+	
+					if( $revision > 2 && AjaxController::isRequredToPayPTC($revision) && !FunctionsClientController::existOnDB('chgfil',array(['appform_id',$appid],['uid',AjaxController::getUidFrom($appid)],['revision',$revision],['isPaid',1])) && !AjaxController::isSessionExist(['employee_login'])){
+						return redirect('employee/dashboard/processflow/assignmentofhferc/'.$appid.'/'.(AjaxController::maxRevisionFor($appid) != 0 ? AjaxController::maxRevisionFor($appid)-1 : 1))->with('errRet', ['errAlt'=>'danger', 'errMsg'=>'Payment is not settled.']);
+					}
+	
+					if(isset($revision)){
+						if ($request->isMethod('get')) 
 						{
-
-							// for req eval
-							$checkapp = DB::table('appform')->where([['appid', $appid]])->first();
-
-							if(!is_null($checkapp->requestReeval) && $checkapp->isApprove == 0 ){
-								$checkteam = DB::table('hferc_team')->where([['appid', $appid], ['revision', $revision]])->first();
-
-								if(is_null($checkteam)){
-										$getTeam = DB::table('hferc_team')->where([['appid', $appid], ['revision', $revision - 1]])->get();
-										foreach($getTeam as $gt){
-											DB::table('hferc_team')->insert(['appid' => $appid, 'uid' => $gt->uid, 'pos' => $gt->pos, 'revision' => $revision, 'permittedtoInspect' => 1]);
-											// DB::table('hferc_team')->insert(['appid' => $appid, 'uid' => $gt['uid'], 'pos' => $gt['pos'], 'revision' => $revision, 'permittedtoInspect' => 1]);
-											AjaxController::notifyClient($appid,$gt->uid,41);
-										}
-								}
-							}
-
-							$count = $canViewOthers = 0;
-							$data = AjaxController::getAllDataEvaluateOne($appid);
-							// $evaluationResult = [];
-							$evaluationResult = AjaxController::maxRevisionFor($appid, (isset($revision) ? ['revision',$revision] : []), 1);
-							// $evaluationResult = AjaxController::maxRevisionFor($appid, (isset($revision) ? ['revision',$revision] : []), 1);
-							$members = AjaxController::getMembersInHFERC($data->appid,$data->rgnid,2,(isset($evaluationResult->revision) ? $evaluationResult->revision : AjaxController::maxRevisionFor($appid)+1));
-							$notin = AjaxController::getMembersInHFERC($data->appid,$data->rgnid,1,(isset($evaluationResult->revision) ? $evaluationResult->revision : AjaxController::maxRevisionFor($appid)+1));
-							
-							if(count($members) > 0){
-								foreach ($members as $key) {
-									if($key->permittedtoInspect > 0 && $key->hasInspected > 0 && !isset($evaluationResult->HFERC_eval)){
-										$count +=1;
-									} if($key->permittedtoInspect > 0 && $key->hasInspected){
-										$canViewOthers +=1;
-										array_push($membersDoneEv, $key->uid);
+							$membersDoneEv = array();
+							try 
+							{
+	
+								// for req eval
+								$checkapp = DB::table('appform')->where([['appid', $appid]])->first();
+	
+								if(!is_null($checkapp->requestReeval) && $checkapp->isApprove == 0 ){
+									$checkteam = DB::table('hferc_team')->where([['appid', $appid], ['revision', $revision]])->first();
+	
+									if(is_null($checkteam)){
+											$getTeam = DB::table('hferc_team')->where([['appid', $appid], ['revision', $revision - 1]])->get();
+											foreach($getTeam as $gt){
+												DB::table('hferc_team')->insert(['appid' => $appid, 'uid' => $gt->uid, 'pos' => $gt->pos, 'revision' => $revision, 'permittedtoInspect' => 1]);
+												// DB::table('hferc_team')->insert(['appid' => $appid, 'uid' => $gt['uid'], 'pos' => $gt['pos'], 'revision' => $revision, 'permittedtoInspect' => 1]);
+												AjaxController::notifyClient($appid,$gt->uid,41);
+											}
 									}
 								}
+	
+								$count = $canViewOthers = 0;
+								$data = AjaxController::getAllDataEvaluateOne($appid);
+								// $evaluationResult = [];
+								$evaluationResult = AjaxController::maxRevisionFor($appid, (isset($revision) ? ['revision',$revision] : []), 1);
+								// $evaluationResult = AjaxController::maxRevisionFor($appid, (isset($revision) ? ['revision',$revision] : []), 1);
+								$members = AjaxController::getMembersInHFERC($data->appid,$data->rgnid,2,(isset($evaluationResult->revision) ? $evaluationResult->revision : AjaxController::maxRevisionFor($appid)+1));
+								$notin = AjaxController::getMembersInHFERC($data->appid,$data->rgnid,1,(isset($evaluationResult->revision) ? $evaluationResult->revision : AjaxController::maxRevisionFor($appid)+1));
+								
+								if(count($members) > 0){
+									foreach ($members as $key) {
+										if($key->permittedtoInspect > 0 && $key->hasInspected > 0 && !isset($evaluationResult->HFERC_eval)){
+											$count +=1;
+										} if($key->permittedtoInspect > 0 && $key->hasInspected){
+											$canViewOthers +=1;
+											array_push($membersDoneEv, $key->uid);
+										}
+									}
+								}
+								// $canEvaluate = true;
+								$canEvaluate = ($count >=1 ? true : false);
+								$membersDoneEv = (DB::table('x08')->whereIn('uid',$membersDoneEv)->get() ?? []);
+								$currentLoggedIn = (session()->has('employee_login') ? session()->get('employee_login') :null);
+								// dd($members);
+								$emp = session()->get('employee_login') ;
+								
+								$dataTeam = DB::table('team');
+								$dataTeam->join('region', 'team.rgnid', '=', 'region.rgnid');
+								$dataTeam->where('team.type','ptc');
+								$dataTeam->where('team.rgnid', $emp->rgnid);
+								//$dataTeam->where('team.rgnid', $data->rgnid);
+								$dataTeam =	$dataTeam->get();
+	
+	
+	
+	
+								$arrRet = [
+									'AppData' => $data,
+									'hferc' => $members, 
+									'free' => $notin, 
+									'appid'=>$appid, 
+									'dataTeam' => $dataTeam,
+									'apptype' => $data->hfser_id, 
+									'canEval' => $canEvaluate, 
+									'membDone' => $membersDoneEv, 
+									'evaluation' => $evaluationResult, 
+									'revisionCountCurent' => (isset($evaluationResult->revision) ? $evaluationResult->revision : AjaxController::maxRevisionFor($appid) + 1),
+									'maxRevision' => AjaxController::maxRevisionFor($appid) + 1,
+									'canViewOthers' => ($canViewOthers >=1 ? true : false), 
+									'revision' => $revision, 
+									'currentUser' => $currentLoggedIn,
+									'canProcessAction' => (isset($currentLoggedIn->uid) && $currentLoggedIn->uid == 'ADMIN' ? true : DB::table("hferc_team")->where([['appid',$appid],['uid',$currentLoggedIn->uid]])->whereIn('pos',['C','VC','NA','E'])->exists()),
+									'isHead' => (isset($currentLoggedIn->uid) && $currentLoggedIn->uid == 'ADMIN' ? true : DB::table("hferc_team")->where([['appid',$appid],['uid',$currentLoggedIn->uid]])->whereIn('pos',['C','VC', 'NA'])->exists()),
+									'customRights' => (isset($currentLoggedIn->uid) && ($currentLoggedIn->uid == 'ADMIN' || $currentLoggedIn->grpid == 'DC') ? true :  DB::table("hferc_team")->where([['appid',$appid],['uid',$currentLoggedIn->uid]])->whereIn('pos',['NA','PO','C','VC'])->exists())
+									// 'customRights' => (isset($currentLoggedIn->uid) && $currentLoggedIn->uid == 'ADMIN' ? true :  DB::table("hferc_team")->where([['appid',$appid],['uid',$currentLoggedIn->uid]])->whereIn('pos',['NA','PO'])->exists())
+							,'count'=>$count
+								];
+								return view('employee.processflow.pfassignmentofhfercaction', $arrRet);
+							} 
+							catch (Exception $e) 
+							{
+								dd($e);
+								AjaxController::SystemLogs($e);
+								session()->flash('system_error','ERROR');
+								return view('employee.processflow.pfassignmentofhfercaction');
 							}
-							// $canEvaluate = true;
-							$canEvaluate = ($count >=1 ? true : false);
-							$membersDoneEv = (DB::table('x08')->whereIn('uid',$membersDoneEv)->get() ?? []);
-							$currentLoggedIn = (session()->has('employee_login') ? session()->get('employee_login') :null);
-							// dd($members);
-                            $emp = session()->get('employee_login') ;
-                            
-							$dataTeam = DB::table('team');
-							$dataTeam->join('region', 'team.rgnid', '=', 'region.rgnid');
-							$dataTeam->where('team.type','ptc');
-							$dataTeam->where('team.rgnid', $emp->rgnid);
-							//$dataTeam->where('team.rgnid', $data->rgnid);
-							$dataTeam =	$dataTeam->get();
-
-
-
-
-							$arrRet = [
-								'AppData' => $data,
-								'hferc' => $members, 
-								'free' => $notin, 
-								'appid'=>$appid, 
-								'dataTeam' => $dataTeam,
-								'apptype' => $data->hfser_id, 
-								'canEval' => $canEvaluate, 
-								'membDone' => $membersDoneEv, 
-								'evaluation' => $evaluationResult, 
-								'revisionCountCurent' => (isset($evaluationResult->revision) ? $evaluationResult->revision : AjaxController::maxRevisionFor($appid) + 1),
-								'maxRevision' => AjaxController::maxRevisionFor($appid) + 1,
-								'canViewOthers' => ($canViewOthers >=1 ? true : false), 
-								'revision' => $revision, 
-								'currentUser' => $currentLoggedIn,
-								'canProcessAction' => (isset($currentLoggedIn->uid) && $currentLoggedIn->uid == 'ADMIN' ? true : DB::table("hferc_team")->where([['appid',$appid],['uid',$currentLoggedIn->uid]])->whereIn('pos',['C','VC','NA','E'])->exists()),
-								'isHead' => (isset($currentLoggedIn->uid) && $currentLoggedIn->uid == 'ADMIN' ? true : DB::table("hferc_team")->where([['appid',$appid],['uid',$currentLoggedIn->uid]])->whereIn('pos',['C','VC', 'NA'])->exists()),
-								'customRights' => (isset($currentLoggedIn->uid) && ($currentLoggedIn->uid == 'ADMIN' || $currentLoggedIn->grpid == 'DC') ? true :  DB::table("hferc_team")->where([['appid',$appid],['uid',$currentLoggedIn->uid]])->whereIn('pos',['NA','PO','C','VC'])->exists())
-								// 'customRights' => (isset($currentLoggedIn->uid) && $currentLoggedIn->uid == 'ADMIN' ? true :  DB::table("hferc_team")->where([['appid',$appid],['uid',$currentLoggedIn->uid]])->whereIn('pos',['NA','PO'])->exists())
-						,'count'=>$count
-							];
-							return view('employee.processflow.pfassignmentofhfercaction', $arrRet);
-						} 
-						catch (Exception $e) 
-						{
-							dd($e);
-							AjaxController::SystemLogs($e);
-							session()->flash('system_error','ERROR');
-							return view('employee.processflow.pfassignmentofhfercaction');
+						} else {
+							if($request->isMethod('post')){
+	
+								if($request->action == 'add'){
+	
+										if($request->type == "PTC" ){
+											$mem = json_decode($request->members, true);
+											foreach($mem as $m){
+												$ret = DB::table('hferc_team')->insert(['appid' => $appid, 'uid' => $m['uid'], 'pos' => $m['pos'], 'revision' => (isset($evaluationResult->revision) ? $evaluationResult->revision : AjaxController::maxRevisionFor($appid) + 1), 'permittedtoInspect' => 1]);
+												AjaxController::notifyClient($appid,$m['uid'],41);
+											}
+										}else{
+											$ret = DB::table('hferc_team')->insert(['appid' => $appid, 'uid' => $request->uid, 'pos' => $request->pos, 'revision' => (isset($evaluationResult->revision) ? $evaluationResult->revision : AjaxController::maxRevisionFor($appid) + 1), 'permittedtoInspect' => 1]);
+											AjaxController::notifyClient($appid,$request->uid,41);
+										}
+								
+								} else if($request->action == 'edit'){
+									$ret = DB::table('hferc_team')->where('hfercid',$request->id)->update(['pos' => $request->pos]);
+								} else if($request->action == 'delete'){
+									$selected = DB::table('hferc_team')->select('uid')->where('hfercid',$request->id)->first()->uid;
+									AjaxController::notifyClient($appid,$selected,40);
+									$ret = DB::table('hferc_team')->where('hfercid',$request->id)->delete();
+								} else if($request->action == 'permit'){
+									$ret = DB::table('hferc_team')->where('hfercid',$request->id)->update(['permittedtoInspect' => $request->permit]);
+									$selected = DB::table('hferc_team')->select('uid')->where('hfercid',$request->id)->first()->uid;
+									AjaxController::notifyClient($appid,$selected,41);
+								} else if($request->action == 'evaluate'){
+									$cur = AjaxController::getCurrentUserAllData();
+									$maxID = AjaxController::maxRevisionFor($appid);
+	
+									// $rev = $maxID;
+									// if($request->evaluation == 2){
+										$rev =	$maxID + 1;
+									// }
+	
+									$ret = DB::table('hferc_evaluation')->insert(['HFERC_eval' => $request->evaluation, 'HFERC_comments' => $request->comments, 'HFERC_evalBy' => $cur['cur_user'], 'revision' => $rev, 'appid' => $appid]);
+									
+									// $ret = DB::table('hferc_evaluation')->insert(['HFERC_eval' => $request->evaluation, 'HFERC_comments' => $request->comments, 'HFERC_evalBy' => $cur['cur_user'], 'revision' => $maxID + 1, 'appid' => $appid]);
+	
+									$notifyAllHere = DB::table('hferc_team')->where('appid',$appid)->get();
+									foreach ($notifyAllHere as $value) {
+										AjaxController::notifyClient($appid,$value->uid,($request->evaluation == 1 ? 42 : 43));
+									}
+	
+									if($request->evaluation == 1){
+										DB::table('appform')->where('appid',$appid)->update(['status' => 'FR']);
+									}else if($request->evaluation == 2){
+										DB::table('appform')->where('appid',$appid)->update(['status' => 'RDA']);
+										// DB::table('appform')->where('appid',$appid)->update(['status' => 'REVF']);
+									}
+	
+								} else if($request->action == 'FP'){
+									$cur = AjaxController::getCurrentUserAllData();
+									$ret = DB::table('appform')->where('appid',$appid)->update(['isAcceptedFP' => $request->fpselect, 'FPacceptedDate' => $cur['date'], 'FPacceptedTime' => $cur['time'], 'FPacceptedBy' => $cur['cur_user'], 'fpcomment' => $request->fpremark, 'status' => 'FPE']);
+									$selected = AjaxController::getUidFrom($appid);
+									AjaxController::notifyClient($appid,$selected,53);
+								}
+	
+								return ($ret ? 'done' : 'error');
+							}
 						}
 					} else {
-						if($request->isMethod('post')){
-
-							if($request->action == 'add'){
-
-									if($request->type == "PTC" ){
-										$mem = json_decode($request->members, true);
-										foreach($mem as $m){
-											$ret = DB::table('hferc_team')->insert(['appid' => $appid, 'uid' => $m['uid'], 'pos' => $m['pos'], 'revision' => (isset($evaluationResult->revision) ? $evaluationResult->revision : AjaxController::maxRevisionFor($appid) + 1), 'permittedtoInspect' => 1]);
-											AjaxController::notifyClient($appid,$m['uid'],41);
-										}
-									}else{
-										$ret = DB::table('hferc_team')->insert(['appid' => $appid, 'uid' => $request->uid, 'pos' => $request->pos, 'revision' => (isset($evaluationResult->revision) ? $evaluationResult->revision : AjaxController::maxRevisionFor($appid) + 1), 'permittedtoInspect' => 1]);
-										AjaxController::notifyClient($appid,$request->uid,41);
-									}
-																
-																
-						
-							
-							} else if($request->action == 'edit'){
-								$ret = DB::table('hferc_team')->where('hfercid',$request->id)->update(['pos' => $request->pos]);
-							} else if($request->action == 'delete'){
-								$selected = DB::table('hferc_team')->select('uid')->where('hfercid',$request->id)->first()->uid;
-								AjaxController::notifyClient($appid,$selected,40);
-								$ret = DB::table('hferc_team')->where('hfercid',$request->id)->delete();
-							} else if($request->action == 'permit'){
-								$ret = DB::table('hferc_team')->where('hfercid',$request->id)->update(['permittedtoInspect' => $request->permit]);
-								$selected = DB::table('hferc_team')->select('uid')->where('hfercid',$request->id)->first()->uid;
-								AjaxController::notifyClient($appid,$selected,41);
-							} else if($request->action == 'evaluate'){
-								$cur = AjaxController::getCurrentUserAllData();
-								$maxID = AjaxController::maxRevisionFor($appid);
-
-								// $rev = $maxID;
-								// if($request->evaluation == 2){
-									$rev =	$maxID + 1;
-								// }
-
-								$ret = DB::table('hferc_evaluation')->insert(['HFERC_eval' => $request->evaluation, 'HFERC_comments' => $request->comments, 'HFERC_evalBy' => $cur['cur_user'], 'revision' => $rev, 'appid' => $appid]);
-								
-								// $ret = DB::table('hferc_evaluation')->insert(['HFERC_eval' => $request->evaluation, 'HFERC_comments' => $request->comments, 'HFERC_evalBy' => $cur['cur_user'], 'revision' => $maxID + 1, 'appid' => $appid]);
-
-								$notifyAllHere = DB::table('hferc_team')->where('appid',$appid)->get();
-								foreach ($notifyAllHere as $value) {
-									AjaxController::notifyClient($appid,$value->uid,($request->evaluation == 1 ? 42 : 43));
-								}
-
-								if($request->evaluation == 1){
-									DB::table('appform')->where('appid',$appid)->update(['status' => 'FR']);
-								}else if($request->evaluation == 2){
-									DB::table('appform')->where('appid',$appid)->update(['status' => 'RDA']);
-									// DB::table('appform')->where('appid',$appid)->update(['status' => 'REVF']);
-								}
-
-							} else if($request->action == 'FP'){
-								$cur = AjaxController::getCurrentUserAllData();
-								$ret = DB::table('appform')->where('appid',$appid)->update(['isAcceptedFP' => $request->fpselect, 'FPacceptedDate' => $cur['date'], 'FPacceptedTime' => $cur['time'], 'FPacceptedBy' => $cur['cur_user'], 'fpcomment' => $request->fpremark, 'status' => 'FPE']);
-								$selected = AjaxController::getUidFrom($appid);
-								AjaxController::notifyClient($appid,$selected,53);
-							}
-
-							return ($ret ? 'done' : 'error');
-						}
+						return redirect('employee/dashboard/processflow/assignmentofhferc/'.$appid.'/'.(AjaxController::maxRevisionFor($appid) == 0 ? 1 :AjaxController::maxRevisionFor($appid)));
 					}
-				} else {
-					return redirect('employee/dashboard/processflow/assignmentofhferc/'.$appid.'/'.(AjaxController::maxRevisionFor($appid) == 0 ? 1 :AjaxController::maxRevisionFor($appid)));
 				}
+			}
+			else {
+				return redirect()->route('employee');
 			}
 		}
 

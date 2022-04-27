@@ -3266,6 +3266,7 @@ public function fdacertN(Request $request, $appid, $requestOfClient = null) {
 							session()->forget('appcharge');
 							session()->forget('ambcharge');
 							session()->forget('directorSettings');
+							$request->session()->flush(); 
 							Cache::flush();
 							
 							return json_encode(true);

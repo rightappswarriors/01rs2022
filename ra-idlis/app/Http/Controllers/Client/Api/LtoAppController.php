@@ -265,79 +265,87 @@ class LtoAppController extends Controller
             $nameofcomp = null;
         }
 
-        $hfser_id = 'LTO';
-        $faclArr = [];
-        $facl_grp = FACLGroup::where('hfser_id', $hfser_id)->select('hgpid')->get();
-        foreach ($facl_grp as $f) {
-            array_push($faclArr, $f->hgpid);
-        }
-        $hfaci_sql = "SELECT * FROM hfaci_grp WHERE hgpid IN (SELECT hgpid FROM `facl_grp` WHERE hfser_id = '$hfser_id')"; 
-
-     
         $ptcapp = ApplicationForm::where('appid', $appid)->first();
         $ponly = DB::table('ptc')->where([['appid', $appid]])->first();
 
         $appform = new stdClass();
 
-         $appform->facilityname          = $ptcapp->facilityname;
-               $appform->rgnid                 = $ptcapp->rgnid;
-               $appform->provid                = $ptcapp->provid;
-               $appform->cmid                  = $ptcapp->cmid;
-               $appform->brgyid                = $ptcapp->brgyid;
-               $appform->street_number         = $ptcapp->street_number;
-               $appform->street_name           = $ptcapp->street_name;
-               $appform->zipcode               = $ptcapp->zipcode;
-               $appform->contact               = $ptcapp->contact;
-               $appform->areacode              = $ptcapp->areacode;
-               $appform->landline              = $ptcapp->landline;
-               $appform->faxnumber             = $ptcapp->faxnumber;
-               $appform->email                 = $ptcapp->email;
-               $appform->cap_inv               = $ptcapp->cap_inv;
-               $appform->lot_area              = $ptcapp->lot_area;
-               $appform->noofbed               = (int)$ponly->propbedcap;
-               // $appform->noofbed               = $ptcapp->noofbed;
-               $appform->uid                   = $ptcapp->uid;
-               $appform->ocid                  = $ptcapp->ocid;
-               $appform->classid               = $ptcapp->classid;
-               $appform->subClassid            = $ptcapp->subClassid;
-               $appform->facmode               = $ptcapp->facmode;
-               $appform->funcid                = $ptcapp->funcid;
-               $appform->owner                 = $ptcapp->owner;
-               $appform->ownerMobile           = $ptcapp->ownerMobile;
-               $appform->ownerLandline         = $ptcapp->ownerLandline;
-               $appform->ownerEmail            = $ptcapp->ownerEmail;
-               $appform->mailingAddress        = $ptcapp->mailingAddress;
-               $appform->approvingauthoritypos = $ptcapp->approvingauthoritypos;
-               $appform->approvingauthority    = $ptcapp->approvingauthority;
-               $appform->hfep_funded           = $ptcapp->hfep_funded;
-               $appform->assignedRgn           = $ptcapp->assignedRgn;
-               $appform->ptcCode               = $ptcapp->hfser_id.'R'.$ptcapp->rgnid.'-'.$ptcapp->appid;
-               // $appform->ptcCode               = $ptcapp->ptcCode;
-               $appform->noofmain              = $ptcapp->noofmain;
-               $appform->noofdialysis          = $ptcapp->noofdialysis;
-               // $appform->noofsatellite         = $ptcapp->noofsatellite;
-               $appform->aptid                 = $ptcapp->aptid;
-               $appform->savingStat            = "partial";
-               $appform->hgpid                 = $ptcapp->hgpid;
-               $appform->rgn_desc             =  DB::table('region')->where([['rgnid', $ptcapp->rgnid]])->first()->rgn_desc;
-               $appform->provname              =  DB::table('province')->where([['provid', $ptcapp->provid]])->first()->provname;
-               $appform->cmname               =  DB::table('city_muni')->where([['cmid', $ptcapp->cmid]])->first()->cmname;
-               $appform->brgyname                = DB::table('barangay')->where([['brgyid', $ptcapp->brgyid]])->first()->brgyname;
-               $appform->faxNumber                 = $ptcapp->faxNumber;
-               $appform->appid                  = null;
-               $appform->appComment                   = null;
-               $appform->noofdialysis                    = null;
-               $appform->noofsatellite                     = null;
-               $appform->typeamb                      = null;
-               $appform->ambtyp                       = null;
-               $appform->plate_number                        = null;
-               $appform->ambOwner                         = null;
-               $appform->addonDesc                          = null;
+        $hfser_id = 'LTO';
+        //$sql_hfser_id  =  DB::select("SELECT hfser_id FROM type_facility WHERE facid='$ptcapp->hgpid' AND (hfser_id='LTO' OR hfser_id='ATO' OR hfser_id='COA' OR hfser_id='COR') LIMIT 1;");
        
-               $appformConv = array();
-             $appformConv[] = $appform;
-
+        /*
+        foreach ($sql_hfser_id as $s) {
+            $hfser_id=$s;
+        }
+        */
+        /// dd($hfser_id);
+        $faclArr = [];
+        $facl_grp = FACLGroup::where('hfser_id', $hfser_id)->select('hgpid')->get();
         
+        foreach ($facl_grp as $f) {
+            array_push($faclArr, $f->hgpid);
+        }
+
+        $hfaci_sql = "SELECT * FROM hfaci_grp WHERE hgpid IN (SELECT hgpid FROM `facl_grp` WHERE hfser_id = '$hfser_id')"; 
+
+
+        $appform->facilityname          = $ptcapp->facilityname;
+        $appform->rgnid                 = $ptcapp->rgnid;
+        $appform->provid                = $ptcapp->provid;
+        $appform->cmid                  = $ptcapp->cmid;
+        $appform->brgyid                = $ptcapp->brgyid;
+        $appform->street_number         = $ptcapp->street_number;
+        $appform->street_name           = $ptcapp->street_name;
+        $appform->zipcode               = $ptcapp->zipcode;
+        $appform->contact               = $ptcapp->contact;
+        $appform->areacode              = $ptcapp->areacode;
+        $appform->landline              = $ptcapp->landline;
+        $appform->faxnumber             = $ptcapp->faxnumber;
+        $appform->email                 = $ptcapp->email;
+        $appform->cap_inv               = $ptcapp->cap_inv;
+        $appform->lot_area              = $ptcapp->lot_area;
+        $appform->noofbed               = (int)$ponly->propbedcap;
+        // $appform->noofbed               = $ptcapp->noofbed;
+        $appform->uid                   = $ptcapp->uid;
+        $appform->ocid                  = $ptcapp->ocid;
+        $appform->classid               = $ptcapp->classid;
+        $appform->subClassid            = $ptcapp->subClassid;
+        $appform->facmode               = $ptcapp->facmode;
+        $appform->funcid                = $ptcapp->funcid;
+        $appform->owner                 = $ptcapp->owner;
+        $appform->ownerMobile           = $ptcapp->ownerMobile;
+        $appform->ownerLandline         = $ptcapp->ownerLandline;
+        $appform->ownerEmail            = $ptcapp->ownerEmail;
+        $appform->mailingAddress        = $ptcapp->mailingAddress;
+        $appform->approvingauthoritypos = $ptcapp->approvingauthoritypos;
+        $appform->approvingauthority    = $ptcapp->approvingauthority;
+        $appform->hfep_funded           = $ptcapp->hfep_funded;
+        $appform->assignedRgn           = $ptcapp->assignedRgn;
+        $appform->ptcCode               = $ptcapp->hfser_id.'R'.$ptcapp->rgnid.'-'.$ptcapp->appid;
+        // $appform->ptcCode               = $ptcapp->ptcCode;
+        $appform->noofmain              = $ptcapp->noofmain;
+        $appform->noofdialysis          = $ptcapp->noofdialysis;
+        // $appform->noofsatellite         = $ptcapp->noofsatellite;
+        $appform->aptid                 = $ptcapp->aptid;
+        $appform->savingStat            = "partial";
+        $appform->hgpid                 = $ptcapp->hgpid;
+        $appform->rgn_desc             =  DB::table('region')->where([['rgnid', $ptcapp->rgnid]])->first()->rgn_desc;
+        $appform->provname              =  DB::table('province')->where([['provid', $ptcapp->provid]])->first()->provname;
+        $appform->cmname               =  DB::table('city_muni')->where([['cmid', $ptcapp->cmid]])->first()->cmname;
+        $appform->brgyname                = DB::table('barangay')->where([['brgyid', $ptcapp->brgyid]])->first()->brgyname;
+        $appform->faxNumber                 = $ptcapp->faxNumber;
+        $appform->appid                  = null;
+        $appform->appComment                   = null;
+        $appform->noofdialysis                    = null;
+        $appform->noofsatellite                     = null;
+        $appform->typeamb                      = null;
+        $appform->ambtyp                       = null;
+        $appform->plate_number                        = null;
+        $appform->ambOwner                         = null;
+        $appform->addonDesc                          = null;
+       
+        $appformConv = array();
+        $appformConv[] = $appform;
         
         $chk =  DB::table('x08_ft')->where([['appid', $appid]])->first();
 

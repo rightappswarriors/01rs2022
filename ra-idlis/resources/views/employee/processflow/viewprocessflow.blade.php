@@ -7,8 +7,8 @@
   @section('title', 'View Process Flow')
   @section('content')
   <input type="text" id="CurrentPage" hidden="" value="PF001">
-  <div class="content p-4">
-  	<div class="card" style="width: 165vh;" >
+  <div class="content p-4" style="font-size:13px; margin-left:0px;" >
+  	<div class="card" >
    
   		<div class="card-header bg-white font-weight-bold">
              Application Status  @include('employee.tableDateSearch')
@@ -27,7 +27,7 @@
     <div  >
    
     
-          	<table class="table table-hover" style="font-size:13px; zoom: 87% ;width: 5vh" id="example">
+          	<table class="table table-hover" style="font-size:13px;" id="example">
                   <thead>
                   <tr>
                       <th ></th>

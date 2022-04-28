@@ -7879,7 +7879,7 @@ use FunctionsClientController;
 					//dd($Cur_useData);
 					$data = AjaxController::getAllApplicantsProcessFlow();
 
-					dd($data);
+					//dd($data);
 					return view('employee.processflow.pfapproval', ['BigData'=>$data,'uilastname'=> $Cur_useData['lastname'],'uiposition'=> $Cur_useData['position'],'uirgnid'=> $Cur_useData['rgnid'] ]);
 				}
 				else {

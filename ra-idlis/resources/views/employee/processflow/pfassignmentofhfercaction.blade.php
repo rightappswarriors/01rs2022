@@ -198,9 +198,9 @@ while($i>0) {
                       <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#viewModalEdit" onclick="showData('{{$members->hfercid}}','{{ucfirst($members->fname.' '. (!empty($members->mname) ? $members->mname.',' :'').$members->lname)}}','{{$members->pos}}')">
                         <i class="fa fa-fw fa-edit"></i>
                       </button>
-                      <!-- <button type="button" class="btn btn-danger" onclick="showDelete('{{$members->hfercid}}');">
+                      <button type="button" class="btn btn-danger" onclick="showDelete('{{$members->hfercid}}');">
                         <i class="fa fa-ban" aria-hidden="true"></i>
-                      </button> -->
+                      </button>
                     @else
                     
                    

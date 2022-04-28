@@ -174,12 +174,14 @@
 					@break
 				@endswitch
 			</div> --}}
+			<div>
+			</div>
 
 			 <div class="container mt-5 text-center">
 				<span class="display-4">Comments</span>
 				<div class="container border border-secondary rounded text-justify" style="height: 300px; overflow-y: hidden; ">
-					<span class="pt-3" style="font-size: 25px;">
-						{{$reco->details}}
+					<span class="pt-3" style="font-size: 25px; white-space: pre-line;">
+						{{ $reco->details }}
 					</span>
 				</div>
 			</div>

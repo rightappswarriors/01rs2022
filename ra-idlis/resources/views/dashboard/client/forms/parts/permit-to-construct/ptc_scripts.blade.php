@@ -165,6 +165,31 @@
             document.getElementById("noDal").setAttribute("hidden", "hidden")
             document.getElementById("noofdialysis").value = null;
         }
+
+        if(selected == 6 || selected == 17 || selected == 18){
+            document.getElementById("NPtc").removeAttribute("hidden")
+        }else{
+            document.getElementById("NPtc").setAttribute("hidden", "hidden")
+            document.getElementById("propbedcap").value = null;
+        }
+
+
+        if(selected == 9){
+            document.getElementById("NSB").removeAttribute("hidden")
+            document.getElementById("NDD").removeAttribute("hidden")
+        }else{
+            document.getElementById("NSB").setAttribute("hidden", "hidden")
+            document.getElementById("singlebed").value = null;
+            document.getElementById("NDD").setAttribute("hidden", "hidden")
+            document.getElementById("doubledeck").value = null;
+        }
+
+
+
+
+
+
+
         document.getElementById('serv_chg').innerHTML = ' ';
 
         getServCap(selected)
@@ -316,12 +341,12 @@ console.log(arr)
 
         document.getElementById(selected == 0 ? "type0" : "type1").checked = true
 
-        if(selected == 0){
-            document.getElementById("NPtc").removeAttribute("hidden")
-        }else{
-            document.getElementById("NPtc").setAttribute("hidden", "hidden")
-            document.getElementById("propbedcap").value = null;
-        }
+        // if(selected == 0){
+        //     document.getElementById("NPtc").removeAttribute("hidden")
+        // }else{
+        //     document.getElementById("NPtc").setAttribute("hidden", "hidden")
+        //     document.getElementById("propbedcap").value = null;
+        // }
 
         if(selected == 1){
             document.getElementById("RPtc").removeAttribute("hidden")

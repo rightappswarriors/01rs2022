@@ -19,16 +19,38 @@
 
 
 <!-- <div class="col-md-12"> -->
+<div class="col-md-12" id="NSB" hidden>
+<br/>
+    <label>
+        Number of Single Bed
+        <span class="text-danger">*</span>
+    </label>
+    <p>
+        <h3  id="singlebedview" hidden></h3>
+    </p>
+    <input class="form-control" type="number" name="singlebed" id="singlebed" placeholder="Number of Single Bed" />
+</div>
+<div class="col-md-12" id="NDD" hidden>
+<br/>
+    <label>
+        Number of Double Deck
+        <span class="text-danger">*</span>
+    </label>
+    <p>
+        <h3  id="doubledeckview" hidden></h3>
+    </p>
+    <input class="form-control" type="number" name="doubledeck" id="doubledeck" placeholder="Number of Double Deck" />
+</div>    
 <div class="col-md-12" id="NPtc" hidden>
 <br/>
     <label>
-        Proposed Bed Capacity
+        Proposed Number of Beds
         <span class="text-danger">*</span>
     </label>
     <p>
         <h3  id="propbedcapview" hidden></h3>
     </p>
-    <input class="form-control" type="number" name="propbedcap" id="propbedcap" placeholder="Proposed Bed Capacity" />
+    <input class="form-control" type="number" name="propbedcap" id="propbedcap" placeholder="Proposed Number of Beds" />
 </div>
 <br/>
 <div class="col-md-12" id="RPtc" hidden>

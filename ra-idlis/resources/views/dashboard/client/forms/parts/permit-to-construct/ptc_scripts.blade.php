@@ -80,26 +80,20 @@
               var getFACID = servFacArray[1];
               var theFACID = getFACID[0].facid;
 
-              getFACID.forEach(function myFunction(item, index) {
-                console.log(item.facid)
-                setTimeout(function(){ 
-                    var gefc = item.facid;
-                    console.log(gefc);
-                    document.getElementById(item.facid).checked = true
-                }, 3000);
-
-             });
-
-
             //   console.log("getHGPID")
             //   console.log(getHGPID)
             console.log("dbhgpid")
             console.log(dbhgpid)
             setTimeout(function(){ 
                 typeofFacs(dbhgpid)
-            }, 1000);
-
-
+ }, 1000);
+            console.log("theFACID")
+            console.log(theFACID)
+            setTimeout(function(){ 
+                var gefc = document.getElementById(theFACID);
+                if(gefc){
+              document.getElementById(theFACID).checked = true}
+        }, 1000);
         
             }
 
@@ -237,14 +231,14 @@
         data.map((it) => {
            
                var newDiv = document.createElement("div");
-               newDiv.setAttribute("class", "custom-control custom-checkbox mr-sm-2");
+               newDiv.setAttribute("class", "custom-control custom-radio mr-sm-2");
                newDiv.setAttribute("id", "otherServe-" + it.facid);
                document.getElementById("ServCapCont").appendChild(newDiv);
 
                var x = document.createElement("INPUT");
                x.setAttribute("id", it.facid);
                x.setAttribute("onclick", "getFacServCharge()");
-               x.setAttribute("type", "checkbox");
+               x.setAttribute("type", "radio");
                x.setAttribute("value", it.facid);
                x.setAttribute("name", "facid");
                x.setAttribute("class", "custom-control-input");

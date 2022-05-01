@@ -63,7 +63,7 @@
         var ptcorg = JSON.parse('{!!((count($fAddress) > 0) ? addslashes($ptc): "")!!}');
       var  ptc = ptcorg[0]
         // console.log("ptc")
-        console.log("ptc")
+        console.log(ptc);
      
        
 
@@ -106,6 +106,10 @@
             document.getElementById("construction_description").value = ptc.construction_description;
             document.getElementById("propbedcap").value = ptc.propbedcap;
             document.getElementById("propbedcapview").innerText  = ptc.propbedcap;
+            document.getElementById("singlebed").value = ptc.singlebed;
+            document.getElementById("singlebedview").innerText  = ptc.singlebed;
+            document.getElementById("doubledeck").value = ptc.doubledeck;
+            document.getElementById("doubledeckview").innerText  = ptc.doubledeck;
             document.getElementById("renoOption").value = ptc.renoOption;
             document.getElementById("incbedcapfrom").value = ptc.incbedcapfrom;
             document.getElementById("incbedcapto").value = ptc.incbedcapto;

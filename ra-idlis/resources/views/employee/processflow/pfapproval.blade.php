@@ -62,7 +62,6 @@
                               if($data->status == 'P' || $data->status == 'RA' || $data->status == 'RE' || $data->status == 'RI' ){
                                 $ifdisabled = 'disabled';
                               }
-
                             @endphp
 
                             <tr>

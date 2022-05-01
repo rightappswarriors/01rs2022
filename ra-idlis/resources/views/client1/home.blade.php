@@ -64,7 +64,9 @@
 			        </div>
 					{{-- <div class="_forIntro col-lg-6">
 			        </div> --}}
-			        <div class="_forIntro col-lg-6">
+
+					{{-- Display past applications  --}}
+			        <div class="_forIntro col-lg-6" style="display:none;">
 			          <div class="card flex-lg-row mb-4 box-shadow h-lg-250" style="border-radius: 1rem; box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);height: 300px;">
 						<div class="container table-responsive">
 							<h3 class="mb-0 pt-3 pb-3 text-center">

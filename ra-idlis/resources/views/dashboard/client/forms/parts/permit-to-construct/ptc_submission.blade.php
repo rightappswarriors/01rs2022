@@ -178,7 +178,7 @@ function submitProper (e){
         type:                   $('input[name="type"]:checked').val(),
         construction_description:$('#construction_description').val(),
         propbedcap:             $('#propbedcap').val(),
-        singlebed:             $('#singlebed').val(),
+        singlebed:              $('#singlebed').val(),
         doubledeck:             $('#doubledeck').val(),
         renoOption:             $('#renoOption').val(),
         incbedcapfrom:          $('#incbedcapfrom').val(),
@@ -244,6 +244,7 @@ function submitProper (e){
         // aptid: "IN"
     }
     console.log(data)
+    console.log(ptcDet)
     console.log("submit")
     if(confirm("Are you sure you want to proceed?")){
         callApi('/api/application/ptc/save', data, 'POST').then(d => {

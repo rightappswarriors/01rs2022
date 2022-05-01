@@ -74,12 +74,6 @@
                               $ifdisabled = '';$color = '';
                             @endphp
 
-                            @if($type == 'technical' && strtolower($data->hfser_id) != 'lto' )
-                                <?php continue; ?>
-                            @elseif($type == 'documentary' && strtolower($data->hfser_id) == 'lto' )
-                            <?php continue; ?>
-                             @endif
-
                              @if($data->status == 'A' )
                                 <?php continue; ?>
                               @endif
@@ -96,12 +90,8 @@
                               @endif
 
                            @if(strtolower($data->hfser_id) == 'ptc' && $data->isReadyForInspec == 0 && $data->status == 'REV')
-                              
                               <?php  continue; ?>
-                              
-                              @endif 
-
-
+                            @endif
 
                              {{--  @if($data->aptid == 'R' || $data->hasAssessors == 'T' || strtolower($data->hfser_id) != 'lto')--}}
                             @if($data->hasAssessors == 'T' || strtolower($data->hfser_id) != 'lto')

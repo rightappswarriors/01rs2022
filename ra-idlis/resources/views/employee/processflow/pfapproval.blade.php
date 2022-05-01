@@ -65,23 +65,6 @@
 
                             @endphp
 
-                            {{-- @if(strtolower($uirgnid) == 'hfsrb')
-                              @if($lname == 'eugenio' && ($position == 'directoriii' || $position == 'director3') && $data->hfser_id == 'PTC')
-                                  @if($data->pbedcap >= 100)
-                                      @php continue; @endphp
-                                  @endif
-                              @endif
-                              @if($lname == 'lutero' && ($position == 'directoriv' || $position == 'director4') && $data->hfser_id == 'PTC')
-                                  @if($data->pbedcap <= 99)
-                                      @php continue; @endphp
-                                  @endif
-                              @endif
-                            @endif  --}}
-
-
-
-
-
                             <tr>
                               <!-- <td class="text-center">{{$data->pbedcap}}</td> -->
                               <td class="text-center">{{$data->hfser_id}}</td>

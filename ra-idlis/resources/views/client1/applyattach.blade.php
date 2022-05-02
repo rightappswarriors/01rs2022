@@ -340,35 +340,26 @@
 			})
 		})
 
-		
+		@if($prompt == true)
+
+		alert('Uploaded requirements are submitted.');
 		
 
 		var aptid = '{{$appform->aptid}}';
 		var hfser_id = '{{$appform->hfser_id}}';
 
 		//if(aptid == 'R' && hfser_id == 'COA'){
-		if(hfser_id == 'LTO' || hfser_id == 'COA' || hfser_id == 'ATO' || hfser_id == 'COR'){
-
-			@if($prompt == true)
-				alert('Uploading of requirements are submitted. Please click OK to redirect to encoding of requirements.');
-			@endif
-
-			window.location.href = "{{asset('client1/apply/app/"+hfser_id+"/')}}/{{$appform->appid}}/hfsrb"
-			
-		}else{
-			@if($prompt == true)
-				alert('Uploading of requirements are submitted. Payment will follow after documents are evaluated.');
-			@endif
-
-			window.location.href = "{{url('client1/apply')}}"
-		}
-
+			if(hfser_id == 'LTO' || hfser_id == 'COA' || hfser_id == 'ATO' || hfser_id == 'COR'){
+				window.location.href = "{{asset('client1/apply/app/"+hfser_id+"/')}}/{{$appform->appid}}/hfsrb"
+			}else{
+				window.location.href = "{{url('client1/apply')}}"
+			}
 		
 		// if (r == true) { window.location.href = "{{url('client1/payment/'.FunctionsClientController::getToken().'/'.$appid)}}" };
 		// var r = confirm('Requirements submitted. Proceed to Payment Method?');
 		// if (r == true) { window.location.href = "{{url('client1/payment/'.FunctionsClientController::getToken().'/'.$appid)}}" };
 	
-		
+		@endif
 	</script>
 	@include('client1.cmp.footer')
 	<script>

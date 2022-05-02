@@ -38,6 +38,14 @@
                                 <td colspan="2">No Ambulance</td>
                             </tr>
                         </tbody>
+
+                        
+                        <tbody id="totalfeesN">
+                                <tr>
+                                    <td colspan="2"><br/><center><b style="font-size:150%;">TOTAL FEES: ₱0.00</b></center></td>
+                                </tr>
+                            </tbody>
+
                     </table>
                 </div>
             </div>

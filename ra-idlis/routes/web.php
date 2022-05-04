@@ -512,7 +512,7 @@ Route::match(['get', 'post'],  'employee/dashboard/processflow/pre-assessment/FD
 
 
 Route::match(['get', 'post'],  'employee/dashboard/processflow/evaluate/FDA/{request?}', 'DOHController@EvaluateProcessFlowFDA'); // View All // FDA
-Route::match(['get', 'post'], 'employee/dashboard/processflow/evaluate/{appid}/{requestforfda?}', 'DOHController@EvaluateOneProcessFlow'); // View One
+Route::match(['get', 'post'], 'employee/dashboard/processflow/evaluate/{appid}/{requestforfda?}/{isdocumentary?}', 'DOHController@EvaluateOneProcessFlow'); // View One
 Route::match(['get', 'post'], 'employee/dashboard/processflow/LTO/evaluate/', 'DOHController@evaluateLTOReq'); // View One
 Route::match(['get', 'post'], 'employee/dashboard/processflow/evaluate/{appid}/edit', 'DOHController@EditEvaluationOneProcessFlow'); // Edit One
 Route::match(['get', 'post'], 'employee/dashboard/processflow/evaluate/FDA/{appid}/{request}', 'DOHController@EvaluateOneProcessFlowFDA'); // Edit One

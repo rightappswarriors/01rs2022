@@ -6,13 +6,13 @@
   <div class="content p-4">
   	<div class="card">
   		<div class="card-header bg-white font-weight-bold">
-             Evaluate Applicants  ({{$type == 'technical' ? 'Technical' : 'Documentary'}})  @include('employee.tableDateSearch')
+        {{$type == 'technical' ? 'Technical' : 'Documentary'}}  Evaluation  @include('employee.tableDateSearch')
           </div>
-          @if($type != 'technical')
+         {{-- @if($type != 'technical')  --}}
           <div  class="card-header bg-white text-center">
               <span class=" font-weight-bold">Legend:</span> <span class=" font-weight-bold">Gray Background </span>= Not yet Viewed/Not yet Opened Document(s).  <span class=" font-weight-bold">White Background</span> = Viewed/Opened Document(s).
           </div>
-          @endif
+          {{-- @endif --}}
           
           <div class="card-body table-responsive">
          
@@ -51,22 +51,22 @@
                                  continue
                               endif --}} -->
                   <tbody id="FilterdBody">
+                  
+                 
+              
                    @if (isset($BigData))
                         @foreach ($BigData as $data)
-                         {{-- @if($data->isCashierApprove == 1)  --}}     
-                        @if(true) 
+                          @if($data->isCashierApprove == 1)   
+                          {{-- @if(true) --}}
                         @if( $data->aptid == 'R' || $data->isReadyForInspec == 1 || $data->isrecommended == 2  &&  (isset($data->isCashierApprove) && $data->isCashierApprove == 1 ) )
                             
                             @if(strtolower($data->hfser_id) == 'ptc' )
-                              
-                           
-                            
+                  
                             @else
 
-                            <!-- Place the  data->isrecommended [2,null] here-->
-
-
+                                  <!-- Place the  data->isrecommended [2,null] here-->
                             @endif
+
                             @php
                               $status = '';
                               $paid = $data->appid_payment;
@@ -111,8 +111,10 @@
                                     @if(!isset($data->documentSent))
                                       <button type="button" title="Evaluate {{$data->facilityname}}" class="btn btn-outline-primary" onclick="acceptDocu({{$data->appid}})"  {{$ifdisabled}}><i class="fa fa-fw fa-clipboard-check" {{$ifdisabled}}></i></button>&nbsp;
                                       {{-- <button type="button" title="Edit {{$data->facilityname}}" class="btn btn-outline-warning" onclick="window.location.href = '{{ asset('/employee/dashboard/processflow/evaluate') }}/{{$data->appid}}/edit'"  {{$ifdisabled}}><i class="fa fa-fw fa-edit" {{$ifdisabled}}></i></button> --}}
-                                    @else
-                                      <button type="button" title="Evaluate {{$data->facilityname}}" class="btn btn-outline-primary" onclick="window.location.href = '{{ asset('/employee/dashboard/processflow/evaluate') }}/{{$data->appid}}'"  {{$ifdisabled}}><i class="fa fa-fw fa-clipboard-check" {{$ifdisabled}}></i></button>&nbsp;
+
+                                      {{-- for documentary evaluation  --}}
+                                    @else Documentary
+                                      <button type="button" title="Evaluate {{$data->facilityname}}" class="btn btn-outline-primary" onclick="window.location.href = '{{ asset('/employee/dashboard/processflow/evaluate') }}/{{$data->appid}}/{{'hfsrb'}}/{{$isdocumentary}}'"  {{$ifdisabled}}><i class="fa fa-fw fa-clipboard-check" {{$ifdisabled}}></i></button>&nbsp;
                                     {{-- <button type="button" title="Edit {{$data->facilityname}}" class="btn btn-outline-warning" onclick="window.location.href = '{{ asset('/employee/dashboard/processflow/evaluate') }}/{{$data->appid}}/edit'"  {{$ifdisabled}}><i class="fa fa-fw fa-edit" {{$ifdisabled}}></i></button> --}}
                                     @endif
                                 </center>

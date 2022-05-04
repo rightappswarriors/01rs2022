@@ -11,19 +11,12 @@
           <div class="card-body table-responsive">
         
             @php
-            $lname = preg_replace('/\s*/', '', $uilastname);
-            $lname = strtolower($lname);
+              $lname = preg_replace('/\s*/', '', $uilastname);
+              $lname = strtolower($lname);
 
-            $position = preg_replace('/\s*/', '', $uiposition);
-            $position = strtolower($position);
-
-            
-
-            @endphp
-<!-- 
-            {{$lname}}
-            {{$position}} -->
-          
+              $position = preg_replace('/\s*/', '', $uiposition);
+              $position = strtolower($position);
+            @endphp          
             
               <table class="table table-hover" id="example" style="font-size:13px;">
                   <thead>

@@ -165,8 +165,7 @@
               @else
                <a href="{{asset('/employee/dashboard/processflow/evaluate/technical')}}">
                @endif
-                 
-               Evaluation 
+                 Technical Evaluation 
                @if($office == 'pharma')
                     <div style="float: right;">
                       <a class="btn {{(FunctionsClientController::existOnDB('cdrrpersonnel',[['appid',$AppData->appid],['isTag',1]]) ? 'bg-danger': 'btn-primary')}} p-3 text-white" target="_blank" href="{{url('client1/apply/fda/CDRR/view/personnel/').'/'.$AppData->appid.'/tag'}}">Tag Pharmacist</a>

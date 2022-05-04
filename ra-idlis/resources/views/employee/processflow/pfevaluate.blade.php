@@ -72,7 +72,7 @@
                             @endphp
 
                              @if($data->status == 'A' )
-                                <?php continue; ?>
+                             <?php continue; ?>
                               @endif
 
                             @if($data->isrecommended == 1 && strtolower($data->hfser_id) != 'lto')

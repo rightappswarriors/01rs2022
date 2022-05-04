@@ -269,6 +269,8 @@ class NewClientController extends Controller {
 			return redirect('client1/home')->with('errRet', ['errAlt'=>'danger', 'errMsg'=>'Error on page Add new Application. Contact the admin']);
 		}
 	}
+
+	//Client Attachedments or Uploads of Documents
 	public function __applyAttach(Request $request, $hfser, $appid, $office = 'hfsrb') {
 		// try {
 			$office = AjaxController::listsofapproved(['hfsrb','xray','pharma'],strtolower($office),'hfsrb');

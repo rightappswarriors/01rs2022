@@ -160,13 +160,14 @@
              
                <!-- <a href="{{asset('/employee/dashboard/processflow/evaluate')}}"><button class="btn btn-primary" >Back</button></a> -->
                <!-- <button class="btn btn-primary" onclick="window.history.back();">Back</button> -->
-               @if(app('request')->input('from') == 'rec')
-          <button class="btn btn-primary" onclick="window.history.back();">Back</button>&nbsp;
-        @else
-        <a href="{{asset('/employee/dashboard/processflow/evaluate')}}"><button class="btn btn-primary" >Back</button></a>
-  @endif
-  Evaluation 
+              @if(app('request')->input('from') == 'rec')
+                <button class="btn btn-primary" onclick="window.history.back();">Back</button>&nbsp;
+              @else
+                <a href="{{asset('/employee/dashboard/processflow/evaluate')}}"><button class="btn btn-primary" >Back</button></a>
+              @endif
+               Documentary Evaluation 
             </div>
+
             <div class="card-body">
               <div class="col-sm-12">
                   <h2>@isset($AppData) {{$AppData->facilityname}} @endisset</h2>
@@ -249,7 +250,7 @@
                 @if (isset($UploadData))
                   @foreach ($UploadData as $UpData)
                       
-                    <tr>
+                  <tr>
                     <td >
                       <font>
 
@@ -367,7 +368,7 @@
             @if($AppData->hfser_id == 'PTC' && isset($AppData->conCode)) Other Details:  {{$AppData->conCode}}@endif
             <br>
             
-{{--             <div class="col-sm-12" id="TheSaveButton" @if(isset($numOfNull) AND ($numOfNull== 0)) style="display: none" @endif>
+          {{--  <div class="col-sm-12" id="TheSaveButton" @if(isset($numOfNull) AND ($numOfNull== 0)) style="display: none" @endif>
               <hr>
               <button type="button" class="btn btn-success" onclick="saveEvals()">
                   <i class="fa fa-floppy-o" aria-hidden="true"></i>  Save Application

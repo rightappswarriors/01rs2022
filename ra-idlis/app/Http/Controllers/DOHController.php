@@ -3583,7 +3583,7 @@ use FunctionsClientController;
 				//dd(AjaxController::getAllApplicantsProcessFlow());
 				//dd($data);
 				//dd(AjaxController::getCurrentUserAllData());
-				return view('employee.processflow.pfevaluate', ['BigData'=>$data, 'type'=>'documentary']);
+				return view('employee.processflow.pfevaluate', ['BigData'=>$data, 'type'=>'documentary', 'isdocumentary'=>'true']);
 			} 
 			catch (Exception $e) 
 			{
@@ -3598,7 +3598,7 @@ use FunctionsClientController;
 			{
 				$data = AjaxController::getAllApplicantsProcessFlow();
 				// dd(AjaxController::getCurrentUserAllData());
-				return view('employee.processflow.pfevaluate', ['BigData'=>$data, 'type'=>'technical']);
+				return view('employee.processflow.pfevaluate', ['BigData'=>$data, 'type'=>'technical', 'isdocumentary'=>'false']);
 			} 
 			catch (Exception $e) 
 			{
@@ -3689,224 +3689,245 @@ use FunctionsClientController;
 			
 		}
 
-
-
-		public function EvaluateOneProcessFlow(Request $request, $appid, $office = 'hfsrb')
+		//This is the function of the content for evaluate applicant, either to go to Technical Evaluation or Documentary Evaluation.
+		public function EvaluateOneProcessFlow(Request $request, $appid, $office = 'hfsrb', $isdocumentary='true')
 		{
-			$office = AjaxController::listsofapproved(['hfsrb','xray','pharma'],strtolower($office),'hfsrb');
-			$forhfsrb = ($office == 'hfsrb');
-			$boolFlag = false;
-			$boolRedirect = true;
-			// if(DB::table('appform')->where([['appid', $appid],['isrecommended',null]])->orWhere([['appid', $appid],['isrecommended',2]])->count() <= 0){
-			// 	return redirect('employee/dashboard/processflow/evaluate');
-			// }
+			if(session()->has('employee_login')){
 
-			$data = AjaxController::getAllDataEvaluateOne($appid);
-			$coaFlag = ($forhfsrb && strtolower($data->hfser_id) == 'coa');
-			if ($request->isMethod('get')) 
-			{
-				$Cur_useData  = AjaxController::getCurrentUserAllData();
-				$curForm = FunctionsClientController::getUserDetailsByAppform($appid);
-				$documentDate = (isset($curForm[0]->documentSent) ? $curForm[0]->documentSent :  Date('Y-m-d',strtotime('now')));
-				$linkToEdit = asset('client1/apply/employeeOverride/app/'.$data->hfser_id.'/'.$data->appid);
-				$data8 = Carbon::parse($Cur_useData['date']);
-				$data9 = Carbon::parse($Cur_useData['date']);
-				$data10 = Carbon::parse($Cur_useData['date']);
-				$data10 = $data10->addDays(30);
-				$data8 = $data8->addDays(1);
-				do {
-					// $temp = $data8->toDateString();	
-					if ($data8->isWeekday()) { // true
-						$temp = $data8->toDateString();
-						$check = DB::table('holidays')->where('hdy_date', '=', $temp)->first();
-						if ($check) {
+				$office = AjaxController::listsofapproved(['hfsrb','xray','pharma'],strtolower($office),'hfsrb');
+				$forhfsrb = ($office == 'hfsrb');
+				$boolFlag = false;
+				$boolRedirect = true;
+				// if(DB::table('appform')->where([['appid', $appid],['isrecommended',null]])->orWhere([['appid', $appid],['isrecommended',2]])->count() <= 0){
+				// 	return redirect('employee/dashboard/processflow/evaluate');
+				// }
+				$data = AjaxController::getAllDataEvaluateOne($appid);
+				$coaFlag = ($forhfsrb && strtolower($data->hfser_id) == 'coa');
+
+				if ($request->isMethod('get')) 
+				{
+					$Cur_useData  = AjaxController::getCurrentUserAllData();
+					$curForm = FunctionsClientController::getUserDetailsByAppform($appid);
+					$documentDate = (isset($curForm[0]->documentSent) ? $curForm[0]->documentSent :  Date('Y-m-d',strtotime('now')));
+					$linkToEdit = asset('client1/apply/employeeOverride/app/'.$data->hfser_id.'/'.$data->appid);
+					$data8 = Carbon::parse($Cur_useData['date']);
+					$data9 = Carbon::parse($Cur_useData['date']);
+					$data10 = Carbon::parse($Cur_useData['date']);
+					$data10 = $data10->addDays(30);
+					$data8 = $data8->addDays(1);
+
+					do {
+						// $temp = $data8->toDateString();	
+						if ($data8->isWeekday()) { // true
+							$temp = $data8->toDateString();
+							$check = DB::table('holidays')->where('hdy_date', '=', $temp)->first();
+							if ($check) {
+								$data8 = $data8->addDays(1);
+								$test = false;
+							} else {
+								$test = true;
+							}
+						} else { // false
 							$data8 = $data8->addDays(1);
 							$test = false;
-						} else {
-							$test = true;
 						}
-					} else { // false
-						$data8 = $data8->addDays(1);
-						$test = false;
-					}
-				} while ($test == false);
+					} while ($test == false);
 
-				// for filtering per hfser
-				switch (strtolower($data->hfser_id)) {
-					case 'lto':
-						$boolFlag = false;
-						break;
-					
-					case 'coa':
-						if($coaFlag && !isset($data->coaflag)){
+					// for filtering per hfser
+					/*
+					switch (strtolower($data->hfser_id)) {
+						case 'lto':
+							$boolFlag = false;
+							break;
+						
+						case 'coa':
+							if($coaFlag && !isset($data->coaflag)){
+								$boolFlag = true;
+							} else {
+								$boolRedirect = false;
+							}
+							break;
+						default:
 							$boolFlag = true;
-						} else {
-							$boolRedirect = false;
-						}
 						break;
-					default:
-						$boolFlag = true;
-					break;
-				}
+					} */
 
-				// if( strtolower($data->hfser_id) != 'lto' /*|| $office != 'hfsrb'*/ /*&& ( $coaFlag && !isset($data->coaflag) ) */){
-				if($boolFlag){
+					if($coaFlag && !isset($data->coaflag)){
+
+					} else {
+						$boolRedirect = false;
+					}
+
+					if($isdocumentary == "true"){
+						$boolFlag = true;
+					} else{
+						$boolRedirect = false;
+					}
+					// if( strtolower($data->hfser_id) != 'lto' /*|| $office != 'hfsrb'*/ /*&& ( $coaFlag && !isset($data->coaflag) ) */){
+					//if $boolFlag is true, go to documentary evaluation content page, otherwise, technical evaluation content.
+					//dd($boolFlag);
+					if($boolFlag){
+
+						try 
+						{
+							$data1 = AjaxController::getAllDataEvaluateOneUploads($appid, 0, $office);
+							$data2 = AjaxController::getAllDataEvaluateOneUploads($appid, 1);
+							$data3 = AjaxController::getAllDataEvaluateOneUploads($appid, 2);
+							$data4 = AjaxController::getAllDataEvaluateOneUploads($appid, 3);
+							$data5 = AjaxController::getAllDataEvaluateOneUploads($appid, 4);
+							$data6 = AjaxController::getAllOrderOfPayment();
+							// $data7 = AjaxController::getAllDataEvaluateOneUploads($appid, 5);
+							$test = false;
+							$isApproved = [1, null]; $isAllUpload = []; $isTrue = true;
+							// dd($curForm);
+							// if(count($curForm) > 0) {
+							// 	foreach(FunctionsClientController::getReqUploads($curForm[0]->hfser_id, $appid) AS $each) {
+							// 		if(! isset($each->filepath)) {
+							// 			array_push($isAllUpload, $each->upid);
+							// 		} else {
+							// 			if(! in_array($each->evaluation, $isApproved)) {
+							// 				if(in_array($curForm[0]->canapply, [1])) {
+							// 					array_push($isAllUpload, $each->upid);
+							// 				}
+							// 			}
+							// 		}
+							// 	}
+							// 	if(count($isAllUpload) < 1) {
+							// 		$isTrue = true;
+							// 	}
+							// }								
+							// $clientUID = DB::select("SELECT `uid` FROM x08 WHERE uid IN (SELECT uid FROM appform WHERE appid = '$appid')")['0']->uid;
+							// if(!session()->has('uData') && session()->get('uData')['uid'] != $clientUID){
+							// 	session()->forget('uData');
+							// 	$clientData = DB::select("SELECT * FROM x08 WHERE uid IN (SELECT uid FROM appform WHERE appid = '$appid')")['0'];
+							// 	session()->put('uData',$clientData);
+							// }
+							$acceptedExt = array('pdf','jpg','png','jpeg','gif');
+							//dd($data);
+							return view('employee.processflow.pfevaluteone', ['AppData'=> $data, 'UploadData' => $data1, 'numOfX' => count($data2), 'numOfApp' => count($data3), 'numOfAprv'=> count($data4), 'numOfNull' => count($data5), 'OOPS'=>$data6, /*'OPPok' => $data7,*/ 'ActualString' => $data8->toDateString(), 'DateString' => $data8->toFormattedDateString(),'appID' => $appid, 'DateNow' => $data9->toDateString(), 'AfterDay'=> $data10->toDateString(), 'linkToEdit' => $linkToEdit, 'documentDate' => $documentDate/*,'allSent' => $isTrue*/, 'accepted' => $acceptedExt, 'forhfsrb' => $forhfsrb, 'office' => $office, 'coaFlag' => $coaFlag, 'redirect' => $boolRedirect]);
+						} 
+						catch (Exception $e) 
+						{
+							return $e;
+							AjaxController::SystemLogs($e);
+							session()->flash('system_error','ERROR');
+							return view('employee.processflow.pfevaluteone');
+						}
+					} else {
+
+						$tables = array();
+						$arrTemp = [];
+						$req = AjaxController::getAllRequirementsLTO($appid);
+						
+						if($office != 'hfsrb'){
+							$adjustedName = ($office == 'pharma' ? 'CDRR' : 'CDRRHR');
+							$req = AjaxController::getRequirementsFDA($appid);
+							$count = count($req);
+
+							if(isset($req)){
+								for ($i=0; $i < $count; $i++) {
+									if(isset($req[$i]) && ($req[$i][4] == $adjustedName) && $req[$i][2]->isNotEmpty()){
+										array_push($arrTemp, $req[$i][3]);
+									}
+									if(isset($req[$i]) && ($req[$i][4] != $adjustedName)){
+										unset($req[$i]);
+									}
+								}
+							}
+						}
+						if(count($arrTemp) <= 0){
+							foreach($req as $key => $datas){
+								if(!in_array(trim($datas[3]), $tables)){
+									array_push($tables, trim($datas[3]));
+								}
+							}
+						} else {
+							$tables = $arrTemp;
+						}
+
+						$Cur_useData = AjaxController::getCurrentUserAllData();
+						$checdata = DB::table('appform')->where('appid', '=', $appid)->first();
+
+						if(is_null($checdata->isrecommended)){
+								$updateData = array(
+									'isrecommended'=>1,
+									'recommendedby' => $Cur_useData['cur_user'],
+									'recommendedtime' => $Cur_useData['time'],
+									'recommendeddate' =>  $Cur_useData['date'],
+									'recommendedippaddr' =>$Cur_useData['ip'],
+									'isPayEval' => 1,
+									'payEvalby' => $Cur_useData['cur_user'],
+									'payEvaldate' => $Cur_useData['date'],
+									'payEvaltime' => $Cur_useData['time'],
+									'payEvalip'=> $Cur_useData['ip'],
+									'status' => 'FI'
+								);
+
+								DB::table('appform')->where('appid', '=', $appid)->update($updateData);
+						}
+						
+						return view('employee.processflow.pfevaluateoneLTO', ['type'=> 'docu','AppData'=> $data, 'requirements' => $req, 'appID' => $appid, 'documentDate' => $documentDate, 'linkToEdit' => $linkToEdit, 'ActualString' => $data8->toDateString(), 'DateString' => $data8->toFormattedDateString(),'appID' => $appid, 'DateNow' => $data9->toDateString(), 'AfterDay'=> $data10->toDateString(), 'tables' => json_encode($tables), 'forhfsrb' => $forhfsrb, 'office' => $office, 'coaFlag' => $coaFlag, 'redirect' => $boolRedirect]);
+					}
+				}
+				if ($request->isMethod('post')) 
+				{
 					try 
 					{
-						$data1 = AjaxController::getAllDataEvaluateOneUploads($appid, 0, $office);
-						$data2 = AjaxController::getAllDataEvaluateOneUploads($appid, 1);
-						$data3 = AjaxController::getAllDataEvaluateOneUploads($appid, 2);
-						$data4 = AjaxController::getAllDataEvaluateOneUploads($appid, 3);
-						$data5 = AjaxController::getAllDataEvaluateOneUploads($appid, 4);
-						$data6 = AjaxController::getAllOrderOfPayment();
-						// $data7 = AjaxController::getAllDataEvaluateOneUploads($appid, 5);
-						
-						
-						$test = false;
-						$isApproved = [1, null]; $isAllUpload = []; $isTrue = true;
-						// dd($curForm);
-						// if(count($curForm) > 0) {
-						// 	foreach(FunctionsClientController::getReqUploads($curForm[0]->hfser_id, $appid) AS $each) {
-						// 		if(! isset($each->filepath)) {
-						// 			array_push($isAllUpload, $each->upid);
-						// 		} else {
-						// 			if(! in_array($each->evaluation, $isApproved)) {
-						// 				if(in_array($curForm[0]->canapply, [1])) {
-						// 					array_push($isAllUpload, $each->upid);
-						// 				}
-						// 			}
-						// 		}
-						// 	}
-						// 	if(count($isAllUpload) < 1) {
-						// 		$isTrue = true;
-						// 	}
-						// }
-						
+						if($request->has('addUpload')){
+							foreach ($request->addUpload as $key => $value) {
+								DB::table('app_upload')->insert(['app_id' => $appid,'upid' => 1, 'upDesc' => $value, 'upDescRemarks' => $request->addUploadRemarks[$key]]);
+							}
+							$uid = AjaxController::getUidFrom($data->appid);
+							$idForNotify = AjaxController::getNotificationIDfromCases($data->hfser_id,'additionalRequirments',1);
+							AjaxController::notifyClient($data->appid,$uid,$idForNotify);
+							return redirect('employee/dashboard/processflow/evaluate/'.$appid);
+						}
+
+						if(empty($request->checkFiles)){
+							$addedby = session()->get('employee_login');
+							$dt = Carbon::now();
+							$dateNow = $dt->toDateString();
+							$timeNow = $dt->toTimeString();
+							for ($i=0; $i < count($request->ifChk) ; $i++) { 
+								if (isset($request->ifChk[$i])) {
+									$updateData = array(
+										'evaluation'=>$request->ifChk[$i],
+										'evaluatedBy' => $addedby->uid,
+										'evaltime' => $timeNow, 
+										'evaldate' => $dateNow,
+										'remarks' => $request->ChkRmk[$i],
+									);
+									$test = DB::table('app_upload')->where('apup_id', '=', $request->ids[$i])->update($updateData);
+								}
+							}
+							// return ($request->ifChk[4]);
 							
-						// $clientUID = DB::select("SELECT `uid` FROM x08 WHERE uid IN (SELECT uid FROM appform WHERE appid = '$appid')")['0']->uid;
-						// if(!session()->has('uData') && session()->get('uData')['uid'] != $clientUID){
-						// 	session()->forget('uData');
-						// 	$clientData = DB::select("SELECT * FROM x08 WHERE uid IN (SELECT uid FROM appform WHERE appid = '$appid')")['0'];
-						// 	session()->put('uData',$clientData);
-						// }
-						$acceptedExt = array('pdf','jpg','png','jpeg','gif');
-						//dd($data);
-						return view('employee.processflow.pfevaluteone', ['AppData'=> $data, 'UploadData' => $data1, 'numOfX' => count($data2), 'numOfApp' => count($data3), 'numOfAprv'=> count($data4), 'numOfNull' => count($data5), 'OOPS'=>$data6, /*'OPPok' => $data7,*/ 'ActualString' => $data8->toDateString(), 'DateString' => $data8->toFormattedDateString(),'appID' => $appid, 'DateNow' => $data9->toDateString(), 'AfterDay'=> $data10->toDateString(), 'linkToEdit' => $linkToEdit, 'documentDate' => $documentDate/*,'allSent' => $isTrue*/, 'accepted' => $acceptedExt, 'forhfsrb' => $forhfsrb, 'office' => $office, 'coaFlag' => $coaFlag, 'redirect' => $boolRedirect]);
+							// 
+							// return back();	
+							
+							return ($test ? 'DONE' : 'ERROR');
+						} else {
+							$test = DB::table('appform')->where('appid',$appid)->update(['documentSent' => Carbon::now()->toDateString()]);
+							if($test){
+								$uid = AjaxController::getUidFrom($appid);
+								AjaxController::notifyClient($appid,$uid,23);
+							}
+							return $test;
+						}
+
 					} 
 					catch (Exception $e) 
 					{
-						return $e;
 						AjaxController::SystemLogs($e);
-						session()->flash('system_error','ERROR');
-						return view('employee.processflow.pfevaluteone');
+						// session()->flash('system_error','ERROR');
+						return 'ERROR';
 					}
-				} else {
-
-					$tables = array();
-					$arrTemp = [];
-					$req = AjaxController::getAllRequirementsLTO($appid);
-					if($office != 'hfsrb'){
-						$adjustedName = ($office == 'pharma' ? 'CDRR' : 'CDRRHR');
-						$req = AjaxController::getRequirementsFDA($appid);
-						$count = count($req);
-						if(isset($req)){
-							for ($i=0; $i < $count; $i++) {
-								if(isset($req[$i]) && ($req[$i][4] == $adjustedName) && $req[$i][2]->isNotEmpty()){
-									array_push($arrTemp, $req[$i][3]);
-								}
-								if(isset($req[$i]) && ($req[$i][4] != $adjustedName)){
-									unset($req[$i]);
-								}
-							}
-						}
-					}
-					if(count($arrTemp) <= 0){
-						foreach($req as $key => $datas){
-							if(!in_array(trim($datas[3]), $tables)){
-								array_push($tables, trim($datas[3]));
-							}
-						}
-					} else {
-						$tables = $arrTemp;
-					}
-
-					$Cur_useData = AjaxController::getCurrentUserAllData();
-					$checdata = DB::table('appform')->where('appid', '=', $appid)->first();
-					if(is_null($checdata->isrecommended)){
-							$updateData = array(
-								'isrecommended'=>1,
-								'recommendedby' => $Cur_useData['cur_user'],
-								'recommendedtime' => $Cur_useData['time'],
-								'recommendeddate' =>  $Cur_useData['date'],
-								'recommendedippaddr' =>$Cur_useData['ip'],
-								'isPayEval' => 1,
-								'payEvalby' => $Cur_useData['cur_user'],
-								'payEvaldate' => $Cur_useData['date'],
-								'payEvaltime' => $Cur_useData['time'],
-								'payEvalip'=> $Cur_useData['ip'],
-								'status' => 'FI'
-							);
-
-							DB::table('appform')->where('appid', '=', $appid)->update($updateData);
-					}
-					
-					return view('employee.processflow.pfevaluateoneLTO', ['type'=> 'docu','AppData'=> $data, 'requirements' => $req, 'appID' => $appid, 'documentDate' => $documentDate, 'linkToEdit' => $linkToEdit, 'ActualString' => $data8->toDateString(), 'DateString' => $data8->toFormattedDateString(),'appID' => $appid, 'DateNow' => $data9->toDateString(), 'AfterDay'=> $data10->toDateString(), 'tables' => json_encode($tables), 'forhfsrb' => $forhfsrb, 'office' => $office, 'coaFlag' => $coaFlag, 'redirect' => $boolRedirect]);
 				}
-			}
-			if ($request->isMethod('post')) 
-			{
-				try 
-				{
-					if($request->has('addUpload')){
-						foreach ($request->addUpload as $key => $value) {
-							DB::table('app_upload')->insert(['app_id' => $appid,'upid' => 1, 'upDesc' => $value, 'upDescRemarks' => $request->addUploadRemarks[$key]]);
-						}
-						$uid = AjaxController::getUidFrom($data->appid);
-						$idForNotify = AjaxController::getNotificationIDfromCases($data->hfser_id,'additionalRequirments',1);
-						AjaxController::notifyClient($data->appid,$uid,$idForNotify);
-						return redirect('employee/dashboard/processflow/evaluate/'.$appid);
-					}
 
-					if(empty($request->checkFiles)){
-						$addedby = session()->get('employee_login');
-						$dt = Carbon::now();
-			          	$dateNow = $dt->toDateString();
-			          	$timeNow = $dt->toTimeString();
-			          	for ($i=0; $i < count($request->ifChk) ; $i++) { 
-			          		if (isset($request->ifChk[$i])) {
-			          			$updateData = array(
-									'evaluation'=>$request->ifChk[$i],
-									'evaluatedBy' => $addedby->uid,
-									'evaltime' => $timeNow, 
-									'evaldate' => $dateNow,
-									'remarks' => $request->ChkRmk[$i],
-								);
-								$test = DB::table('app_upload')->where('apup_id', '=', $request->ids[$i])->update($updateData);
-			          		}
-			          	}
-			          	// return ($request->ifChk[4]);
-						
-						// 
-						// return back();	
-						
-						return ($test ? 'DONE' : 'ERROR');
-					} else {
-						$test = DB::table('appform')->where('appid',$appid)->update(['documentSent' => Carbon::now()->toDateString()]);
-						if($test){
-							$uid = AjaxController::getUidFrom($appid);
-							AjaxController::notifyClient($appid,$uid,23);
-						}
-						return $test;
-					}
-
-				} 
-				catch (Exception $e) 
-				{
-					AjaxController::SystemLogs($e);
-					// session()->flash('system_error','ERROR');
-					return 'ERROR';
-				}
 			}
+			else {
+				return redirect()->route('employee');
+			}			
 		}
 
 		public function evaluateLTOReq(Request $request){

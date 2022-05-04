@@ -161,11 +161,11 @@
                <!-- <a href="{{asset('/employee/dashboard/processflow/evaluate')}}"><button class="btn btn-primary" >Back</button></a> -->
                <!-- <button class="btn btn-primary" onclick="window.history.back();">Back</button> -->
               @if(app('request')->input('from') == 'rec')
-                <button class="btn btn-primary" onclick="window.history.back();">Back</button>&nbsp;
+                <button class="btn btn-primary  ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" onclick="window.history.back();">Back</button>&nbsp;
               @else
-                <a href="{{asset('/employee/dashboard/processflow/evaluate')}}"><button class="btn btn-primary" >Back</button></a>
+                <a href="{{asset('/employee/dashboard/processflow/evaluate')}}"><button class="btn btn-primary  ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" >Back</button></a>
               @endif
-               Documentary Evaluation 
+               &nbsp; Documentary Evaluation 
             </div>
 
             <div class="card-body">
@@ -422,21 +422,21 @@
                   {{-- @elseif($AppData->isrecommended == '1') --}}
                   {{-- <span style="color: green;font-weight: bolder">YES </span> --}}
                   {{-- @elseif($AppData->isrecommended == 2) --}}
-                  {{-- <button type="button"  class="btn btn-success" onclick="Recommended4Inspection('ApproveApplication');">Recommended for Inspection</button> --}}
-                  {{-- <button type="button" class="btn btn-danger" onclick="Recommended4Inspection('RejectApplication');">Reject Application</button> --}}
+                  {{-- <button type="button"  class="btn btn-success ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" onclick="Recommended4Inspection('ApproveApplication');">Recommended for Inspection</button> --}}
+                  {{-- <button type="button" class="btn btn-danger ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" onclick="Recommended4Inspection('RejectApplication');">Reject Application</button> --}}
                   {{-- <span style="color: orange;font-weight: bolder">NO, FOR REVISION </span> --}}
                   @endif
                 @endisset
               @else
-             <button class="btn btn-block p-4 btn-primary" onclick="acceptDocu()">Accept Documents</button>
+             <button class="btn btn-block p-4 btn-primary ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" onclick="acceptDocu()">Accept Documents</button>
               @endif
               </div>
               &nbsp;
               {{-- @isset($OPPok)
                 @if ($OPPok === null AND $AppData->isrecommended == 1)
-                  <button type="button" class="btn btn-info" title="Order of Payment" data-target="#ShowList" data-toggle="modal"  onclick="location.href='{{ asset('/employee/dashboard/lps/evaluate/')}}/{{$AppData->appid}}/{{$OOPs->oop_id}}/add'"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                  <button type="button" class="btn btn-info ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" title="Order of Payment" data-target="#ShowList" data-toggle="modal"  onclick="location.href='{{ asset('/employee/dashboard/lps/evaluate/')}}/{{$AppData->appid}}/{{$OOPs->oop_id}}/add'"><i class="fa fa-plus" aria-hidden="true"></i></button>
                 @elseif($OPPok !== null AND $AppData->isrecommended == 1)
-                  <button type="button" class="btn btn-info" title="Order of Payment" onclick="location.href='{{ asset('/employee/dashboard/lps/evaluate/')}}/{{$AppData->appid}}/{{$OPPok->oop_id}}/view'"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                  <button type="button" class="btn btn-info ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" title="Order of Payment" onclick="location.href='{{ asset('/employee/dashboard/lps/evaluate/')}}/{{$AppData->appid}}/{{$OPPok->oop_id}}/view'"><i class="fa fa-eye" aria-hidden="true"></i></button>
                 @endif
               @endisset --}}
               

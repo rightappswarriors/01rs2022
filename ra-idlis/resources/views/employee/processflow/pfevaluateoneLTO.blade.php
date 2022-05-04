@@ -159,13 +159,18 @@
               <input type="" id="token" value="{{ Session::token() }}" hidden>
               
               @if($office == 'xray')
-              <button class="btn btn-primary" onclick="window.history.back();">Back</button>
+              <button class="btn btn-primary ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" onclick="window.history.back();">Back</button>
               @elseif($office == 'pharma')
-              <a href="{{asset('employee/dashboard/processflow/pre-assessment/FDA/pharma')}}">
+                <a href="{{asset('employee/dashboard/processflow/pre-assessment/FDA/pharma')}}">
+                  <button class="btn btn-primary  ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" >Back</button>
+                </a>
               @else
-               <a href="{{asset('/employee/dashboard/processflow/evaluate/technical')}}">
-               @endif
-                 Technical Evaluation 
+                <a href="{{asset('/employee/dashboard/processflow/evaluate/technical')}}">
+                  <button class="btn btn-primary  ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" >Back</button>
+                </a>
+              @endif 
+              &nbsp; Technical Evaluation
+              
                @if($office == 'pharma')
                     <div style="float: right;">
                       <a class="btn {{(FunctionsClientController::existOnDB('cdrrpersonnel',[['appid',$AppData->appid],['isTag',1]]) ? 'bg-danger': 'btn-primary')}} p-3 text-white" target="_blank" href="{{url('client1/apply/fda/CDRR/view/personnel/').'/'.$AppData->appid.'/tag'}}">Tag Pharmacist</a>
@@ -180,6 +185,13 @@
                   <h2>@isset($AppData) {{$AppData->facilityname}} @endisset</h2>
                   <h5>@isset($AppData) {{strtoupper($AppData->streetname)}} {{strtoupper($AppData->brgyname)}} {{$AppData->cmname}}, {{$AppData->provname}} @endisset</h5>
                   {{-- {{ asset('employee/dashboard/processflow/evaluate')}}/{{$AppData->appid}}/edit --}}
+                  <span>
+                    <label>Process Type:&nbsp;</label>
+                    <span class="font-weight-bold">@if($AppData->aptid == 'R'){{'Renewal'}}@elseif($AppData->aptid == 'IN'){{'Initial New'}}@else{{'Unidentified'}}@endif
+                        @if(isset($AppData->hfser_id)){{' '.$AppData->hfser_id}}@endif
+                    </span>
+                  </span>
+
                   @if($forhfsrb)
                     @if(!empty($documentDate))
                     <h6>Institutional Character: 
@@ -443,19 +455,17 @@
           </div>
 
           <div>
-
        
           @if($office != 'pharma' && $office != 'xray')
-         
-          <div class="col mt-3" style="width: 300px">
-          <!-- <u><a target="_blank" href="{{url('client1/apply/GenerateReportAssessments/'.$AppData->appid)}}">Show Client's Self Assessment</a></u> -->
-          @include('employee.processflow.evalOptRenewal')
-          <br/>
-        </div>
-        
+            @if($AppData->aptid == 'R')
+              <div class="col mt-3" style="width: 300px">
+              <!-- <u><a target="_blank" href="{{url('client1/apply/GenerateReportAssessments/'.$AppData->appid)}}">Show Client's Self Assessment</a></u> -->
+                @include('employee.processflow.evalOptRenewal')
+              <br/>
+              </div>
+            @endif
           @endif
-          
-         
+                   
           <script>
               document.getElementById('appid').value = '{{$AppData->appid}}'
               document.getElementById('valid_from').value = '{{$AppData->validDateFrom}}'

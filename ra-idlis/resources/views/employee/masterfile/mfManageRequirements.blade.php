@@ -79,7 +79,7 @@
   							</select>
   						</div>
   					</div>
-  					<div class="row">
+  					<div class="row" >
   						<div class="col-sm-4">Facility :</div>
   						<div class="col-sm-8" style="margin:0 0 .8em 0;">
   							<select id="FacServID" data-parsley-required-message="*<strong>Facility</strong> required" class="form-control" required>  

@@ -12,76 +12,70 @@
    
   		<div class="card-header bg-white font-weight-bold">
              Application Status  @include('employee.tableDateSearch')
-          </div>
-          <div class="card-body table-responsive">
-          <!-- <table border="0" cellspacing="5" cellpadding="5">
-        <tbody><tr>
-            <td>Minimum date:</td>
-            <td><input type="date" id="min" name="min"></td>
-        </tr>
-        <tr>
-            <td>Maximum date:</td>
-            <td><input type="date" id="max" name="max"></td>
-        </tr>
-    </tbody></table> -->
-    <div  >
-   
-    
-          	<table class="table table-hover" style="font-size:13px;" id="example">
-                  <thead>
-                  <tr>
-                      <th ></th>
-                      <th class="select-filter"></th>
-                      <th ></th>
-                      <th ></th>
-                      <th class="select-filter"></th>
-                      <th class="select-filter"></th>
-                      <th ></th>
-                      <th></th>
-                      <th ></th>
-                      <th ></th>
-                      <th ></th>
-                      <th class="select-filter"></th>
-                     
-                  </tr>
-                  <tr>
-                      <td scope="col" style="text-align: center;">Options</td>
-                      <td scope="col" style="text-align: center;">Type</td>
-                      <td scope="col" style="text-align: center;">Code</td>
-                      <td scope="col" style="text-align: center;">Name of the Facility</td>
-                      <td scope="col" style="text-align: center;">Type of Facility</td>
-                      <td scope="col" style="text-align: center;">Type</td>
-                      <td scope="col" style="text-align: center;">Date Applied</td>
-                      {{-- <td scope="col" style="">Paid</td> --}}
-                      <td scope="col" style="text-align: center;">Status</td>
-                      <td scope="col" style="text-align:center">Evaluated</td>
-                      {{-- <td scope="col" style="">Evaluated by</td> --}}
-                      {{-- <td scope="col" style="">Region Evaluated</td> --}}
-                      <td scope="col" style="text-align: center;">Inspected</td>
-                      <td scope="col" style="text-align: center;">Approved</td>
-                      <td scope="col" style="text-align: center;">Region</td>
-                      
-                      {{-- <td scope="col" style="">Current Status</td> --}}
-                     
-                  </tr>
-                  </thead>
-                  <tbody id="FilterdBody">
-                   @if (isset($LotsOfDatas))
-                    @foreach ($LotsOfDatas as $data)
-                      @if(in_array($data->hfser_id, $serv))
+      </div>
+      <div class="card-body table-responsive">
+        <div  >   
 
-                     <tr>
-                        <td><center>
+          <table class="table table-hover" style="font-size:13px;" id="example">
+            <thead>
+              <tr>
+                  <th ></th>
+                  <th class="select-filter"></th>
+                  <th ></th>
+                  <th ></th>
+                  <th class="select-filter"></th>
+                  <th class="select-filter"></th>
+                  <th ></th>
+                  <th></th>
+                  <th ></th>
+                  <th ></th>
+                  <th ></th>
+                  <th class="select-filter"></th>
+                  <th></th>
+                  
+              </tr>
+              <tr>
+                  <td scope="col" style="text-align: center;">Options</td>
+                  <td scope="col" style="text-align: center;">Type</td>
+                  <td scope="col" style="text-align: center;">Code</td>
+                  <td scope="col" style="text-align: center;">Name of the Facility</td>
+                  <td scope="col" style="text-align: center;">Type of Facility</td>
+                  <td scope="col" style="text-align: center;">Type</td>
+                  <td scope="col" style="text-align: center;">Date Applied</td>
+                  {{-- <td scope="col" style="">Paid</td> --}}
+                  <td scope="col" style="text-align: center;">Status</td>
+                  <td scope="col" style="text-align:center">Evaluated</td>
+                  {{-- <td scope="col" style="">Evaluated by</td> --}}
+                  {{-- <td scope="col" style="">Region Evaluated</td> --}}
+                  <td scope="col" style="text-align: center;">Inspected</td>
+                  <td scope="col" style="text-align: center;">Approved</td>
+                  <td scope="col" style="text-align: center;">Region</td>
+                  <td scope="col" style="text-align: center;">Assigned Region Office</td>
+                  
+                  {{-- <td scope="col" style="">Current Status</td> --}}
+                  
+              </tr>
+            </thead>
+            <tbody id="FilterdBody">
+              @if (isset($LotsOfDatas))
+                @foreach ($LotsOfDatas as $data)
+                  @if(in_array($data->hfser_id, $serv))
+
+                    <tr>
+                      <td>
+                        <center>
                           <button type="button" title="View detailed information for {{$data->facilityname}}" class="btn btn-outline-info" onclick="showData({{$data->appid}},'{{$data->aptdesc}}', '{{$data->authorizedsignature}}','{{$data->brgyname}}', '{{$data->classname}}' ,'{{$data->cmname}}', '{{$data->email}}', '{{$data->facilityname}}','{{$data->hgpdesc}}', '{{$data->formattedDate}}', '{{$data->formattedTime}}', '{{$data->hfser_desc}}','{{$data->ocdesc}}', '{{$data->provname}}','{{$data->rgn_desc}}', '{{$data->streetname}}', '{{$data->zipcode}}', '{{$data->isrecommended}}', '{{$data->hfser_id}}', '{{$data->status}}', '{{$data->uid}}', '{{$data->trns_desc}}');" data-toggle="modal" data-target="#GodModal"><i class="fa fa-fw fa-eye"></i></button>
-                        </center></td>
-                       <td style="text-align:center">{{$data->hfser_id}}</td>
-                       <td style="text-align:center">{{$data->hfser_id}}R{{$data->rgnid}}-{{$data->appid}}</td>
-                       <td style="text-align:center"><strong>{{$data->facilityname}}</strong></td>
-                       <td style="text-align:center">{{(ajaxController::getFacilitytypeFromHighestApplicationFromX08FT($data->appid)->hgpdesc ?? 'NOT FOUND')}}</td>
-                       <td style="text-align:center">{{$data->aptdesc}}</td>
-                        <td style="text-align:center">{{$data->formattedDate}}</td>
-                        <td style="color:black;font-weight:bolder;text-align:center;">{{$data->trns_desc}}</td>
-                        <td><center> {{-- EVALUATION --}}
+                        </center>
+                      </td>
+                      <td style="text-align:center">{{$data->hfser_id}}</td>
+                      <td style="text-align:center">{{$data->hfser_id}}R{{$data->rgnid}}-{{$data->appid}}</td>
+                      <td style="text-align:center"><strong>{{$data->facilityname}}</strong></td>
+                      <td style="text-align:center">{{(ajaxController::getFacilitytypeFromHighestApplicationFromX08FT($data->appid)->hgpdesc ?? 'NOT FOUND')}}</td>
+                      <td style="text-align:center">{{$data->aptdesc}}</td>
+                      <td style="text-align:center">@if(isset($data->created_at)){{date("F j, Y", strtotime($data->created_at)) }} @else {{ 'NA' }} @endif </td>
+                      <td style="color:black;font-weight:bolder;text-align:center;">{{$data->trns_desc}}</td>
+                      <td>
+                        <center> {{-- EVALUATION --}}
                           <h5>
                             @if($data->isrecommended == 1) 
                             <span class="badge  badge-success" title="Click for more info" style="cursor:pointer;" data-toggle="modal" data-target="#ShowEvalInfo" onclick="showEvalInfo('{{$data->formattedTimeEval}}', '{{$data->formattedDateEval}}', '{{$data->formattedTimePropEval}}', '{{$data->formattedDatePropEval}}', '{{$data->recommendedbyName}}', '{{$data->hfser_id}}R{{$data->rgnid}}-{{$data->appid}}', {{$data->appid}})">Yes</span> 
@@ -89,9 +83,12 @@
                               <span class="badge badge-warning">Pending</span> 
                             @else 
                               <span class="badge badge-danger">No</span> 
-                          @endif</h5>
-                        </center></td>
-                        <td><center> {{-- INSPECTION --}}
+                            @endif
+                          </h5>
+                        </center>
+                      </td>
+                      <td>
+                        <center> {{-- INSPECTION --}}
                           <h5>
                             @if ($data->isInspected != null)
                               <span class="badge badge-success">Yes</span>
@@ -99,8 +96,10 @@
                               <span class="badge badge-warning">{{$data->hfser_id == 'CON' ? 'N/A' : 'Pending'}}</span>
                             @endif
                           </h5>
-                        </center></td>
-                        <td><center> {{-- APPROVED --}}
+                        </center>
+                      </td>
+                      <td>
+                        <center> {{-- APPROVED --}}
                           <h5>
                             @if ($data->isApprove == '1')
                               <span class="badge badge-success">Yes</span>
@@ -110,23 +109,20 @@
                               <span class="badge badge-warning">Pending</span>
                             @endif
                           </h5>
-                        </center></td>
-                        <td style="text-align:center">{{$data->rgn_desc}}</td>
-                       
-                        
-                     </tr>
+                        </center>
+                      </td>
+                      <td style="text-align:center">{{$data->rgn_desc}}</td>
+                      <td style="text-align:center">{{$data->asrgn_desc}}</td>
+                    </tr>
 
-                     @endif
+                  @endif
+                @endforeach
+              @endif 
+            </tbody>
+          </table>
 
-
-                    @endforeach
-                  @endif 
-                  </tbody>
-                 
-              </table>
-    </div>
-        
-          </div>
+        </div>
+      </div>
   	</div>
   </div>
   <div class="modal fade" id="GodModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

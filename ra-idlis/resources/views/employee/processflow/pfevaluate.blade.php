@@ -62,11 +62,7 @@
                             $ifdisabled = '';$color = '';
                           @endphp
 
-                          @if(strtolower($data->hfser_id) == 'con' && $data->isrecommended == 2 && $data->status == 'REV')
-                            <?php continue; ?>
-                          @endif
-
-                          @if(strtolower($data->hfser_id) == 'ptc' && $data->isReadyForInspec == 0 && $data->status == 'REV')
+                          @if((strtolower($data->hfser_id) == 'con' && $data->isrecommended == 2 && $data->status == 'REV')  || (strtolower($data->hfser_id) == 'ptc' && $data->isReadyForInspec == 0 && $data->status == 'REV'))
                             <?php  continue; ?>
                           @endif
                           
@@ -121,9 +117,6 @@
 
     $('#min').datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
     $('#max').datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
-
-
-
       
       var table = $('#example').DataTable();
     

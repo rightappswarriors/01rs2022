@@ -51,7 +51,8 @@
                     <script>
 						console.log("{!! $data->hasAssessors.'---'. $data->facilityname.'---' . AjaxController::canProcessNextStepFDA($data->appid,'isCashierApproveFDA','isCashierApprovePharma') !!}")
 						</script>
-                      @if($data->isPayEval == 1 && $data->isCashierApprove == 1 && in_array($data->hfser_id, ['LTO','COA']) )
+                    {{-- $data->isPayEval == 1 && --}}
+                      @if( $data->isCashierApprove == 1 && in_array($data->hfser_id, ['LTO','COA', 'ATO', 'COR']) )
                     @php
                       $status = ''; $color = '';
                       $paid = $data->appid_payment;
@@ -59,20 +60,9 @@
                       if ($reco == 'P') {
                         $status = 'Pending';
                       }
-                            // if ($data->isrecommended == null) {
-                            //     $status = 'For Evaluation';
-                            //     $color = 'black';
-                            // }else if ($data->isrecommended == 1) {
-                            //   $status = 'Application Approved';
-                            //   $color = 'green';
-                            // }
-                            // if ($paid == null) {
-                            //     $status = 'For Evaluation (Not Paid)';
-                            //     $color = 'red';
-                            // }
                     @endphp
-                    <script>
-						console.log("{!! $data->hasAssessors.'---'. $data->facilityname.'---' . AjaxController::canProcessNextStepFDA($data->appid,'isCashierApproveFDA','isCashierApprovePharma') !!}")
+            <script>
+						  console.log("{!! $data->hasAssessors.'---'. $data->facilityname.'---' . AjaxController::canProcessNextStepFDA($data->appid,'isCashierApproveFDA','isCashierApprovePharma') !!}")
 						</script>
                       <tr>
                         <td style="text-align:center">{{$data->hfser_id}}</td>

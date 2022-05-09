@@ -38,17 +38,17 @@
                       @if (isset($BigData))
                         @foreach ($BigData as $data)
                           <!-- if($data->isPayEval == 1 && $data->isrecommended == 1 && $data->isCashierApprove == 1 && $data->isInspected == null && in_array($data->hfser_id, ['LTO','COA']) && $data->proposedWeek != null && AjaxController::canProcessNextStepFDA($data->appid,'isCashierApproveFDA','isCashierApprovePharma')) -->
-                          @if($data->isPayEval == 1  && $data->isCashierApprove == 1 && $data->isInspected == null && in_array($data->hfser_id, ['LTO','COA']) && $data->proposedWeek != null && AjaxController::canProcessNextStepFDA($data->appid,'isCashierApproveFDA','isCashierApprovePharma'))
-                      
-                        
+                          @if($data->isPayEval == 1  && $data->isCashierApprove == 1 && $data->isInspected == null && in_array($data->hfser_id, ['LTO','COA', 'ATO', 'COR']) && $data->proposedWeek != null && AjaxController::canProcessNextStepFDA($data->appid,'isCashierApproveFDA','isCashierApprovePharma'))
                          @php
                             $status = '';
                             $paid = $data->appid_payment;
                             $reco = $data->isrecommended;
                             $ifdisabled = '';$color = '';
-                            if($currentuser['cur_user'] != 'ADMIN' && !FunctionsClientController::existOnDB('app_team',[['appid',$data->appid],['uid',$currentuser['cur_user']]])){
-                              continue;
-                            }
+
+                            // if($currentuser['cur_user'] != 'ADMIN' && !FunctionsClientController::existOnDB('app_team',[['appid',$data->appid],['uid',$currentuser['cur_user']]])){
+                             // continue;
+                            //}
+
                             // if ($data->isInspected == null ) {
                             //       $OptBtn = "<button type=\"button\" title=\"Assess ".$data->facilityname."\" class=\"btn-defaults\" onclick=\"window.location.href=\"".asset('employee/dashboard/lps/assess')."/".$data->appid."/inspect\"  ".$ifdisabled."><i class=\"fa fa-fw fa-clipboard-check\"></i></button>";
                             //   } else {

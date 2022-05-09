@@ -7122,7 +7122,7 @@ use FunctionsClientController;
 			{
 				($session_equiv !== false ? self::sessionForMobile($session_equiv) : null);
 				$data = AjaxController::getAllApplicantsProcessFlow();
-				$arrfilter = [['isPayEval','==',1],['isrecommended','==',1],['isCashierApprove','==',1],['isInspected','==',null],['proposedWeek','!=',null], ['hfser_id','in_array',['LTO','COA']]];
+				$arrfilter = [['isPayEval','==',1],['isrecommended','==',1],['isCashierApprove','==',1],['isInspected','==',null],['proposedWeek','!=',null], ['hfser_id','in_array',['LTO','COA','ATO', 'COR']]];
 				$currentuser = AjaxController::getCurrentUserAllData();
                 return ($this->agent && $session_equiv ? response()->json(array('data' => AjaxController::filterApplicantData($data,$arrfilter))) : view('employee.processflow.pfassessment', ['BigData' => $data, 'currentuser' => $currentuser]));
 			} 

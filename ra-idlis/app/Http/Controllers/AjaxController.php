@@ -4704,7 +4704,7 @@ public static function checkConmem($appid)
 							->orderBy('appform.t_date','desc')
 							->get();
 							break;
-					case 'LO':
+					/*case 'LO':
 						$anotherData = DB::table('appform')
 							->leftJoin('hfaci_serv_type', 'appform.hfser_id', '=', 'hfaci_serv_type.hfser_id')
 							->leftJoin('hfaci_grp', 'appform.facid', '=', 'hfaci_grp.hgpid')
@@ -4752,7 +4752,7 @@ public static function checkConmem($appid)
 							->get();
 							
 							//dd($anotherData);
-							break;
+							break;*/
 							
 					case 'HFERC':
 						$anotherData = DB::table('appform')
@@ -4779,6 +4779,8 @@ public static function checkConmem($appid)
 							->get();
 							break;
 					default:		
+
+						
 						$anotherData = DB::table('appform');
 							$anotherData->leftJoin('hfaci_serv_type', 'appform.hfser_id', '=', 'hfaci_serv_type.hfser_id');
 							$anotherData->leftJoin('hfaci_grp', 'appform.facid', '=', 'hfaci_grp.hgpid');

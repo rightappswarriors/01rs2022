@@ -6572,6 +6572,7 @@ use FunctionsClientController;
 			
 			$getOnDBID = $sample = array();
 			$res = null;
+
 			if(isset($request->appid) && FunctionsClientController::isExistOnAppform($request->appid) && FunctionsClientController::existOnDB('asmt_h1',[['asmtH1ID',$request->part]]) && in_array(true, AjaxController::isSessionExist(['uData','employee_login']))){
 			// if(isset($request->appid) && FunctionsClientController::isExistOnAppform($request->appid) && FunctionsClientController::existOnDB('asmt_h1',[['asmtH1ID',$request->part]]) && in_array(true, AjaxController::isSessionExist(['uData','employee_login']))){
 				try {
@@ -6592,11 +6593,14 @@ use FunctionsClientController;
 						$filteredAssessment = $request->except($arrOfUnneeded);
 						$dataFromDB = AjaxController::forAssessmentHeaders(array(['appform.appid',$request->appid],['asmt_h1.apptype',$data->hfser_id],['asmt_h1.asmtH1ID',$request->part]),array('asmt_h1.*','asmt_h2.*','asmt_h3.*','asmt_title.title_code', 'x08_ft.id as xid'))[0];
 						$uData = AjaxController::getCurrentUserAllData();
+
 						foreach ($filteredAssessment as $key => $value) {
 							if(is_numeric($key) && !in_array($key, $getOnDBID)){
 								$res = DB::table('assessmentcombined')->whereIn('asmtComb',[$key])->select('asmtComb','assessmentName','assessmentSeq','headingText')->first();
+
 								$forInsertArray = array('x08_id' => $request->xid, 'asmtComb_FK' => $res->asmtComb, 'assessmentName' => $res->assessmentName, 'asmtH3ID_FK' => $request->part, 'h3name' => $dataFromDB->h3name, 'asmtH2ID_FK' => $dataFromDB->asmtH2ID, 'h2name' => $dataFromDB->h2name, 'asmtH1ID_FK' => $dataFromDB->asmtH1ID, 'partID' => $dataFromDB->title_code, 'h1name' => $dataFromDB->h1name, 'evaluation' => ($value['comp'] == 'false' ? 0 : ($value['comp'] == 'NA' ? 'NA' : 1)), 'remarks' => $value['remarks'], 'assessmentSeq' => $res->assessmentSeq, 'evaluatedBy'=> ($uData['cur_user'] != 'ERROR' ? $uData['cur_user'] : (session()->has('uData') ? session()->get('uData')->uid :'UNKOWN, '.$request->ip())), 'assessmentHead' => $res->headingText, 'monid' => $request->monid, 'selfassess' => ($isSelfAssess ? $isSelfAssess : null), 'appid' => $request->appid);
 								// (isset($request->monid) && $request->monid > 0 ? $forInsertArray['monid'] = $request->monid : '');
+								
 								DB::table('assessmentcombinedduplicate')->insert($forInsertArray);
 								array_push($getOnDBID, $key);
 							}
@@ -6873,8 +6877,6 @@ use FunctionsClientController;
 			}
 		}
 
-
-
 		public function GenerateReportAssessment (Request $request, $appid, $monid = null, $isSelfAssess = null){
 			$reco = $otherDet = null;
 			if(FunctionsClientController::isExistOnAppform($appid) && FunctionsClientController::existOnDB('assessmentcombinedduplicate',array(['assessmentcombinedduplicate.appid',$appid]))){
@@ -7122,7 +7124,7 @@ use FunctionsClientController;
 			{
 				($session_equiv !== false ? self::sessionForMobile($session_equiv) : null);
 				$data = AjaxController::getAllApplicantsProcessFlow();
-				$arrfilter = [['isPayEval','==',1],['isrecommended','==',1],['isCashierApprove','==',1],['isInspected','==',null],['proposedWeek','!=',null], ['hfser_id','in_array',['LTO','COA','ATO', 'COR']]];
+				$arrfilter = [['isPayEval','==',1],['isrecommended','==',1],['isCashierApprove','==',1],['isInspected','==',null],['proposedWeek','!=',null], ['hfser_id','in_array',['LTO','COA','ATO','COR']]];
 				$currentuser = AjaxController::getCurrentUserAllData();
                 return ($this->agent && $session_equiv ? response()->json(array('data' => AjaxController::filterApplicantData($data,$arrfilter))) : view('employee.processflow.pfassessment', ['BigData' => $data, 'currentuser' => $currentuser]));
 			} 

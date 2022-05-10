@@ -26,9 +26,11 @@ use QrCode;
 
 class NewClientController extends Controller {
 	protected static $curUser;
+	
 	public function __index(Request $request) {
 		try {
 			$cSes = FunctionsClientController::checkSession(false);
+
 			if(count($cSes) > 0) {
 				return redirect($cSes[0])->with($cSes[1], $cSes[2]);
 			}

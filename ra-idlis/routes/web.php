@@ -93,6 +93,7 @@ Route::prefix('client1')->group(function() {
 	// Route::match(['get', 'post'], '/request/reeval', 'NewClientController@reqReEval');
 	// Route::match(['get', 'post'], '/sendproofpay', 'NewGeneralController@uploadProofofPay');//6-5-2021
 	// Route::match(['get', 'post'], '/', 'NewClientController@__index')->name('client1.login');
+	Route::match(['get', 'post'], '/', 'NewClientController@__index');
 	Route::match(['get', 'post'], '/register/verify/{token}', 'NewClientController@__rToken')->name('client1.rtoken');
 	Route::match(['get', 'post'], '/forgot/{uid}/a/{token}', 'NewClientController@__forgot');
 	Route::match(['get', 'post'], '/reset/{uid}', 'NewClientController@__reset');

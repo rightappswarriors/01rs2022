@@ -876,7 +876,8 @@
                       });
                     }
         function Recommended4Inspection(classTOCall){
-             var IDs = $('.laSelected').map(function () {return $(this).attr('apup')}).get();
+             
+          var IDs = $('.laSelected').map(function () {return $(this).attr('apup')}).get();
           var ifCheck = [], chckRmrks = [];
           var x = 0, y = '';
           
@@ -888,9 +889,8 @@
                 if ((sad == 0) && ($('textarea[name="'+IDs[i]+'_txt"]').val() == '') ) {
                    x = 1; y = IDs[i];
                    break;
-                }
-                
-              }  
+                }                
+              }
 
               ifCheck.forEach(function(index, el) {
                if(index == null){

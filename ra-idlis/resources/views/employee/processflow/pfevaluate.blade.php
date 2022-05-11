@@ -80,12 +80,16 @@
                                 <center>
                                   @if(!isset($data->documentSent))
                                     <button type="button" title="Evaluate {{$data->facilityname}}" class="btn btn-outline-primary ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" onclick="acceptDocu({{$data->appid}})"  {{$ifdisabled}}><i class="fa fa-fw fa-clipboard-check" {{$ifdisabled}}></i></button>&nbsp;
-                                    {{-- <button type="button" title="Edit {{$data->facilityname}}" class="btn btn-outline-warning ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" onclick="window.location.href = '{{ asset('/employee/dashboard/processflow/evaluate') }}/{{$data->appid}}/edit'"  {{$ifdisabled}}><i class="fa fa-fw fa-edit" {{$ifdisabled}}></i></button> --}}
+                                    
 
                                     {{-- for documentary evaluation  --}}
                                   @else
-                                    <button type="button" title="Evaluate {{$data->facilityname}}" class="btn btn-outline-primary ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" onclick="window.location.href = '{{ asset('/employee/dashboard/processflow/evaluate') }}/{{$data->appid}}/{{'hfsrb'}}/{{$isdocumentary}}'"  {{$ifdisabled}}><i class="fa fa-fw fa-clipboard-check" {{$ifdisabled}}></i></button>&nbsp;
-                                  {{-- <button type="button" title="Edit {{$data->facilityname}}" class="btn btn-outline-warning ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" onclick="window.location.href = '{{ asset('/employee/dashboard/processflow/evaluate') }}/{{$data->appid}}/edit'"  {{$ifdisabled}}><i class="fa fa-fw fa-edit" {{$ifdisabled}}></i></button> --}}
+                                    @if($type == 'technical') 
+                                      <button type="button" title="Evaluate {{$data->facilityname}}" class="btn btn-outline-primary ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" onclick="window.location.href = '{{ asset('/employee/dashboard/processflow/evaluatetech') }}/{{$data->appid}}/{{'hfsrb'}}/'"  {{$ifdisabled}}><i class="fa fa-fw fa-clipboard-check" {{$ifdisabled}}></i></button>&nbsp;
+                                    @else
+                                      <button type="button" title="Evaluate {{$data->facilityname}}" class="btn btn-outline-primary ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" onclick="window.location.href = '{{ asset('/employee/dashboard/processflow/evaluate') }}/{{$data->appid}}/{{'hfsrb'}}/'"  {{$ifdisabled}}><i class="fa fa-fw fa-clipboard-check" {{$ifdisabled}}></i></button>&nbsp;
+                                    @endif
+                                  
                                   @endif
                               </center>
                             </td>

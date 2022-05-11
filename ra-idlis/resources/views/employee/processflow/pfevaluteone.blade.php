@@ -876,9 +876,11 @@
                       });
                     }
         function Recommended4Inspection(classTOCall){
-             var IDs = $('.laSelected').map(function () {return $(this).attr('apup')}).get();
+             
+          var IDs = $('.laSelected').map(function () {return $(this).attr('apup')}).get();
           var ifCheck = [], chckRmrks = [];
           var x = 0, y = '';
+          
           if(IDs.length > 0) {
               for (var i = 0; i < IDs.length; i++) {
                 var sad = (typeof($('input[name="'+IDs[i]+'_rad"]:checked').val()) == 'undefined') ? null :  parseInt($('input[name="'+IDs[i]+'_rad"]:checked').val());
@@ -887,9 +889,8 @@
                 if ((sad == 0) && ($('textarea[name="'+IDs[i]+'_txt"]').val() == '') ) {
                    x = 1; y = IDs[i];
                    break;
-                }
-                
-              }  
+                }                
+              }
 
               ifCheck.forEach(function(index, el) {
                if(index == null){
@@ -997,23 +998,22 @@
           }
           function ApproveApplication(){
             @if($AppData->hfser_id == 'PTC' && $AppData->isAcceptedFP != 1)
-            alert("Floorplan not yet accepted")
-
+              alert("Floorplan not yet accepted")
             @else
-            getFuncApprvl()
+              getFuncApprvl()
             @endif
-         
-           
           }
 
           function getFuncApprvl(){
             let final = Array();
             let answers = $(".laSelected");
+
             answers.each(function(a,b){
              if($(this).find('input[type=radio]:checked').val() == 0){
               final.push('hasNo');
              }
             })
+            
             if(final.length <= 0){
               $.ajax({
                   url : '{{ asset('employee/dashboard/processflow/judgeApplication') }}',
@@ -1026,12 +1026,12 @@
                             title: 'Success',
                             text: 'Successfully set application to Accepted',
                           }).then(() => {
-                            @if(($AppData->hfser_id == 'PTC' && $AppData->isAcceptedFP != 1 && $forhfsrb) || (!$forhfsrb || $redirect))
-                            location.reload();
-                            @else
-                             window.location.href = '{{ asset('employee/dashboard/processflow/orderofpayment/') }}/{{$appID}}';
-                            @endif
-                            
+                            //@if(($AppData->hfser_id == 'PTC' && $AppData->isAcceptedFP != 1 && $forhfsrb) || (!$forhfsrb || $redirect))
+                            //location.reload();
+                            //@else
+                             //window.location.href = '{{ asset('employee/dashboard/processflow/orderofpayment/') }}/{{$appID}}';
+                            //@endif
+                            window.location.href = '{{ asset('employee/dashboard/processflow/evaluate') }}';
 
                           });
                         } else if (data == 'ERROR') {
@@ -1050,8 +1050,6 @@
                 })
               }
           }
-
-
 
         function chckDate(){
                     var dateVal = $('#propDate').val();

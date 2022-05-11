@@ -5122,12 +5122,38 @@ public static function checkConmem($appid)
 					else if ($request->selected == 1)  // Approved
 					{
 						$stat = null;
+						
 						switch ($clienthfser_id) {
 							case 'LTO':
 								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
 								$stat = 'FI';
 								// $stat = $curStat;
 								break;
+								
+							case 'COA':
+								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
+								$stat = 'FI';
+								// $stat = $curStat;
+								break;
+
+							case 'ATO':
+								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
+								$stat = 'FI';
+								// $stat = $curStat;
+								break;
+
+							case 'COR':
+								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
+								$stat = 'FI';
+								// $stat = $curStat;
+								break;
+
+							case 'LTO':
+								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
+								$stat = 'FI';
+								// $stat = $curStat;
+								break;
+
 							case 'PTC':
 								if(DB::table('appform')->where([['appid',$request->apid],['isAcceptedFP','<>',1]])->doesntExist()){
 									$stat = 'FPPR';

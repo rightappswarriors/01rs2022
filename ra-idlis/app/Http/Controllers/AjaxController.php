@@ -5129,7 +5129,7 @@ public static function checkConmem($appid)
 								$stat = 'FI';
 								// $stat = $curStat;
 								break;
-								
+
 							case 'COA':
 								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
 								$stat = 'FI';
@@ -5910,76 +5910,73 @@ public static function checkConmem($appid)
 			try 
 			{
 				$data0 = DB::table('appform')
-												->join('x08', 'appform.uid', '=', 'x08.uid')
-												->leftJoin('x08 AS comeval', 'appform.concommittee_evalby', '=', 'comeval.uid')
-												->leftJoin('x08 AS cashval', 'appform.CashierApproveByFDA', '=', 'cashval.uid')
-												->leftJoin('x08 AS recfdaval', 'appform.recommendedbyFDA', '=', 'recfdaval.uid')
-												->leftJoin('x08 AS recbyfda', 'appform.RecobyFDA', '=', 'recbyfda.uid')
-												->leftJoin('x08 AS recbyfdaphar', 'appform.RecobyFDAPhar', '=', 'recbyfdaphar.uid')
-												->leftJoin('x08 AS recbyfdaph', 'appform.CashierApproveByPharma', '=', 'recbyfdaph.uid')
-												->leftJoin('x08 AS evalby', 'appform.recommendedby', '=', 'evalby.uid')
-												->leftJoin('x07', 'comeval.grpid', '=', 'x07.grp_id')
-												->join('barangay', 'appform.brgyid', '=', 'barangay.brgyid')
-												->join('city_muni', 'appform.cmid', '=', 'city_muni.cmid')
-												->join('province', 'appform.provid', '=', 'province.provid')
-												// ->join('type_facility', 'appform.hfser_id', '=', 'type_facility.hfser_id') 
-												->leftjoin('trans_status', 'appform.status', '=', 'trans_status.trns_id')
-												// ->join('orderofpayment', 'type_facility.oop_id', '=', 'orderofpayment.oop_id')
-												// , 'orderofpayment.*'
-												->select('appform.*', 
-												'appform.street_number',  
-												'x08.*',  
-												'comeval.fname as com_fname',  
-												'comeval.pre as com_pre',  
-												'comeval.suf as com_suf',  
-												'comeval.mname as com_mname', 
-												 'comeval.lname as com_lname', 
+						->join('x08', 'appform.uid', '=', 'x08.uid')
+						->leftJoin('x08 AS comeval', 'appform.concommittee_evalby', '=', 'comeval.uid')
+						->leftJoin('x08 AS cashval', 'appform.CashierApproveByFDA', '=', 'cashval.uid')
+						->leftJoin('x08 AS recfdaval', 'appform.recommendedbyFDA', '=', 'recfdaval.uid')
+						->leftJoin('x08 AS recbyfda', 'appform.RecobyFDA', '=', 'recbyfda.uid')
+						->leftJoin('x08 AS recbyfdaphar', 'appform.RecobyFDAPhar', '=', 'recbyfdaphar.uid')
+						->leftJoin('x08 AS recbyfdaph', 'appform.CashierApproveByPharma', '=', 'recbyfdaph.uid')
+						->leftJoin('x08 AS evalby', 'appform.recommendedby', '=', 'evalby.uid')
+						->leftJoin('x07', 'comeval.grpid', '=', 'x07.grp_id')
+						->leftJoin('barangay', 'appform.brgyid', '=', 'barangay.brgyid')
+						->leftJoin('city_muni', 'appform.cmid', '=', 'city_muni.cmid')
+						->leftJoin('province', 'appform.provid', '=', 'province.provid')
+						// ->join('type_facility', 'appform.hfser_id', '=', 'type_facility.hfser_id') 
+						->leftjoin('trans_status', 'appform.status', '=', 'trans_status.trns_id')
+						// ->join('orderofpayment', 'type_facility.oop_id', '=', 'orderofpayment.oop_id')
+						// , 'orderofpayment.*'
+						->select('appform.*', 'appform.street_number',  'x08.*',  'comeval.fname as com_fname',  'comeval.pre as com_pre',  'comeval.suf as com_suf',  'comeval.mname as com_mname', 'comeval.lname as com_lname', 
 
-												 'cashval.fname as cash_fname',  
-												  'cashval.pre as cash_pre',  
-												'cashval.suf as cash_suf',  
-												'cashval.mname as cash_mname', 
-												 'cashval.lname as cash_lname', 
+						'cashval.fname as cash_fname',  
+						'cashval.pre as cash_pre',  
+						'cashval.suf as cash_suf',  
+						'cashval.mname as cash_mname', 
+						'cashval.lname as cash_lname', 
 
-												  'recfdaval.fname as recfdaval_fname',  
-												  'recfdaval.pre as recfdaval_pre',  
-												'recfdaval.suf as recfdaval_suf',  
-												'recfdaval.mname as recfdaval_mname', 
-												 'recfdaval.lname as recfdaval_lname',   
-												 
-												 'evalby.fname as evalby_fname',  
-												  'evalby.pre as evalby_pre',  
-												'evalby.suf as evalby_suf',  
-												'evalby.mname as evalby_mname', 
-												 'evalby.lname as evalby_lname', 
+						'recfdaval.fname as recfdaval_fname',  
+						'recfdaval.pre as recfdaval_pre',  
+						'recfdaval.suf as recfdaval_suf',  
+						'recfdaval.mname as recfdaval_mname', 
+						'recfdaval.lname as recfdaval_lname',   
+							
+						'evalby.fname as evalby_fname',  
+						'evalby.pre as evalby_pre',  
+						'evalby.suf as evalby_suf',  
+						'evalby.mname as evalby_mname', 
+						'evalby.lname as evalby_lname', 
 
-												  'recbyfda.fname as recbyfda_fname',  
-												  'recbyfda.pre as recbyfdal_pre',  
-												'recbyfda.suf as recbyfda_suf',  
-												'recbyfda.mname as recbyfda_mname', 
-												 'recbyfda.lname as recbyfda_lname',  
+						'recbyfda.fname as recbyfda_fname',  
+						'recbyfda.pre as recbyfdal_pre',  
+						'recbyfda.suf as recbyfda_suf',  
+						'recbyfda.mname as recbyfda_mname', 
+						'recbyfda.lname as recbyfda_lname',  
 
- 												 'recbyfdaphar.fname as recbyfdaphar_fname',  
-												  'recbyfdaphar.pre as recbyfdalphar_pre',  
-												'recbyfdaphar.suf as recbyfdaphar_suf',  
-												'recbyfdaphar.mname as recbyfdaphar_mname', 
-												 'recbyfdaphar.lname as recbyfdaphar_lname',  
+						'recbyfdaphar.fname as recbyfdaphar_fname',  
+						'recbyfdaphar.pre as recbyfdalphar_pre',  
+						'recbyfdaphar.suf as recbyfdaphar_suf',  
+						'recbyfdaphar.mname as recbyfdaphar_mname', 
+						'recbyfdaphar.lname as recbyfdaphar_lname',  
 
-												  'recbyfdaph.fname as recbyfdaph_fname',  
-												  'recbyfdaph.pre as recbyfdaph_pre',  
-												'recbyfdaph.suf as recbyfdaph_suf',  
-												'recbyfdaph.mname as recbyfdaph_mname', 
-												 'recbyfdaph.lname as recbyfdaph_lname',  
-												 
-												 'x07.grp_desc', 
-												 'barangay.brgyname', 
-												 'city_muni.cmname',
-												  'province.provname',
-												   'trans_status.trns_desc') //, 'type_facility.*'
-												->where('appform.appid', '=', $appid)
-												// , 'type_facility.*', 'orderofpayment.*'
-												// ->where('type_facility.facid', '=', 'appform.facid')
-												->first();
+						'recbyfdaph.fname as recbyfdaph_fname',  
+						'recbyfdaph.pre as recbyfdaph_pre',  
+						'recbyfdaph.suf as recbyfdaph_suf',  
+						'recbyfdaph.mname as recbyfdaph_mname', 
+						'recbyfdaph.lname as recbyfdaph_lname',  
+							
+						'x07.grp_desc', 
+						'barangay.brgyname', 
+						'city_muni.cmname',
+						'province.provname',
+						'trans_status.trns_desc') //, 'type_facility.*'
+						->where('appform.appid', '=', $appid)
+						// , 'type_facility.*', 'orderofpayment.*'
+						// ->where('type_facility.facid', '=', 'appform.facid')
+						->first();
+						
+						if($data0 != null)
+						{
+							
 						/////  Evaluation
 						if ($data0->isrecommended != null) {
 							$time1 = $data0->recommendedtime;
@@ -6186,6 +6183,8 @@ public static function checkConmem($appid)
 								$data0->FDAAprovalApproverPharma = 'Not Available' ;
 							}
 						}
+						
+					}
 				return $data0;
 			} 
 			catch (Exception $e) 

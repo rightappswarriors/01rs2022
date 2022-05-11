@@ -7969,14 +7969,18 @@ use FunctionsClientController;
 			//dd($request->isMethod('post'));
 			if ($request->isMethod('get')) 
 			{
+				// $canView = null;
+				$apdata =DB::table('appform')->where([['appid', $appid]])->first();
+				//dd($apdata);
+				$data = AjaxController::getRecommendationData($appid);
+				// $data1 = AjaxController::getPreAssessment($data->uid);
+				$data2 = AjaxController::getAssignedMembersInTeam4Recommendation($appid);
+				$canView = AjaxController::canViewFDAOOP($appid);
+				$otherDetails = [];
+				
 				try 
 				{
-					// $canView = null;
-					$apdata =DB::table('appform')->where([['appid', $appid]])->first();
-					$data = AjaxController::getRecommendationData($appid);
-					// $data1 = AjaxController::getPreAssessment($data->uid);
-					$data2 = AjaxController::getAssignedMembersInTeam4Recommendation($appid);
-					$canView = AjaxController::canViewFDAOOP($appid);
+					
 					switch ($data->hfser_id) {
 						case 'PTC':
 							$otherDetails = DB::table('hferc_evaluation')->leftJoin('x08','x08.uid','hferc_evaluation.HFERC_evalBy')->where([['appid',$appid]])->orderBy('hferc_evaluation.revision', 'desc')->first();
@@ -8014,7 +8018,7 @@ use FunctionsClientController;
 				{
 					AjaxController::SystemLogs($e);
 					session()->flash('system_error','ERROR');
-					return view('employee.processflow.pfrecommendationone');
+					return view('employee.processflow.pfrecommendationone', ['AppData'=>$data,'apdat'=>$apdata,/*'PreAss'=>$data1,*/ 'APPID' => $appid, 'Teams4theApplication' => $data2, 'canView' => $canView, 'otherDetails' => $otherDetails]);
 				}
 			}
 			if ($request->isMethod('post')) {

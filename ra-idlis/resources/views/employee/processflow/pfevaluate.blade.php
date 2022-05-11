@@ -81,7 +81,6 @@
                                   @if(!isset($data->documentSent))
                                     <button type="button" title="Evaluate {{$data->facilityname}}" class="btn btn-outline-primary ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" onclick="acceptDocu({{$data->appid}})"  {{$ifdisabled}}><i class="fa fa-fw fa-clipboard-check" {{$ifdisabled}}></i></button>&nbsp;
                                     
-
                                     {{-- for documentary evaluation  --}}
                                   @else
                                     @if($type == 'technical') 
@@ -94,7 +93,6 @@
                               </center>
                             </td>
                           </tr>
-
                         @endif
                       @endforeach
                     @endif

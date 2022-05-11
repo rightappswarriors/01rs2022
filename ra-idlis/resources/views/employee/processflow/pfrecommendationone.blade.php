@@ -16,7 +16,7 @@
             <tr>
              
               <td width="100%">
-                @if(!is_null($apdat))
+                @if(isset($apdat))
                 <h2>{{strtoupper($apdat->facilityname)}} </h2>
                 <h4>{{$apdat->hfser_id}}R{{$apdat->rgnid}}-{{$apdat->appid}} </h4>
                 @endif

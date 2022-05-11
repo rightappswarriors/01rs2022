@@ -3880,6 +3880,7 @@ use FunctionsClientController;
 							$uid = AjaxController::getUidFrom($data->appid);
 							$idForNotify = AjaxController::getNotificationIDfromCases($data->hfser_id,'additionalRequirments',1);
 							AjaxController::notifyClient($data->appid,$uid,$idForNotify);
+							
 							return redirect('employee/dashboard/processflow/evaluate/'.$appid);
 						}
 
@@ -3888,6 +3889,7 @@ use FunctionsClientController;
 							$dt = Carbon::now();
 							$dateNow = $dt->toDateString();
 							$timeNow = $dt->toTimeString();
+
 							for ($i=0; $i < count($request->ifChk) ; $i++) { 
 								if (isset($request->ifChk[$i])) {
 									$updateData = array(
@@ -6600,7 +6602,7 @@ use FunctionsClientController;
 
 								$forInsertArray = array('x08_id' => $request->xid, 'asmtComb_FK' => $res->asmtComb, 'assessmentName' => $res->assessmentName, 'asmtH3ID_FK' => $request->part, 'h3name' => $dataFromDB->h3name, 'asmtH2ID_FK' => $dataFromDB->asmtH2ID, 'h2name' => $dataFromDB->h2name, 'asmtH1ID_FK' => $dataFromDB->asmtH1ID, 'partID' => $dataFromDB->title_code, 'h1name' => $dataFromDB->h1name, 'evaluation' => ($value['comp'] == 'false' ? 0 : ($value['comp'] == 'NA' ? 'NA' : 1)), 'remarks' => $value['remarks'], 'assessmentSeq' => $res->assessmentSeq, 'evaluatedBy'=> ($uData['cur_user'] != 'ERROR' ? $uData['cur_user'] : (session()->has('uData') ? session()->get('uData')->uid :'UNKOWN, '.$request->ip())), 'assessmentHead' => $res->headingText, 'monid' => $request->monid, 'selfassess' => ($isSelfAssess ? $isSelfAssess : null), 'appid' => $request->appid);
 								// (isset($request->monid) && $request->monid > 0 ? $forInsertArray['monid'] = $request->monid : '');
-								
+
 								DB::table('assessmentcombinedduplicate')->insert($forInsertArray);
 								array_push($getOnDBID, $key);
 							}
@@ -10238,6 +10240,7 @@ use FunctionsClientController;
 					$data5 = AjaxController::getAllDataOrderOfPaymentUploads($data->aptid ,3);
 					$uacs = AjaxController::getAllUACS();
 					$code = $data->hfser_id.'R'.$data->rgnid.'-'.$data->appid;
+
 					foreach($data1 as $payments){
 						if($payments->cat_id === 'PMT'){
 							$paymentsRec +=1;
@@ -10284,7 +10287,7 @@ use FunctionsClientController;
 						  'CashierApproveTime' => Date('H:i:s',strtotime('now')), 
 						  'CashierApproveIp' => $request->ip(), 
 						  'isCashierApprove' => 1, 
-						  'status' => 'FI', 
+						  'status' => 'FDE', 
 						  'proofpaystat' => 'posted', 
 						  't_date' => Date('Y-m-d',strtotime('now'))]);
 			  			if($update){

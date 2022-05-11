@@ -7982,8 +7982,20 @@ use FunctionsClientController;
 							$otherDetails = DB::table('hferc_evaluation')->leftJoin('x08','x08.uid','hferc_evaluation.HFERC_evalBy')->where([['appid',$appid]])->orderBy('hferc_evaluation.revision', 'desc')->first();
 							// $otherDetails = DB::table('hferc_evaluation')->leftJoin('x08','x08.uid','hferc_evaluation.HFERC_evalBy')->where([['appid',$appid]])->first();
 							break;
-						case 'COA':
+
 						case 'LTO':
+							$otherDetails = DB::table('assessmentrecommendation')->leftJoin('x08','x08.uid','assessmentrecommendation.evaluatedby')->select('assessmentrecommendation.*','x08.fname','x08.mname','x08.lname')->where('appid',$appid)->first();
+							break;
+
+						case 'COA':
+							$otherDetails = DB::table('assessmentrecommendation')->leftJoin('x08','x08.uid','assessmentrecommendation.evaluatedby')->select('assessmentrecommendation.*','x08.fname','x08.mname','x08.lname')->where('appid',$appid)->first();
+							break;
+
+						case 'ATO':
+							$otherDetails = DB::table('assessmentrecommendation')->leftJoin('x08','x08.uid','assessmentrecommendation.evaluatedby')->select('assessmentrecommendation.*','x08.fname','x08.mname','x08.lname')->where('appid',$appid)->first();
+							break;
+								
+						case 'COR':
 							$otherDetails = DB::table('assessmentrecommendation')->leftJoin('x08','x08.uid','assessmentrecommendation.evaluatedby')->select('assessmentrecommendation.*','x08.fname','x08.mname','x08.lname')->where('appid',$appid)->first();
 							break;
 						

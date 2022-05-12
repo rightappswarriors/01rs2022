@@ -111,8 +111,8 @@
 							<th style="white-space: nowrap;">Type of Application</th>
 							<th>Owner</th>
 							<th>Type</th>
-							<th style="white-space: nowrap;">Date applied</th>
-							<th style="white-space: nowrap;">Date approved</th>
+							<th style="white-space: nowrap;">Date Applied</th>
+							<th style="white-space: nowrap;">Date Approved</th>
 							{{-- <th>Status</th> --}}
 							{{-- <th>FDA Status</th> --}}
 							{{-- <th>FDA COC Number</th> --}}

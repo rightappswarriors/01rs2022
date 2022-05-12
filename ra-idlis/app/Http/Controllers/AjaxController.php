@@ -4553,8 +4553,6 @@ public static function checkConmem($appid)
 					->where('surv_form.rgnid',$Cur_useData['rgnid'] )
 					->get();
 				}
-			
-
 
 				// 	$data = DB::table('surv_form')
 				// ->leftJoin('registered_facility','registered_facility.regfac_id','surv_form.regfac_id')
@@ -4653,7 +4651,6 @@ public static function checkConmem($appid)
 					case 'FDARF':
 
 					case 'NA':			
-							// $anotherData = DB::table('appform')->get();
 							$anotherData = DB::table('appform')
 							->leftJoin('hfaci_serv_type', 'appform.hfser_id', '=', 'hfaci_serv_type.hfser_id')
 							->leftJoin('hfaci_grp', 'appform.facid', '=', 'hfaci_grp.hgpid')
@@ -4670,11 +4667,9 @@ public static function checkConmem($appid)
 							->leftjoin('region AS asrgn','appform.assignedRgn', '=', 'asrgn.rgnid')
 							->select('appform.*', 'hfaci_serv_type.*', 'ptc.propbedcap as pbedcap','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid', 'asrgn.rgn_desc AS asrgn_desc')
 							->where('appform.draft', '=', null)
-							// ->where('appform.assignedRgn', '=', $Cur_useData['rgnid'])
 							->orderBy('appform.appid','desc')
 							->get();
-
-							//dd($anotherData);
+							
 						break;
 					case 'FDA':
 							$anotherData = DB::table('appform')
@@ -4692,16 +4687,11 @@ public static function checkConmem($appid)
 							->leftjoin('ptc','ptc.appid','appform.appid')
 							->leftjoin('region AS asrgn','appform.assignedRgn', '=', 'asrgn.rgnid')
 							->select('appform.*', 'hfaci_serv_type.*', 'ptc.propbedcap as pbedcap','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid', 'asrgn.rgn_desc AS asrgn_desc')
-							// ->where([
-							// 	['appform.status','A'],
-							// 	['appform.hfser_id','LTO'],
-							// 	['isApprove',1]
-							// ])
-							->where([['appform.hfser_id','LTO']])
-							// ->where([['appform.hfser_id','LTO'],['appform.noofsatellite', '>', 0]]) 7-2-2021
+							->where([['appform.hfser_id','LTO'], ['appform.hfser_id','COA'], ['appform.hfser_id','ATO'], ['appform.hfser_id','COR'],['appform.noofsatellite', '>', 0]]) //7-2-2021
 							->orderBy('appform.appid','desc')
 							->get();
 							break;
+
 					/*case 'LO':
 						$anotherData = DB::table('appform')
 							->leftJoin('hfaci_serv_type', 'appform.hfser_id', '=', 'hfaci_serv_type.hfser_id')
@@ -4799,8 +4789,8 @@ public static function checkConmem($appid)
 							}
 
 							$anotherData->orderBy('appform.appid','desc');
-
 							$anotherData = $anotherData->get();
+
 						break;
 				}
 				for ($i=0; $i < count($anotherData); $i++) {

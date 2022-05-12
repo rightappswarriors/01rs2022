@@ -61,6 +61,9 @@
                 @foreach ($LotsOfDatas as $data)
                   @if(in_array($data->hfser_id, $serv))
 
+                    @if(!isset($data->t_date))
+                      @php continue; @endphp
+                    @endif
                     <tr>
                       <td>
                         <center>
@@ -72,7 +75,7 @@
                       <td style="text-align:center"><strong>{{$data->facilityname}}</strong></td>
                       <td style="text-align:center">{{(ajaxController::getFacilitytypeFromHighestApplicationFromX08FT($data->appid)->hgpdesc ?? 'NOT FOUND')}}</td>
                       <td style="text-align:center">{{$data->aptdesc}}</td>
-                      <td style="text-align:center">@if(isset($data->created_at)){{date("F j, Y", strtotime($data->created_at)) }} @else {{ 'NA' }} @endif </td>
+                      <td style="text-align:center">@if(isset($data->t_date)){{date("F j, Y", strtotime($data->created_at)) }} @else {{ 'Not Officially Applied Yet' }} @endif </td>
                       <td style="color:black;font-weight:bolder;text-align:center;">{{$data->trns_desc}}</td>
                       <td>
                         <center> {{-- EVALUATION --}}

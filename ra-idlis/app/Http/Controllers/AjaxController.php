@@ -4672,7 +4672,6 @@ public static function checkConmem($appid)
 							->where('appform.draft', '=', null)
 							// ->where('appform.assignedRgn', '=', $Cur_useData['rgnid'])
 							->orderBy('appform.appid','desc')
-							->orderBy('appform.t_date','desc')
 							->get();
 
 							//dd($anotherData);
@@ -4701,7 +4700,6 @@ public static function checkConmem($appid)
 							->where([['appform.hfser_id','LTO']])
 							// ->where([['appform.hfser_id','LTO'],['appform.noofsatellite', '>', 0]]) 7-2-2021
 							->orderBy('appform.appid','desc')
-							->orderBy('appform.t_date','desc')
 							->get();
 							break;
 					/*case 'LO':
@@ -4773,7 +4771,6 @@ public static function checkConmem($appid)
 							->join('hferc_team', 'appform.appid', '=', 'appform.appid')
 							->select('appform.*', 'hfaci_serv_type.*', 'ptc.propbedcap as pbedcap','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid', 'asrgn.rgn_desc AS asrgn_desc')
 							->orderBy('appform.appid','desc')
-							->orderBy('appform.t_date','desc')
 							
 							->distinct()
 							->get();
@@ -4802,7 +4799,7 @@ public static function checkConmem($appid)
 							}
 
 							$anotherData->orderBy('appform.appid','desc');
-							$anotherData->orderBy('appform.t_date','desc');
+
 							$anotherData = $anotherData->get();
 						break;
 				}
@@ -4818,8 +4815,7 @@ public static function checkConmem($appid)
 						$anotherData[$i]->formattedDate = $newD->toFormattedDateString();
 					} else {
 						$anotherData[$i]->formattedDate = 'N/A';
-					}
-					
+					}					
 					
 					//updated
 					$time = $anotherData[$i]->updated_at;
@@ -4827,9 +4823,7 @@ public static function checkConmem($appid)
 					$anotherData[$i]->formattedUpatedTime = $newT->format('g:i A');
 					$date = $anotherData[$i]->updated_at;
 					$newD = Carbon::parse($date);
-					$anotherData[$i]->formattedUpdatedDate = $newD->toFormattedDateString();
-					
-					
+					$anotherData[$i]->formattedUpdatedDate = $newD->toFormattedDateString();				
 					
 					/////  Applied
 					/////  Evaluated
@@ -5215,13 +5209,14 @@ public static function checkConmem($appid)
 											'isReadyForInspec' => 0
 											// 'FDAStatMach' => 'Evaluated, but for Revision'
 										);
-
-
-
 					}
+					
 					$userInf = DB::table('appform')->select('hfser_id','uid')->where('appid',$request->apid)->first();
 					$idForNotify = self::getNotificationIDfromCases($userInf->hfser_id,'eval',$updateData['isrecommended']);
-					if(isset($request->requestFor) && strtolower($request->requestFor) != 'hfsrb'){
+					
+					//FDA
+					if(isset($request->requestFor) && strtolower($request->requestFor) != 'hfsrb')
+					{
 						$suffix = '';
 						if(strtolower($request->requestFor) == 'pharma'){
 							$suffix = 'pharma';
@@ -5252,7 +5247,8 @@ public static function checkConmem($appid)
 								$updateData['machDocRevcount'] = $curappf->machDocRevcount + 1;
 							}
 
-						}else{
+						}
+						else{
 							$updateData['isReadyForInspecFDA'] = 1;
 
 							if(strtolower($request->requestFor) == 'pharma'){

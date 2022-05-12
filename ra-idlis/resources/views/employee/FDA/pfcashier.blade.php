@@ -44,7 +44,7 @@
                           $status = 1;
                         @endphp
                         @foreach ($BigData as $data)
-                          @if((strtolower($data->hfser_id) == 'lto' || strtolower($data->hfser_id) == 'coa') && $data->isReadyForInspecFDA == 1 && $data->isPayEvalFDA == 1 && $data->ispreassessed  == 1)
+                          @if((strtolower($data->hfser_id) == 'lto' || strtolower($data->hfser_id) == 'coa' || strtolower($data->hfser_id) == 'cor' || strtolower($data->hfser_id) == 'ato') && $data->isReadyForInspecFDA == 1 && $data->isPayEvalFDA == 1 && $data->ispreassessed  == 1)
                           <!-- if($data->isPayEvalFDA == 1 && strtolower($data->hfser_id) == 'lto' && $data->isReadyForInspecFDA == 1 && $data->isPayEvalFDA == 1 && $data->ispreassessed == 1) -->
                               @php
                                 $paid = $data->appid_payment;

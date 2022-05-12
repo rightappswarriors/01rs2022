@@ -294,7 +294,7 @@ class NewClientController extends Controller {
 
 			if($request->isMethod("post")) {
 				if($request->has('action') && $request->action == 'trigger'){
-					if(DB::table('appform')->where('appid',$appid)->update(['isReadyForInspec' => 1])){
+					if(DB::table('appform')->where('appid',$appid)->update(['isReadyForInspec' => 0])){
 						return 'DONE';
 					}
 				} else {
@@ -319,7 +319,7 @@ class NewClientController extends Controller {
 
 				if($request->has('upload')){
 					if($curForm[0]->isReadyForInspec == 0){
-						DB::table('appform')->where('appid',$appid)->update(['isReadyForInspec' => 1, 'status'=>'FDE', 'submittedReq'=>1]);
+						DB::table('appform')->where('appid',$appid)->update(['isReadyForInspec' => 1, 'status'=>'FSR', 'submittedReq'=>1]);
 					}
 					foreach($request->upload AS $uKey => $uValue) {
 						if(in_array($uKey, $curRecord)) {
@@ -332,6 +332,7 @@ class NewClientController extends Controller {
 								$arrCheck = []; $makeHash = []; $haveAdd = ['evaluation'=>NULL]; $fMail = [];
 								$validate = [['app_id', 'upid', 'filepath'], ['app_id'=>'No application selected.', 'upid'=>'No upload.', 'filepath'=>'No path selected.']];
 								$stat = ((count($arrFind) > 0) ? FunctionsClientController::fUpdData($sRequest, $arrData, $arrCheck, $makeHash, $haveAdd, $fMail, $validate, 'app_upload', [['app_id', $appid], ['upid', $uKey]]) : FunctionsClientController::fInsData($sRequest, $arrData, $arrCheck, $makeHash, $haveAdd, $fMail, $validate, 'app_upload'));
+								
 								if(! in_array($stat, $msgRet)) {
 									array_push($msgRet, $stat);
 								}

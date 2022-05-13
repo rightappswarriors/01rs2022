@@ -319,7 +319,7 @@ class NewClientController extends Controller {
 
 				if($request->has('upload')){
 					if($curForm[0]->isReadyForInspec == 0){
-						DB::table('appform')->where('appid',$appid)->update(['isReadyForInspec' => 1, 'status'=>'FSR', 'submittedReq'=>1]);
+						DB::table('appform')->where('appid',$appid)->update(['isReadyForInspec' => 0, 'status'=>'FSR', 'submittedReq'=>1]);
 					}
 					foreach($request->upload AS $uKey => $uValue) {
 						if(in_array($uKey, $curRecord)) {
@@ -905,7 +905,7 @@ class NewClientController extends Controller {
 			} else {
 				if($request->has('mPay')){
 					$filename = null;
-					
+
 					if($request->hasFile('attFile')){
 						$filename = FunctionsClientController::uploadFile($request->attFile)['fileNameToStore'];
 					}

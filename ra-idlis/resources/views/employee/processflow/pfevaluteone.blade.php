@@ -172,15 +172,16 @@
               <div class="col-sm-12">
                   <h2>@isset($AppData) {{$AppData->facilityname}} @endisset</h2>
                   <h5>@isset($AppData)
-                  {{
-                    $AppData->street_number?  strtoupper($AppData->street_number).',' : ' '
-                  }}
-                  {{
-                    $AppData->streetname?  strtoupper($AppData->streetname).',': ' '
-                  }}
-                     {{strtoupper($AppData->brgyname)}}, 
-                     {{$AppData->cmname}}, {{$AppData->provname}} @endisset</h5>
-                
+                      {{
+                        $AppData->street_number?  strtoupper($AppData->street_number).',' : ' '
+                      }}
+                      {{
+                        $AppData->streetname?  strtoupper($AppData->streetname).',': ' '
+                      }}
+                        {{strtoupper($AppData->brgyname)}}, 
+                        {{$AppData->cmname}}, {{$AppData->provname}} @endisset
+                  </h5>
+
                 <span>
                   <label>Process Type:&nbsp;</label>
                   <span class="font-weight-bold">@if($AppData->aptid == 'R'){{'Renewal'}}@elseif($AppData->aptid == 'IN'){{'Initial New'}}@else{{'Unidentified'}}@endif
@@ -190,13 +191,13 @@
                 
                   {{-- {{ asset('employee/dashboard/processflow/evaluate')}}/{{$AppData->appid}}/edit --}}
                   @if($forhfsrb)
-
                     @if(!empty($documentDate))
                         <h6>
                         @if(strtolower($AppData->hfser_id) == 'lto')
                           Institutional Character: @if(isset($AppData) && isset($AppData->facmdesc))<strong>{{$AppData->facmdesc}}</strong>@else<span style="color:red">Not Available</span>@endif
                         @endif
                     @endif
+                  
                     <span>
                       <label>Checklist Review Count:&nbsp;</label>
                       <span class="font-weight-bold">@if(isset($AppData)){{$AppData->no_chklist}}@else{{'Not Available'}}@endif</span>
@@ -205,6 +206,7 @@
                     <!-- <h6 class="font-weight-bold"><u>OHSRS Status: <span style="color:blue">Verified</span></u></h6> -->
                     </h6>
               </div>
+
               {{-- @if(!empty($documentDate)) --}}
               <div class="row">
                 
@@ -1031,6 +1033,7 @@
                             //@else
                              //window.location.href = '{{ asset('employee/dashboard/processflow/orderofpayment/') }}/{{$appID}}';
                             //@endif
+                            //window.location.href = '{{ asset('employee/dashboard/processflow/evaluate') }}';
                             window.location.href = '{{ asset('employee/dashboard/processflow/evaluate') }}';
 
                           });

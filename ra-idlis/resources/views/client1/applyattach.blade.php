@@ -14,6 +14,18 @@
 	@php
 		$currentStatus = null;
 	@endphp
+	
+	<div class="container mb-5 ">
+			<div class="pt-1 text-center">
+				<h4 class="">Application Code: <span class="font-weight-bold text-uppercase">{{$appform->hfser_id}}R{{$appform->rgnid}}-{{$appform->appid}}</span>  </h4>
+			</div>
+			<div class=" pt-1">
+			<h4 class=" text-center">Facility Name: <span class="font-weight-bold text-uppercase">{{$appform->facilityname}}</span> </h4>
+			</div>			
+			<div class=" pt-1">
+				Address: <span class="font-weight-bold text-uppercase">{{$appform->street_name}} {{$appform->street_number}} {{$appform->brgyname}} {{$appform->cmname}} {{$appform->provname}} {{$appform->rgn_desc}}</span> 
+			</div>
+	</div>
 	<div class="container mt-5 mb-5">
 	
 		<table class="table table-striped">
@@ -113,7 +125,18 @@
 						<td>
 							{!!(isset($appform->isAcceptedFP) ? '<span class="text-success">RECEIVED</span>' :'<span class="text-danger">NOT YET RECEIVED</span>')!!}
 							<p class="font-weight-bold pt-5">Floor plan Status:</p>
-							<span class="font-weight-bold pt-5">{!!($appform->isAcceptedFP == 0) ? '<span class="text-danger">Not Accepted</span>' : '<span class="text-success">Accepted</span>'!!}</span>
+							<span class="font-weight-bold pt-5">
+								@if($appform->isAcceptedFP == 1)
+									<span class="text-success">
+										Accepted 
+										@if(isset($appform->FPacceptedDate))
+											{{ ' on '. date("F j, Y", strtotime($appform->FPacceptedDate)).' '. date("h:i:s a", strtotime($appform->FPacceptedTime)) }}
+										@endif
+									</span>
+								@else
+									<span class="text-danger">Not Accepted</span>
+								@endif
+							</span>
 							@if(isset($appform->fpcomment))
 							<p class="font-weight-bold pt-5">With Remarks:</p>
 							<span class="">{{$appform->fpcomment}}</span>

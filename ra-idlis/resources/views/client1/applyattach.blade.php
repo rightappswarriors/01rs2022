@@ -14,18 +14,18 @@
 	@php
 		$currentStatus = null;
 	@endphp
-	
-	<div class="container mb-5 ">
-			<div class="pt-1 text-center">
-				<h4 class="">Application Code: <span class="font-weight-bold text-uppercase">{{$appform->hfser_id}}R{{$appform->rgnid}}-{{$appform->appid}}</span>  </h4>
-			</div>
+	<br/>
+	<div class="row">
+		<div class="container text-center">
 			<div class=" pt-1">
-			<h4 class=" text-center">Facility Name: <span class="font-weight-bold text-uppercase">{{$appform->facilityname}}</span> </h4>
+				<h3><span class="font-weight-bold text-uppercase">[{{$appform->hfser_id}}R{{$appform->rgnid}}-{{$appform->appid}}] {{$appform->facilityname}}</span> </h3>
 			</div>			
 			<div class=" pt-1">
-				Address: <span class="font-weight-bold text-uppercase">{{$appform->street_name}} {{$appform->street_number}} {{$appform->brgyname}} {{$appform->cmname}} {{$appform->provname}} {{$appform->rgn_desc}}</span> 
+				<span class="font-weight-normal text-uppercase">{{$appform->street_name}} {{$appform->street_number}} {{$appform->brgyname}} {{$appform->cmname}} {{$appform->provname}} {{$appform->rgn_desc}}</span>
 			</div>
+		</div>
 	</div>
+
 	<div class="container mt-5 mb-5">
 	
 		<table class="table table-striped">

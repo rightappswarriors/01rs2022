@@ -300,6 +300,7 @@ class NewClientController extends Controller {
 				} else {
 				$curRecord = []; $msgRet = []; $isApproved = [1, null]; $isAllUpload = [];
 				foreach(FunctionsClientController::getReqUploads($hfser, $appid, $office) AS $each) {
+
 					if(! isset($each->filepath)) {
 						array_push($curRecord, $each->upid);
 					} else {
@@ -316,10 +317,18 @@ class NewClientController extends Controller {
 						}
 					}
 				}
+				
+				//dd($curForm); //hfser_id
 
 				if($request->has('upload')){
+
 					if($curForm[0]->isReadyForInspec == 0){
-						DB::table('appform')->where('appid',$appid)->update(['isReadyForInspec' => 0, 'status'=>'FSR', 'submittedReq'=>1]);
+						if($curForm[0]->hfser_id == 'PTC'){
+							DB::table('appform')->where('appid',$appid)->update(['isReadyForInspec' => 0, 'status'=>'FDE', 'submittedReq'=>1]);
+						}
+						else {
+							DB::table('appform')->where('appid',$appid)->update(['isReadyForInspec' => 0, 'status'=>'FSR', 'submittedReq'=>1]);
+						}
 					}
 					foreach($request->upload AS $uKey => $uValue) {
 						if(in_array($uKey, $curRecord)) {
@@ -361,6 +370,7 @@ class NewClientController extends Controller {
 				$submitted = true;
 
 			}
+
 			$facilities = DB::table('x08_ft')->where('appid',$appid)->select('facid')->get();
 			// dd($facilities);
 			foreach ($facilities as $key => $value) {
@@ -368,6 +378,7 @@ class NewClientController extends Controller {
 					array_push($arrFaci, trim($value->facid));
 				}
 			}
+			//dd($curForm[0]);
 			$reqChecklist = DB::table('x08_ft')->join('facilitytypupload','x08_ft.facid','facilitytypupload.facid')->where([['facilitytypupload.hfser_id',$hfser],['x08_ft.appid',$appid]])->get();
 			$req = FunctionsClientController::getReqUploads($hfser, $appid, $office);
 			$apf = DB::table('appform')->where([['appid', $appid]])->first();

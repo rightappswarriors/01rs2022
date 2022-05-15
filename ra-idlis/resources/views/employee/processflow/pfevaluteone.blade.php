@@ -170,49 +170,56 @@
 
             <div class="card-body">
               <div class="col-sm-12">
-                  <h2>@isset($AppData) {{$AppData->facilityname}} @endisset</h2>
-                  <h5>@isset($AppData)
-                      {{
-                        $AppData->street_number?  strtoupper($AppData->street_number).',' : ' '
-                      }}
-                      {{
-                        $AppData->streetname?  strtoupper($AppData->streetname).',': ' '
-                      }}
-                        {{strtoupper($AppData->brgyname)}}, 
-                        {{$AppData->cmname}}, {{$AppData->provname}} @endisset
-                  </h5>
 
-                <span>
+                  <h2>@isset($AppData)[<strong>{{$AppData->hfser_id}}R{{$AppData->rgnid}}-{{$AppData->appid}}</strong>]
+                      &nbsp;{{$AppData->facilityname}} @endisset</h2>
+                  <h5>
+                    @isset($AppData)
+                      {{ $AppData->street_number?  strtoupper($AppData->street_number).',' : ' ' }}
+                      {{ $AppData->streetname?  strtoupper($AppData->streetname).',': ' '}}
+                      {{strtoupper($AppData->brgyname)}}, 
+                      {{$AppData->cmname}}, {{$AppData->provname}} 
+                    @endisset
+                  </h5>
                   <label>Process Type:&nbsp;</label>
-                  <span class="font-weight-bold">@if($AppData->aptid == 'R'){{'Renewal'}}@elseif($AppData->aptid == 'IN'){{'Initial New'}}@else{{'Unidentified'}}@endif
-                  @if(isset($AppData->hfser_id)){{' '.$AppData->hfser_id}}@endif
+                  <span class="font-weight-bold">
+                    @if($AppData->aptid == 'R'){{'Renewal'}}@elseif($AppData->aptid == 'IN'){{'Initial New'}}@else{{'Unidentified'}}@endif
+                    @if(isset($AppData->hfser_id)){{' '.$AppData->hfser_id}}@endif
                   </span>
-                </span>
                 
-                  {{-- {{ asset('employee/dashboard/processflow/evaluate')}}/{{$AppData->appid}}/edit --}}
                   @if($forhfsrb)
-                    @if(!empty($documentDate))
-                        <h6>
-                        @if(strtolower($AppData->hfser_id) == 'lto')
-                          Institutional Character: @if(isset($AppData) && isset($AppData->facmdesc))<strong>{{$AppData->facmdesc}}</strong>@else<span style="color:red">Not Available</span>@endif
-                        @endif
-                    @endif
-                  
-                    <span>
+                    <h6>
+                      <label>Institutional Character: </label>
+                      @if(isset($AppData) && isset($AppData->facmdesc))
+                        <strong>{{$AppData->facmdesc}}</strong>
+                      @else
+                        <span style="color:red">Not Available</span>
+                      @endif
+
+                      &nbsp;&nbsp;&nbsp;
                       <label>Checklist Review Count:&nbsp;</label>
-                      <span class="font-weight-bold">@if(isset($AppData)){{$AppData->no_chklist}}@else{{'Not Available'}}@endif</span>
-                    </span>
-                    <h6>@isset($AppData) Status: @if ($AppData->isrecommended === null) <span style="color:blue">For Evaluation</span> @elseif($AppData->isrecommended == 1)  <span style="color:green">Accepted Evaluation</span> @elseif($AppData->isrecommended === 0) <span style="color:red">Disapproved Evaluation</span> @else <span style="color:orange">Evaluated, for Revision</span> @endif @endisset</h6>
-                    <!-- <h6 class="font-weight-bold"><u>OHSRS Status: <span style="color:blue">Verified</span></u></h6> -->
+                      <span class="font-weight-bold">
+                        @if(isset($AppData)){{$AppData->no_chklist}}@else{{'Not Available'}}@endif
+                      </span>                    
                     </h6>
+                    @isset($AppData) Status: 
+                      @if ($AppData->isrecommended === null) 
+                        <span style="color:blue">For Evaluation</span>
+                      @elseif($AppData->isrecommended == 1)  
+                        <span style="color:green">Accepted Evaluation</span> 
+                      @elseif($AppData->isrecommended === 0) 
+                        <span style="color:red">Disapproved Evaluation</span> 
+                      @else 
+                        <span style="color:orange">Evaluated, for Revision</span> 
+                      @endif 
+                    @endisset
               </div>
 
-              {{-- @if(!empty($documentDate)) --}}
               <div class="row">
                 
                 <div class="col-md-8">
                   @if ($AppData->isrecommended == 2 || $AppData->isrecommended == null)
-                  <button data-toggle="modal" data-target="#myModal" class="btn btn-primary ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold"><i class="fa fa-plus pr-3"></i>Add Requirements</button>
+                    <button data-toggle="modal" data-target="#myModal" class="btn btn-primary ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold"><i class="fa fa-plus pr-3"></i>Add Requirements</button>
                   @endif
                 </div>
                 @if($AppData->hfser_id == 'PTC' && $AppData->isAcceptedFP != 1)
@@ -221,7 +228,7 @@
                 </div>
                 @endif
                 <div class="col-md-2 d-flex justify-content-end">
-                  <a href="{{$linkToEdit}}?grplo=rlo{{$AppData->aptid == 'R' ? '&type=r': ''}}" target="_blank" class="font-weight-bold text-white btn btn-warning btn btn-primary ml-3 pb-2 pt-2 mt-2 mb-2"><i class="fa fa-eye" aria-hidden="true"></i> View Application</a>
+                  <a href="{{$linkToEdit}}?grplo=rlo{{$AppData->aptid == 'R' ? '&type=r': ''}}" target="_blank" class="font-weight-bold text-white btn btn-block btn-info btn-flat ml-3 pb-2 pt-2 mt-2 mb-2"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp; View Application</a>
                 </div>
                 @endif
                  

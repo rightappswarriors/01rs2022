@@ -182,40 +182,44 @@
             </div>
             <div class="card-body">
               <div class="col-sm-12">
-                  <h2>@isset($AppData) {{$AppData->facilityname}} @endisset</h2>
-                  <h5>@isset($AppData) {{strtoupper($AppData->streetname)}} {{strtoupper($AppData->brgyname)}} {{$AppData->cmname}}, {{$AppData->provname}} @endisset</h5>
-                  {{-- {{ asset('employee/dashboard/processflow/evaluate')}}/{{$AppData->appid}}/edit --}}
-                  <span>
-                    <label>Process Type:&nbsp;</label>
-                    <span class="font-weight-bold">@if($AppData->aptid == 'R'){{'Renewal'}}@elseif($AppData->aptid == 'IN'){{'Initial New'}}@else{{'Unidentified'}}@endif
-                        @if(isset($AppData->hfser_id)){{' '.$AppData->hfser_id}}@endif
-                    </span>
-                  </span>
+                <h2>@isset($AppData)[<strong>{{$AppData->hfser_id}}R{{$AppData->rgnid}}-{{$AppData->appid}}</strong>]
+                    &nbsp;{{$AppData->facilityname}} @endisset</h2>
+                <h5>
+                  @isset($AppData)
+                    {{ $AppData->street_number?  strtoupper($AppData->street_number).',' : ' ' }}
+                    {{ $AppData->streetname?  strtoupper($AppData->streetname).',': ' '}}
+                    {{strtoupper($AppData->brgyname)}}, 
+                    {{$AppData->cmname}}, {{$AppData->provname}} 
+                  @endisset
+                </h5>
+                
+                <label>Process Type:&nbsp;</label>
+                <span class="font-weight-bold">
+                  @if($AppData->aptid == 'R'){{'Renewal'}}@elseif($AppData->aptid == 'IN'){{'Initial New'}}@else{{'Unidentified'}}@endif
+                  @if(isset($AppData->hfser_id)){{' '.$AppData->hfser_id}}@endif
+                </span>
 
-                  @if($forhfsrb)
-                    @if(!empty($documentDate))
-                    <h6>Institutional Character: 
-                      @if(isset($AppData) && isset($AppData->facmdesc))<strong>{{$AppData->facmdesc}}</strong>
-                        @else<span style="color:red">Not Available</span>
-                        @endif &nbsp;
-                        <a style="float: right;" href="{{$linkToEdit}}?grplo=rlo{{$AppData->aptid == 'R' ? '&type=r': ''}}" target="_blank" class="btn btn-warning">
-                          <i class="fa fa-eye" aria-hidden="true"></i> View Application
-                        </a>
-                        
-                         <!-- &type=r -->
-                        <span style="float: right;">&nbsp;&nbsp;</span>
-                        <a style="float: right;" href="{{url('client1/apply/GenerateReportAssessments/'.$AppData->appid)}}" target="_blank" class="btn btn-warning">
-                          <i class="fa fa-eye" aria-hidden="true"></i> Client's Self Assessment
-                        </a>
-                    </h6>
-                    @endif
-                    <!-- <span>
-                      <label>Checklist Review Count:&nbsp;</label>
-                      <span class="font-weight-bold">@if(isset($AppData)){{$AppData->no_chklist}}@else{{'Not Available'}}@endif</span>
-                    </span> -->
-                    <h6>@isset($AppData) Status: @if ($AppData->isrecommended === null) <span style="color:blue">For Evaluation</span> @elseif($AppData->isrecommended == 1)  <span style="color:green">Accepted Evaluation</span> @elseif($AppData->isrecommended === 0) <span style="color:red">Disapproved Evaluation</span> @else <span style="color:orange">Evaluated, for Revision</span> @endif @endisset</h6>
-                    <!-- <h6 class="font-weight-bold"><u>OHSRS Status: <span style="color:blue">Verified</span></u></h6> -->
-                    @endif
+                @if($forhfsrb)
+                  @if(!empty($documentDate))
+                  <h6>Institutional Character: 
+                    @if(isset($AppData) && isset($AppData->facmdesc))
+                      <strong>{{$AppData->facmdesc}}</strong>
+                    @else
+                      <span style="color:red">Not Available</span>
+                    @endif &nbsp;
+                    
+                    <a style="float: right;" href="{{$linkToEdit}}?grplo=rlo{{$AppData->aptid == 'R' ? '&type=r': ''}}" target="_blank" class="btn btn-info">
+                      <i class="fa fa-eye" aria-hidden="true"></i> View Application
+                    </a>                      
+                    <span style="float: right;">&nbsp;&nbsp;</span>
+                    <a style="float: right;" href="{{url('client1/apply/GenerateReportAssessments/'.$AppData->appid)}}" target="_blank" class="btn btn-info">
+                      <i class="fa fa-eye" aria-hidden="true"></i> Client's Self Assessment
+                    </a>
+                  </h6>
+                  @endif
+
+                  <h6>@isset($AppData) Status: @if ($AppData->isrecommended === null) <span style="color:blue">For Evaluation</span> @elseif($AppData->isrecommended == 1)  <span style="color:green">Accepted Evaluation</span> @elseif($AppData->isrecommended === 0) <span style="color:red">Disapproved Evaluation</span> @else <span style="color:orange">Evaluated, for Revision</span> @endif @endisset</h6>
+                  @endif
               </div>
              
               {{-- @if(!empty($documentDate)) --}}

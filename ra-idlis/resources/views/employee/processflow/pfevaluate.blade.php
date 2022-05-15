@@ -54,7 +54,7 @@
               
                    @if (isset($BigData))
                       @foreach ($BigData as $data)
-                        @if(($data->isCashierApprove == 1)  && ($data->status != 'A' ))
+                        @if(($data->status != 'A' ))
                           @php
                             $status = '';
                             $paid = $data->appid_payment;
@@ -62,7 +62,7 @@
                             $ifdisabled = '';$color = '';
                           @endphp
 
-                          @if((strtolower($data->hfser_id) == 'con' && $data->isrecommended == 2 && $data->status == 'REV')  || (strtolower($data->hfser_id) == 'ptc' && $data->isReadyForInspec == 0 && $data->status == 'REV'))
+                          @if((strtolower($data->hfser_id) == 'con' && $data->isrecommended == 2 && $data->status == 'REV')  || (strtolower($data->hfser_id) == 'ptc' && $data->isReadyForInspec == 0 && $data->status == 'REV') || (strtolower($data->hfser_id) == 'ptc'  && $data->submittedReq != 1) || (strtolower($data->hfser_id) == 'ptc' && $type == 'technical' ) || ((strtolower($data->hfser_id) != 'ptc') && $data->isCashierApprove != 1))
                             <?php  continue; ?>
                           @endif
                           

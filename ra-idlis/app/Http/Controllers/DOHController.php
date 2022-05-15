@@ -3749,9 +3749,7 @@ use FunctionsClientController;
 						$boolRedirect = false;
 					}
 
-					if($boolFlag)
-					{
-
+					if($boolFlag){
 						try 
 						{
 							$data1 = AjaxController::getAllDataEvaluateOneUploads($appid, 0, $office);
@@ -3828,8 +3826,7 @@ use FunctionsClientController;
 						return view('employee.processflow.pfevaluateoneLTO', ['type'=> 'docu','AppData'=> $data, 'requirements' => $req, 'appID' => $appid, 'documentDate' => $documentDate, 'linkToEdit' => $linkToEdit, 'ActualString' => $data8->toDateString(), 'DateString' => $data8->toFormattedDateString(),'appID' => $appid, 'DateNow' => $data9->toDateString(), 'AfterDay'=> $data10->toDateString(), 'tables' => json_encode($tables), 'forhfsrb' => $forhfsrb, 'office' => $office, 'coaFlag' => $coaFlag, 'redirect' => $boolRedirect]);
 					}
 				}
-				if ($request->isMethod('post')) 
-				{
+				if ($request->isMethod('post')) {
 					try 
 					{
 						if($request->has('addUpload')){
@@ -3871,7 +3868,6 @@ use FunctionsClientController;
 							}
 							return $test;
 						}
-
 					} 
 					catch (Exception $e) 
 					{
@@ -3880,7 +3876,6 @@ use FunctionsClientController;
 						return 'ERROR';
 					}
 				}
-
 			}
 			else {
 				return redirect()->route('employee');
@@ -10391,6 +10386,7 @@ use FunctionsClientController;
 			// 	// return redirect()->back();
 			// }//6-2-2021
 			$cur_user = AjaxController::getCurrentUserAllData();
+			
 			if ($request->isMethod('get')) 
 			{
 				try 

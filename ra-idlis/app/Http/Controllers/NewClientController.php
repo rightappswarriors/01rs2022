@@ -287,6 +287,7 @@ class NewClientController extends Controller {
 			}
 
 			$curForm = FunctionsClientController::getUserDetailsByAppform($appid);
+			//dd($curForm);
 			// dd($request);
 			if(count($curForm) < 1) {
 				return redirect('client1/apply')->with('errRet', ['errAlt'=>'warning', 'errMsg'=>'No application selected.']);

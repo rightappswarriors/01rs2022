@@ -30,8 +30,8 @@
                       <th ></th>
                      
                       <th ></th>
-                      <th class="select-filter" >
-                      </th>
+                      <th class="select-filter" ></th>
+                      <th ></th>
                       <th ></th>
                      
                   </tr>
@@ -42,6 +42,7 @@
                       <th scope="col" width="auto" style="text-align:center">Current Assigned Team</th>
                       {{-- <th scope="col" style="text-align:center">Current Assigned </th> --}}
                       <th scope="col" width="auto" style="text-align:center">Current Status</th>
+                      <th scope="col" width="auto" style="text-align:center">Doc and Payment Status</th>
                       <th scope="col" width="auto" style="text-align:center">Options</th>
                   </tr>
                   </thead>
@@ -68,7 +69,7 @@
 						</script>
                       <tr>
                         <td style="text-align:center">{{$data->hfser_id}}</td>
-                        <td style="text-align:center">{{$data->hfser_id}}R{{$data->assignedRgn}}-{{$data->appid}}</td>
+                        <td style="text-align:center; text-transform: uppercase;">{{$data->hfser_id}}R{{$data->assignedRgn}}-{{$data->appid}}</td>
                         <td style="text-align:center"><strong>{{$data->facilityname}}</strong></td>
                         <td style="text-align:center">
                           <strong>
@@ -81,6 +82,17 @@
                             @endisset
                           </strong></td>
                         <td style="text-align:center;font-weight:bold;">{{$data->trns_desc}}</td>
+                        <td style="text-align:center;">
+                          @php
+                            if($data->isReadyForInspec){
+                              echo "Doc. Accepted. ";
+                            }
+                            
+                            if($data->isCashierApprove) {
+                              echo "Payment Confirmed.";
+                            }
+                          @endphp
+                        </td>
                         <td style="text-align:center">
                           @isset($data->hasAssessors) 
                             {{-- @if($data->hasAssessors == 'F') --}}

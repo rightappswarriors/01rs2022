@@ -5101,7 +5101,6 @@ public static function checkConmem($appid)
 											'recommendedippaddr' =>$Cur_useData['ip'],
 											'status' => 'RE',
 										);
-
 					}
 					else if ($request->selected == 1)  // Approved
 					{
@@ -5160,25 +5159,23 @@ public static function checkConmem($appid)
 											'recommendedtime' => $Cur_useData['time'],
 											'recommendeddate' =>  $Cur_useData['date'],
 											'recommendedippaddr' =>$Cur_useData['ip'],
-										//	// 'proposedInspectiontime' => $request->proptime,
-										//	// 'proposedInspectiondate' =>  $request->propdate,
+											//	// 'proposedInspectiontime' => $request->proptime,
+											//	// 'proposedInspectiondate' =>  $request->propdate,
 											// 'status'=> $stat,// updated 5-31-2021
-									// updated 5-31-2021
-										'isPayEval' => 1,
-										'payEvalby' => $Cur_useData['cur_user'],
-										'payEvaldate' => $Cur_useData['date'],
-										'payEvaltime' => $Cur_useData['time'],
-										'payEvalip'=> $Cur_useData['ip'],
-										// 'status' => 'FP'
-										'status' => (strtolower($hfser) == 'lto' || strtolower($hfser) == 'coa' ? 'FI' : 'P'),
-										'isReadyForInspec' => 1
-										// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' :  'FP')
-										// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' :  'FI')
-										// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' : (strtolower($hfser) == 'lto' ? 'FI' :'CE'))
-										// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' : 'CE')
-										// 'FDAStatMach' => 'For Evaluation'
-
-
+											// updated 5-31-2021
+											'isPayEval' => 1,
+											'payEvalby' => $Cur_useData['cur_user'],
+											'payEvaldate' => $Cur_useData['date'],
+											'payEvaltime' => $Cur_useData['time'],
+											'payEvalip'=> $Cur_useData['ip'],
+											// 'status' => 'FP'
+											'status' => (strtolower($hfser) == 'lto' || strtolower($hfser) == 'coa' ? 'FI' : 'P'),
+											'isReadyForInspec' => 1
+											// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' :  'FP')
+											// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' :  'FI')
+											// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' : (strtolower($hfser) == 'lto' ? 'FI' :'CE'))
+											// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' : 'CE')
+											// 'FDAStatMach' => 'For Evaluation'
 										);
 					}
 					else if ($request->selected == 2)  // Revised

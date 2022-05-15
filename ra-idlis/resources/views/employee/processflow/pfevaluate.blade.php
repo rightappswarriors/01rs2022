@@ -62,7 +62,11 @@
                             $ifdisabled = '';$color = '';
                           @endphp
 
-                          @if((strtolower($data->hfser_id) == 'con' && $data->isrecommended == 2 && $data->status == 'REV')  || (strtolower($data->hfser_id) == 'ptc' && $data->isReadyForInspec == 0 && $data->status == 'REV') || (strtolower($data->hfser_id) == 'ptc'  && $data->submittedReq != 1) || (strtolower($data->hfser_id) == 'ptc' && $type == 'technical' ) || ((strtolower($data->hfser_id) != 'ptc') && $data->isCashierApprove != 1))
+                          @if((strtolower($data->hfser_id) == 'con' && $data->isrecommended == 2 && $data->status == 'REV')
+                            || (strtolower($data->hfser_id) == 'ptc' && $data->isReadyForInspec == 0 && $data->status == 'REV') 
+                            || (strtolower($data->hfser_id) == 'ptc'  && $data->submittedReq != 1) 
+                            || (strtolower($data->hfser_id) == 'ptc' && $type == 'technical' ) 
+                            || ((strtolower($data->hfser_id) != 'ptc') && $data->isCashierApprove != 1))
                             <?php  continue; ?>
                           @endif
                           

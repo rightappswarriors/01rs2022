@@ -10312,7 +10312,6 @@ use FunctionsClientController;
 		////// SYSTEM LOGS
 		///////////////////////////////////////////////// MANAGE
 
-
 		public function printOR($appid){
 
 			$check = DB::table('appform')->where('appid',$appid)->select('isCashierApprove')->first()->isCashierApprove;
@@ -10386,7 +10385,7 @@ use FunctionsClientController;
 			// 	// return redirect()->back();
 			// }//6-2-2021
 			$cur_user = AjaxController::getCurrentUserAllData();
-			
+
 			if ($request->isMethod('get')) 
 			{
 				try 

@@ -5091,8 +5091,6 @@ public static function checkConmem($appid)
 					$selected = AjaxController::getUidFrom($request->apid);
 					if ($request->selected == 0)  // Rejected
 					{
-
-
 						$updateData = array(
 											'isrecommended'=>0,
 											'recommendedby' => $Cur_useData['cur_user'],
@@ -5100,9 +5098,11 @@ public static function checkConmem($appid)
 											'recommendeddate' =>  $Cur_useData['date'],
 											'recommendedippaddr' =>$Cur_useData['ip'],
 											'status' => 'RE',
+											'isReadyForInspec' => 0
 										);
 					}
-					else if ($request->selected == 1)  // Approved
+					// Approved Documentary Evaluation
+					else if ($request->selected == 1)  
 					{
 						$stat = null;
 						
@@ -5110,31 +5110,26 @@ public static function checkConmem($appid)
 							case 'LTO':
 								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
 								$stat = 'FI';
-								// $stat = $curStat;
 								break;
 
 							case 'COA':
 								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
 								$stat = 'FI';
-								// $stat = $curStat;
 								break;
 
 							case 'ATO':
 								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
 								$stat = 'FI';
-								// $stat = $curStat;
 								break;
 
 							case 'COR':
 								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
 								$stat = 'FI';
-								// $stat = $curStat;
 								break;
 
 							case 'LTO':
 								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
 								$stat = 'FI';
-								// $stat = $curStat;
 								break;
 
 							case 'PTC':
@@ -5150,35 +5145,25 @@ public static function checkConmem($appid)
 								break;
 
 						}
-						// (strtolower($clienthfser_id) == 'lto' ? 'FI' : 'FPE')
 						$hfser = DB::table('appform')->where('appid',$request->apid)->select('hfser_id')->first()->hfser_id;
 						$updateData = array(
-											// 'isPayEval'=>1,// updated 5-31-2021
 											'isrecommended'=>1,
 											'recommendedby' => $Cur_useData['cur_user'],
 											'recommendedtime' => $Cur_useData['time'],
 											'recommendeddate' =>  $Cur_useData['date'],
 											'recommendedippaddr' =>$Cur_useData['ip'],
-											//	// 'proposedInspectiontime' => $request->proptime,
-											//	// 'proposedInspectiondate' =>  $request->propdate,
-											// 'status'=> $stat,// updated 5-31-2021
-											// updated 5-31-2021
 											'isPayEval' => 1,
 											'payEvalby' => $Cur_useData['cur_user'],
 											'payEvaldate' => $Cur_useData['date'],
 											'payEvaltime' => $Cur_useData['time'],
 											'payEvalip'=> $Cur_useData['ip'],
-											// 'status' => 'FP'
 											'status' => (strtolower($hfser) == 'lto' || strtolower($hfser) == 'coa' ? 'FI' : 'P'),
 											'isReadyForInspec' => 1
-											// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' :  'FP')
-											// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' :  'FI')
-											// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' : (strtolower($hfser) == 'lto' ? 'FI' :'CE'))
-											// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' : 'CE')
 											// 'FDAStatMach' => 'For Evaluation'
 										);
 					}
-					else if ($request->selected == 2)  // Revised
+					// Revised Documentary Evaluation
+					else if ($request->selected == 2)  
 					{
 						$getTimeChck = DB::table('appform')->where('appid', '=', $request->apid)->first();
 						$chkUpd = $getTimeChck->no_chklist + 1;
@@ -5205,6 +5190,7 @@ public static function checkConmem($appid)
 					if(isset($request->requestFor) && strtolower($request->requestFor) != 'hfsrb')
 					{
 						$suffix = '';
+
 						if(strtolower($request->requestFor) == 'pharma'){
 							$suffix = 'pharma';
 						}
@@ -5217,9 +5203,7 @@ public static function checkConmem($appid)
 							'ispreassessedip'.$suffix =>$Cur_useData['ip'],
 							'FDAstatus' => $updateData['status']
 						);
-
 						$curappf = DB::table('appform')->where('appid',$request->apid)->first();
-
 
 						if($request->selected == 2){
 							$updateData['isReadyForInspecFDA'] = 0;
@@ -5233,7 +5217,6 @@ public static function checkConmem($appid)
 								$updateData['machDocNeedRev'] = 1;
 								$updateData['machDocRevcount'] = $curappf->machDocRevcount + 1;
 							}
-
 						}
 						else{
 							$updateData['isReadyForInspecFDA'] = 1;
@@ -5245,11 +5228,7 @@ public static function checkConmem($appid)
 								$updateData['FDAStatMach'] = "For Payment";
 								// $updateData['FDAStatMach'] = "For Inspection";
 							}
-						}
-
-
-
-						
+						}						
 					}
 					if(isset($request->isCoa) && !isset($appform->coaflag)){
 						$updateData = array(

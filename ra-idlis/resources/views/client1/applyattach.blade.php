@@ -122,10 +122,11 @@
 							</div>
 						</td>
 						<td>Please submit Floor Plan / Blue Print to HFSRB/CHD Office prior to Payment.</td>
-						<td>
+						<td colspan='2'>
 							{!!(isset($appform->isAcceptedFP) ? '<span class="text-success">RECEIVED</span>' :'<span class="text-danger">NOT YET RECEIVED</span>')!!}
 							<p class="font-weight-bold pt-5">Floor plan Status:</p>
 							<span class="font-weight-bold pt-5">
+								
 								@if($appform->isAcceptedFP == 1)
 									<span class="text-success">
 										Accepted 
@@ -141,8 +142,7 @@
 							<p class="font-weight-bold pt-5">With Remarks:</p>
 							<span class="">{{$appform->fpcomment}}</span>
 							@endif
-						</td>
-						<td><span class="font-weight-bold">Option Not Available</span></td>
+						</td>						
 					</tr>
 						
 					@endif

@@ -976,7 +976,7 @@
 			try  
 			{
 				$data = DB::table('ptc_team_members')
-						->join('x08', 'ptc_team_members.uid', '=', 'x08.uid')
+						//->join('x08', 'ptc_team_members.uid', '=', 'x08.uid')
 						->where('ptc_team_members.team_id',$request->team_id)
 						->get();
 
@@ -5089,6 +5089,7 @@ public static function checkConmem($appid)
 					$Cur_useData = AjaxController::getCurrentUserAllData();
 					$settings = AjaxController::getAllSettings();
 					$selected = AjaxController::getUidFrom($request->apid);
+
 					if ($request->selected == 0)  // Rejected
 					{
 						$updateData = array(
@@ -5111,27 +5112,22 @@ public static function checkConmem($appid)
 								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
 								$stat = 'FI';
 								break;
-
 							case 'COA':
 								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
 								$stat = 'FI';
 								break;
-
 							case 'ATO':
 								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
 								$stat = 'FI';
 								break;
-
 							case 'COR':
 								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
 								$stat = 'FI';
 								break;
-
 							case 'LTO':
 								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
 								$stat = 'FI';
 								break;
-
 							case 'PTC':
 								if(DB::table('appform')->where([['appid',$request->apid],['isAcceptedFP','<>',1]])->doesntExist()){
 									$stat = 'FPPR';
@@ -5236,6 +5232,7 @@ public static function checkConmem($appid)
 						);
 					}
 					$test = DB::table('appform')->where('appid', '=', $request->apid)->update($updateData);
+
 					try {
 						if ($test) {
 							AjaxController::notifyClient($request->apid,$userInf->uid,$idForNotify);
@@ -5270,10 +5267,6 @@ public static function checkConmem($appid)
 	
 			return $ex;
 		}
-	
-
-
-
 
 		public static function JudgeApplicationFDA(Request $request)
 		{

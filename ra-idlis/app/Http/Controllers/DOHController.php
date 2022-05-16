@@ -4585,6 +4585,7 @@ use FunctionsClientController;
 				if($request->isMethod('get')){
 					$Cur_useData = AjaxController::getCurrentUserAllData();
 					$data = AjaxController::getAllApplicantsProcessFlow();
+					
 					if($appid === false){
 						// return view('employee.processflow.pfevaluteone', ['AppData'=> $data, 'UploadData' => $data1, 'numOfX' => count($data2), 'numOfApp' => count($data3), 'numOfAprv'=> count($data4), 'numOfNull' => count($data5), 'OOPS'=>$data6, 'OPPok' => $data7, 'ActualString' => $data8->toDateString(), 'DateString' => $data8->toFormattedDateString(),'appID' => $appid, 'DateNow' => $data9->toDateString(), 'AfterDay'=> $data10->toDateString(), 'linkToEdit' => $linkToEdit]);
 						return view('employee.processflow.pfinspection', ['applicant' => $data]);
@@ -4615,34 +4616,37 @@ use FunctionsClientController;
 						$data10 = $data10->addDays(30);
 						$data8 = $data8->addDays(1);
 						$test = false;
-							do {
-								// $temp = $data8->toDateString();	
-								if ($data8->isWeekday()) { // true
-									$temp = $data8->toDateString();
-									$check = DB::table('holidays')->where('hdy_date', '=', $temp)->first();
-									if ($check) {
-										$data8 = $data8->addDays(1);
-										$test = false;
-									} else {
-										$test = true;
-									}
-								} else { // false
+						do {
+							// $temp = $data8->toDateString();	
+							if ($data8->isWeekday()) { // true
+								$temp = $data8->toDateString();
+								$check = DB::table('holidays')->where('hdy_date', '=', $temp)->first();
+								if ($check) {
 									$data8 = $data8->addDays(1);
 									$test = false;
+								} else {
+									$test = true;
 								}
-							} while ($test == false);	
+							} else { // false
+								$data8 = $data8->addDays(1);
+								$test = false;
+							}
+						} while ($test == false);	
 							
 						return view('employee.processflow.inspectionShow', ['appdata'=>$data1,'applicant' => $data,'ActualString' => $data8->toDateString(), 'DateString' => $data8->toFormattedDateString(), 'teams' => $teams]);
 					}
 				} else {
 					if(/*isset($request->time) && */isset($request->date)){
+						
 						$upd = DB::table('appform')->where('appid',$appid)->update(['proposedWeek' => json_encode(addslashes($request->date))/*, 'proposedTime' => $request->time*/]);
 						$members = DB::table('app_team')->where('appid',$appid)->get();
+						
 						foreach ($members as $key) {
 							AjaxController::notifyClient($appid,$key->uid,54);
 						}
 						$selected = AjaxController::getUidFrom($appid);
 						AjaxController::notifyClient($appid,$selected,55);
+
 						if($upd){
 							return redirect('employee/dashboard/processflow/inspection/'.$appid);
 						}
@@ -5045,8 +5049,8 @@ use FunctionsClientController;
 								$dataTeam = DB::table('team');
 								$dataTeam->join('region', 'team.rgnid', '=', 'region.rgnid');
 								$dataTeam->where('team.type','ptc');
-								$dataTeam->where('team.rgnid', $emp->rgnid);
-								//$dataTeam->where('team.rgnid', $data->rgnid);
+								//$dataTeam->where('team.rgnid', $emp->rgnid);
+								$dataTeam->where('team.rgnid', $data->assignedRgn);
 								$dataTeam =	$dataTeam->get();
 	
 	
@@ -7275,6 +7279,7 @@ use FunctionsClientController;
 				$data = AjaxController::getAllApplicantsProcessFlow();
 				$arrfilter = [['isPayEval','==',1],['isrecommended','==',1],['isCashierApprove','==',1],['isInspected','==',null],['proposedWeek','!=',null], ['hfser_id','in_array',['LTO','COA','ATO','COR']]];
 				$currentuser = AjaxController::getCurrentUserAllData();
+
                 return ($this->agent && $session_equiv ? response()->json(array('data' => AjaxController::filterApplicantData($data,$arrfilter))) : view('employee.processflow.pfassessment', ['BigData' => $data, 'currentuser' => $currentuser]));
 			} 
 			catch (Exception $e) 
@@ -10448,6 +10453,7 @@ use FunctionsClientController;
 						if($data->hfser_id == 'PTC'){
 							$status = 'FPE';
 						}
+
 			  			DB::table('chgfil')->where([['appform_id',$appid],['chg_num','<>',null],['isPaid',null]])->update(['isPaid'=>1]);
 			  			$update = DB::table('appform')->where('appid',$request->appid)->update(['CashierApproveBy'=>$cur_user['cur_user'],
 						  'CashierApproveDate' => Date('Y-m-d',strtotime('now')), 

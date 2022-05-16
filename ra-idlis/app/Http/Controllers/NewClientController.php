@@ -1440,7 +1440,7 @@ public function fdacertN(Request $request, $appid, $requestOfClient = null) {
 				return view('client1.apply.LTO1.ltohfsrb', $arrRet);
 			} else {
 				if(isset($request->readyNow)){
-					$ret = DB::table('appform')->where('appid',$appid)->update(['isReadyForInspec' => 1, 'status'=> 'CRFE']);
+					$ret = DB::table('appform')->where('appid',$appid)->update(['isReadyForInspec' => 0, 'status'=> 'CRFE']);
 					// $ret = DB::table('appform')->where('appid',$appid)->update(['isReadyForInspec' => 1, 'status'=> 'FE']);
 					if($ret){
 						return 'succ';

@@ -10385,6 +10385,7 @@ use FunctionsClientController;
 			// 	// return redirect()->back();
 			// }//6-2-2021
 			$cur_user = AjaxController::getCurrentUserAllData();
+			$data = AjaxController::getAllDataEvaluateOne($appid);
 
 			if ($request->isMethod('get')) 
 			{
@@ -10395,7 +10396,6 @@ use FunctionsClientController;
 					$paymentsRec = 0;
 					$canAdd = DB::table('chgfil')->where('appform_id',$appid)->whereNotNull('recievedBy')->doesntExist();
 					$paymentMethod = DB::table('charges')->where([['cat_id','PMT'],['forWhom','HFSRB']])->get();
-					$data = AjaxController::getAllDataEvaluateOne($appid);
 					$data1 = AjaxController::getAllDataOrderOfPaymentUploads($appid ,5);
 					$data2 = AjaxController::getAllDataOrderOfPaymentUploads($appid ,4);
 					$data3 = AjaxController::getAllDataOrderOfPaymentUploads($appid ,2);
@@ -10403,7 +10403,7 @@ use FunctionsClientController;
 					$data5 = AjaxController::getAllDataOrderOfPaymentUploads($data->aptid ,3);
 					$uacs = AjaxController::getAllUACS();
 					$code = $data->hfser_id.'R'.$data->rgnid.'-'.$data->appid;
-
+					
 					foreach($data1 as $payments){
 						if($payments->cat_id === 'PMT'){
 							$paymentsRec +=1;
@@ -10419,7 +10419,6 @@ use FunctionsClientController;
 					return view('employee.processflow.pfcashieractions');
 				}
 			}
-
 			
 			if ($request->isMethod('post')) 
 			{
@@ -10444,15 +10443,21 @@ use FunctionsClientController;
 				  		$upd = array('chg_num'=>(intval($getData->chg_num) + 1));
 				  		$test2 = DB::table('chg_app')->where('chgapp_id', '=', $request->id)->update($upd);
 			  		} elseif($request->action == 'evalute') {
+						$status = 'FDE';
+
+						if($data->hfser_id == 'PTC'){
+							$status = 'FPE';
+						}
 			  			DB::table('chgfil')->where([['appform_id',$appid],['chg_num','<>',null],['isPaid',null]])->update(['isPaid'=>1]);
 			  			$update = DB::table('appform')->where('appid',$request->appid)->update(['CashierApproveBy'=>$cur_user['cur_user'],
 						  'CashierApproveDate' => Date('Y-m-d',strtotime('now')), 
 						  'CashierApproveTime' => Date('H:i:s',strtotime('now')), 
 						  'CashierApproveIp' => $request->ip(), 
 						  'isCashierApprove' => 1, 
-						  'status' => 'FDE', 
+						  'status' => $status, 
 						  'proofpaystat' => 'posted', 
 						  't_date' => Date('Y-m-d',strtotime('now'))]);
+
 			  			if($update){
 			  				$uid = AjaxController::getUidFrom($request->appid);
 			  				AjaxController::notifyClient($request->appid,$uid,31);

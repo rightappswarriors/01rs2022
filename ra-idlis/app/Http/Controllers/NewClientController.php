@@ -1416,14 +1416,11 @@ public function fdacertN(Request $request, $appid, $requestOfClient = null) {
 					return redirect('client1/apply')->with('errRet', ['errAlt'=>'danger', 'errMsg'=>'No application selected.']);
 				}
 
-				
 				// $sb = DB::table('appform')->where('appid', $appid)->first();
 				// $subclass = 'none';
 				// if(!is_null($sb->subclassid)){
 				// 	$subclass =$sb->subclassid;
 				// }
-				
-
 				$arrRet = [
 					'userInf'=>FunctionsClientController::getUserDetails(),
 					'addresses'=>$hfLocs,

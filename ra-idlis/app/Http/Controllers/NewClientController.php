@@ -943,52 +943,61 @@ class NewClientController extends Controller {
 			if(DB::table('appform')->join('licensed','licensed.appid','appform.appid')->where([['appform.appid',$appid],['appform.isApprove',1]])->doesntExist()){
 				return redirect('client1/home')->with('errRet', ['errAlt'=>'danger', 'errMsg'=>'Application Does not Exist']);
 			}
+			$otherDetails = null;
 			$x08_ft = 0;
 			$arrayFaci = $arrayserv = array();
 			$retTable = FunctionsClientController::getUserDetailsByAppform($appid);
-			switch ($retTable[0]->hfser_id) {
-				case 'PTC':
-					$otherDetails = DB::table('hferc_evaluation')->join('hferc_team', 'hferc_evaluation.HFERC_evalBy', '=', 'hferc_team.uid')
-					->where([['hferc_evaluation.appid',$appid],['hferc_evaluation.HFERC_eval',1],['hferc_team.pos','C']])
-					->first();
-					// $otherDetails = DB::table('hferc_evaluation')->where([['appid',$appid],['HFERC_eval',1]])->first();
-					break;
+			//dd(empty($retTable));
+			if(!empty($retTable)){
+				switch ($retTable[0]->hfser_id) {
+					case 'PTC':
+						$otherDetails = DB::table('hferc_evaluation')->join('hferc_team', 'hferc_evaluation.HFERC_evalBy', '=', 'hferc_team.uid')
+						->where([['hferc_evaluation.appid',$appid],['hferc_evaluation.HFERC_eval',1],['hferc_team.pos','C']])
+						->first();
+						// $otherDetails = DB::table('hferc_evaluation')->where([['appid',$appid],['HFERC_eval',1]])->first();
+						break;
 
-				case 'LTO':
-					$otherDetails = [DB::table('assessmentrecommendation')->where([['appid',$appid],['choice','issuance']])->first(), DB::table('x08_ft')->where('appid',$appid)->whereIn('facid',['H','H2','H3'])->exists()];
-					break;
+					case 'LTO':
+						$otherDetails = [DB::table('assessmentrecommendation')->where([['appid',$appid],['choice','issuance']])->first(), DB::table('x08_ft')->where('appid',$appid)->whereIn('facid',['H','H2','H3'])->exists()];
+						break;
 
-				case 'CON':
-					$otherDetails = DB::table('con_evaluate')->where('appid',$appid)->first();
-					break;
-				
-				default:
-					$otherDetails = null;
-					break;
-			}
-			$facilityTypeId = "No Facility Type"; 
-			$serviceId = "No Service";
-			if($hfser != $retTable[0]->hfser_id) {
-				return redirect('client1/apply/app/'.$retTable[0]->hfser_id.'/'.$appid.'');
-			}
-			$x08_ft = DB::table('x08_ft')->where('appid',$appid)->join('facilitytyp','facilitytyp.facid','x08_ft.facid')->where('facilitytyp.servtype_id',2)->get();
-			if(count($x08_ft) > 0){
-				foreach($x08_ft as $table){
-					if(!in_array($table->facname, $arrayFaci)){
-						if($table->facid != 'AOASPT1' && $table->facid != 'AOASPT2'  ){
-							array_push($arrayFaci, $table->facname);
+					case 'CON':
+						$otherDetails = DB::table('con_evaluate')->where('appid',$appid)->first();
+						break;
+					
+					default:
+						$otherDetails = null;
+						break;
+				}
+			
+				$facilityTypeId = "No Facility Type"; 
+				$serviceId = "No Service";
+
+				if($hfser != $retTable[0]->hfser_id) {
+					return redirect('client1/apply/app/'.$retTable[0]->hfser_id.'/'.$appid.'');
+				}
+
+				$x08_ft = DB::table('x08_ft')->where('appid',$appid)->join('facilitytyp','facilitytyp.facid','x08_ft.facid')->where('facilitytyp.servtype_id',2)->get();
+				if(count($x08_ft) > 0){
+					foreach($x08_ft as $table){
+						if(!in_array($table->facname, $arrayFaci)){
+							if($table->facid != 'AOASPT1' && $table->facid != 'AOASPT2'  ){
+								array_push($arrayFaci, $table->facname);
+							}
 						}
 					}
 				}
+				
+				if(count($retTable) > 0) {
+					if($retTable[0]->canapply != 2) {
+						return redirect('client1/home')->with('errRet', ['errAlt'=>'danger', 'errMsg'=>'Application not yet applied.']);
+					}
+				} else {
+					return redirect('client1/home')->with('errRet', ['errAlt'=>'danger', 'errMsg'=>'No application selected']);
+				}
 			}
 			$sData = FunctionsClientController::getServFaclDetails($appid); 
-			if(count($retTable) > 0) {
-				if($retTable[0]->canapply != 2) {
-					return redirect('client1/home')->with('errRet', ['errAlt'=>'danger', 'errMsg'=>'Application not yet applied.']);
-				}
-			} else {
-				return redirect('client1/home')->with('errRet', ['errAlt'=>'danger', 'errMsg'=>'No application selected']);
-			}
+
 			if(count($sData[3])) {
 				$impArr = [];
 				$i = 0;

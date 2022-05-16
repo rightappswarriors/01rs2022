@@ -6,7 +6,7 @@
   <div class="content p-4">
       <div class="card">
           <div class="card-header bg-white font-weight-bold">
-             Assess Applicants   @include('employee.tableDateSearch')
+             Assessment Tool   @include('employee.tableDateSearch')
           </div>
           <div class="card-body table-responsive">
         
@@ -15,21 +15,21 @@
                   <tr>
                       <th ></th>
                       <th></th>
-                      <th ></th>
                       <th  class="select-filter"></th>
                       <th></th>
-                      <th class="select-filter"></th>
                       <th  class="select-filter"></th>
+                      <th  class="select-filter"></th>
+                      <th ></th>
                       <th></th>
                      
                   </tr>
                   <tr>
                       <th scope="col" class="text-center">Type</th>
-                      <th scope="col" class="text-center">Application Code</th>
-                      <th scope="col" class="text-center">Name of Health Facility</th>
-                      <th scope="col" class="text-center">Type of Health Facility</th>
-                      <th scope="col" class="text-center">Date</th>
-                      <th scope="col" class="text-center">{{-- &nbsp; --}}Application Status</th>
+                      <th scope="col" class="text-center">App. Code</th>
+                      <th scope="col" class="text-center">Process</th>
+                      <th scope="col" class="text-center">Name of Facility</th>
+                      <th scope="col" class="text-center">Type of Facility</th>
+                      <th scope="col" class="text-center">Applied Date</th>
                       <th scope="col" class="text-center">Current Status</th>
                       <th scope="col" class="text-center">Options</th>
                   </tr>
@@ -58,10 +58,10 @@
                           <tr>
                             <td class="text-center">{{$data->hfser_id}}</td>
                             <td class="text-center">{{$data->hfser_id}}R{{$data->rgnid}}-{{$data->appid}}</td>
+                            <td class="text-center">{{$data->aptdesc}}</td>
                             <td class="text-center"><strong>{{$data->facilityname}}</strong></td>
                             <td class="text-center">{{(ajaxController::getFacilitytypeFromHighestApplicationFromX08FT($data->appid)->hgpdesc ?? 'NOT FOUND')}}</td>
                             <td class="text-center">{{$data->formattedDate}}</td>
-                            <td class="text-center">{{$data->aptdesc}}</td>
                             <td style="color:{{$color}};font-weight:bold;" class="text-center">{{$data->trns_desc}}</td>
                               <td>
                               	<center>
@@ -102,7 +102,7 @@ $('#max').datepicker({ onSelect: function () { table.draw(); }, changeMonth: tru
 
 var table = $('#example').DataTable();
 $("#example thead .select-filter").each( function ( i ) {
-      var e = i == 0 ? 3 : i == 1 ? 5 : 6;
+      var e = i == 0 ? 2 : i == 1 ? 4 : 5;
         var select = $('<select><option value=""></option></select>')
             .appendTo( $(this).empty() )
             // .appendTo( $(this).empty() )

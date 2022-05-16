@@ -37,18 +37,20 @@
                   </tr>
                   <tr>
                       <th scope="col" width="auto" style="text-align:center">Type</th>
-                      <th scope="col" width="auto" style="text-align:center">Application Code</th>
+                      <th scope="col" width="auto" style="text-align:center">App. Code</th>
+                      <th scope="col" width="auto" style="text-align:center">Process</th>
                       <th scope="col" width="auto" style="text-align:center">Name of Facility</th>
                       <th scope="col" width="auto" style="text-align:center">Current Assigned Team</th>
                       {{-- <th scope="col" style="text-align:center">Current Assigned </th> --}}
                       <th scope="col" width="auto" style="text-align:center">Current Status</th>
-                      <th scope="col" width="auto" style="text-align:center">Doc and Payment Status</th>
+                      {{-- <th scope="col" width="auto" style="text-align:center">Doc and Payment Status</th> --}}
                       <th scope="col" width="auto" style="text-align:center">Options</th>
                   </tr>
                   </thead>
                   <tbody id="FilterdBody">
                   @if (isset($BigData))
                     @foreach ($BigData as $data)
+					          @if(($data->status != 'A' ))
                     <script>
 						console.log("{!! $data->hasAssessors.'---'. $data->facilityname.'---' . AjaxController::canProcessNextStepFDA($data->appid,'isCashierApproveFDA','isCashierApprovePharma') !!}")
 						</script>
@@ -59,6 +61,7 @@
                       $status = ''; $color = '';
                       $paid = $data->appid_payment;
                       $reco = $data->status;
+
                       if ($reco == 'P') {
                         $status = 'Pending';
                       }
@@ -68,9 +71,10 @@
 						  console.log("{!! $data->hasAssessors.'---'. $data->facilityname.'---' . AjaxController::canProcessNextStepFDA($data->appid,'isCashierApproveFDA','isCashierApprovePharma') !!}")
 						</script>
                       <tr>
-                        <td style="text-align:center">{{$data->hfser_id}}</td>
+                        <td style="text-align:center; font-weight: bold;">{{$data->hfser_id}}</td>
                         <td style="text-align:center; text-transform: uppercase;">{{$data->hfser_id}}R{{$data->assignedRgn}}-{{$data->appid}}</td>
-                        <td style="text-align:center"><strong>{{$data->facilityname}}</strong></td>
+                        <td class="text-center">{{$data->aptdesc}}</td>
+                        <td style="text-align:center">{{$data->facilityname}}</td>
                         <td style="text-align:center">
                           <strong>
                             @isset($data->hasAssessors) 
@@ -81,18 +85,8 @@
                               @endif 
                             @endisset
                           </strong></td>
-                        <td style="text-align:center;font-weight:bold;">{{$data->trns_desc}}</td>
-                        <td style="text-align:center;">
-                          @php
-                            if($data->isReadyForInspec){
-                              echo "Doc. Accepted. ";
-                            }
-                            
-                            if($data->isCashierApprove) {
-                              echo "Payment Confirmed.";
-                            }
-                          @endphp
-                        </td>
+                        <td style="text-align:center;">{{$data->trns_desc}}</td>
+                       
                         <td style="text-align:center">
                           @isset($data->hasAssessors) 
                             {{-- @if($data->hasAssessors == 'F') --}}
@@ -112,6 +106,7 @@
                         </td>
                       </tr>
                       @endif
+                    @endif
                     @endforeach
                   @endif
                   </tbody>

@@ -6581,8 +6581,14 @@ use FunctionsClientController;
 						if($request->hid == 'AOASPT1AT' || $request->hid == 'AOASPT2AT'){
 							$newcheck = DB::table('assessmentcombinedduplicate')->where([['x08_id',$request->xid],['selfassess',($isSelfAssess ? 1 : null)]])->count() <= 0;
 						}
-					}
+					}	
 
+					$compliance = array(
+						'app_id' => $request->appid,
+						'is_for_compliance' => 0,
+					);
+
+					$complianceId = DB::table('compliance_data')->insertGetId($compliance);
 
 					if($newcheck){
 					// if(DB::table('assessmentcombinedduplicate')->where([['x08_id',$request->xid],['selfassess',($isSelfAssess ? 1 : null)]])->count() <= 0){
@@ -6592,11 +6598,25 @@ use FunctionsClientController;
 						$filteredAssessment = $request->except($arrOfUnneeded);
 						$dataFromDB = AjaxController::forAssessmentHeaders(array(['appform.appid',$request->appid],['asmt_h1.apptype',$data->hfser_id],['asmt_h1.asmtH1ID',$request->part]),array('asmt_h1.*','asmt_h2.*','asmt_h3.*','asmt_title.title_code', 'x08_ft.id as xid'))[0];
 						$uData = AjaxController::getCurrentUserAllData();
+		
 						foreach ($filteredAssessment as $key => $value) {
 							if(is_numeric($key) && !in_array($key, $getOnDBID)){
 								$res = DB::table('assessmentcombined')->whereIn('asmtComb',[$key])->select('asmtComb','assessmentName','assessmentSeq','headingText')->first();
 								$forInsertArray = array('x08_id' => $request->xid, 'asmtComb_FK' => $res->asmtComb, 'assessmentName' => $res->assessmentName, 'asmtH3ID_FK' => $request->part, 'h3name' => $dataFromDB->h3name, 'asmtH2ID_FK' => $dataFromDB->asmtH2ID, 'h2name' => $dataFromDB->h2name, 'asmtH1ID_FK' => $dataFromDB->asmtH1ID, 'partID' => $dataFromDB->title_code, 'h1name' => $dataFromDB->h1name, 'evaluation' => ($value['comp'] == 'false' ? 0 : ($value['comp'] == 'NA' ? 'NA' : 1)), 'remarks' => $value['remarks'], 'assessmentSeq' => $res->assessmentSeq, 'evaluatedBy'=> ($uData['cur_user'] != 'ERROR' ? $uData['cur_user'] : (session()->has('uData') ? session()->get('uData')->uid :'UNKOWN, '.$request->ip())), 'assessmentHead' => $res->headingText, 'monid' => $request->monid, 'selfassess' => ($isSelfAssess ? $isSelfAssess : null), 'appid' => $request->appid);
 								// (isset($request->monid) && $request->monid > 0 ? $forInsertArray['monid'] = $request->monid : '');
+
+								if($value['comp'] == 'false'){
+
+									$complianceItem = array(
+										'assesment_id' => $res->asmtComb,
+										'compliance_id' => $complianceId,
+										'assesment_status' => 0
+									);
+	
+									DB::table('compliance_item')->insert($complianceItem);
+								}
+
+								
 								DB::table('assessmentcombinedduplicate')->insert($forInsertArray);
 								array_push($getOnDBID, $key);
 							}
@@ -6886,9 +6906,25 @@ use FunctionsClientController;
 
 					$isSent = DB::table('assessmentrecommendation')->insert(['choice' => $request->choice, 'details' => $request->details, 'valfrom' => $request->vf, 'valto' => $request->vto, 'days' => $request->days, 'appid' => $request->appid, 'selfAssess' => $isSelfAssess , 'monid' => $monid, 'noofbed' => $request->noofbed, 'noofdialysis' => $request->noofdialysis, 'conforme' => $request->conformee, 'conformeDesignation' => $request->conformeeDes, 'evaluatedby' => $uData['cur_user']]);
 
+					
+
 					if(!$isSent){
 						return redirect('employee/dashboard/processflow/parts/'.$appid)->with('errRet', ['errAlt'=>'danger', 'errMsg'=>'Error Occured. Please try again later']);
 					}
+				}
+
+				if($request->choice == 'compliance'){
+
+					$mytime = Carbon::now();
+					$expiry = Carbon::now()->addDays($request->days);
+					
+					DB::table('compliance_data')
+					->where('app_id', $request->appid)
+					->update([
+						'is_for_compliance' => 1,
+						'date_for_compliance' => $mytime,
+						'valid_until' => $expiry
+					]);
 				}
 
 				// if(!isset($monid)){
@@ -7115,6 +7151,40 @@ use FunctionsClientController;
 			}
 		}
 
+		public function complianceDetails($complianceId = false){
+			try 
+			{
+				$data = AjaxController::getComplianceDetails($complianceId);
+
+				// dd($data);
+				// exit;
+				return view('employee.processflow.pfcompliancedetails', ['BigData'=>$data, 'type'=>'technical', 'isdocumentary'=>'false']);
+			} 
+			catch (Exception $e) 
+			{
+				AjaxController::SystemLogs($e);
+				session()->flash('system_error','ERROR');
+				return view('employee.processflow.pfcompliance');
+			}
+		}
+
+		public function complianceProcessFlow(){
+
+			try 
+			{
+				$data = AjaxController::getForComplianceApplication();
+
+				// dd($data);
+				// exit;
+				return view('employee.processflow.pfcompliance', ['BigData'=>$data, 'type'=>'technical', 'isdocumentary'=>'false']);
+			} 
+			catch (Exception $e) 
+			{
+				AjaxController::SystemLogs($e);
+				session()->flash('system_error','ERROR');
+				return view('employee.processflow.pfcompliance');
+			}
+		}
 
 		public function AssessmentProcessFlow(Request $request , $session_equiv = false)
 		{

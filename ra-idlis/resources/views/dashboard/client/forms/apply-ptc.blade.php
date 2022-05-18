@@ -6,9 +6,8 @@
     </div>
     <div class="card-body">
         <form class="row">
-        
-        <input type="hidden" name="uid" id="uid" value="{{isset($user->uid) ? $user->uid : '' }}"/>
-                <!-- <input type="hidden" name="uid" id="uid" value="$user->uid"/> 6-9-2021 -->
+            <input type="hidden" name="uid" id="uid" value="{{isset($user->uid) ? $user->uid : '' }}"/>
+            <!-- <input type="hidden" name="uid" id="uid" value="$user->uid"/> 6-9-2021 -->
             <!-- <input type="hidden" name="appid" id="appid" value="{{ isset($appdata->appid) ? $appdata->appid : '' }}" /> -->
             <input type="hidden" name="appid" id="appid" />
             
@@ -57,9 +56,7 @@
                 {{-- PTC Option --}}
                 @include('dashboard.client.forms.parts.permit-to-construct.options')
 
-                {{-- PTC CON Code --}}
-           
-
+                {{-- PTC CON Code --}}         
                 @include('dashboard.client.forms.parts.con_number')
 
                 {{-- PTC Proposed Health Facility Address --}}
@@ -103,41 +100,36 @@
                 @endphp
 
                 @if(app('request')->input('grp') == 'c' ||  $grpid == 'DC')
-                <div class="col-md-12">
-                Remarks: <br>
-                {!!((count($fAddress) > 0) ? $fAddress[0]->appComment: "No Remarks")!!}
-                </div>
-              
+                    <div class="col-md-12">
+                    Remarks: <br>
+                    {!!((count($fAddress) > 0) ? $fAddress[0]->appComment: "No Remarks")!!}
+                    </div>
                 @endif
-                
-              
 
-
-                @if($grpid == 'RLO')
-
-
-                @if(app('request')->input('grp') != 'c' && app('request')->input('cont') != 'yes' && app('request')->input('grpn') != 'c')
-                <div class="col-md-12" id="divRem" >
-                    <label for="remarks" >Remarks</label>
-                    <textarea class="form-control" name="remarks" id="remarks" >
-                    
-                    </textarea>
-                </div>
-                <div class="col-md-12"> &nbsp;</div>
-                <div class="col-lg-3 col-md-3 col-xs-12 mb-5">
-                        <button id="update"  class="btn btn-primary btn-block" type="button" onClick="savePartialPtc('update')">
-                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                            Update 
-                        </button>
-                </div>
+                @if($grpid != 'C')
+                    @if(app('request')->input('grp') != 'c' && app('request')->input('cont') != 'yes' && app('request')->input('grpn') != 'c')
+                        <div class="col-md-12" id="divRem" >
+                            <label for="remarks" >Remarks</label>
+                            <textarea class="form-control" name="remarks" id="remarks" >
+                            
+                            </textarea>
+                        </div>
+                        <div class="col-md-12"> &nbsp;</div>
+                        <div class="col-lg-3 col-md-3 col-xs-12 mb-5">
+                            <button id="update"  class="btn btn-primary btn-block" type="button" onClick="savePartialPtc('update')">
+                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                Update 
+                            </button>
+                        </div>
+                    @endif
                 @endif
-                @endif
-            </div>
-                 
+            </div>                 
         </form>
     </div>
 </div>
+
 @include('dashboard.client.modal.facilityname-helper')
+
 <div class="modal fade" id="confirmSubmitModalPtc" tabindex="-1" aria-labelledby="confirmSubmitModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -170,7 +162,7 @@
                     </div>
                 </div>
             </div>
-</section>
+    </section>
 </div>
 
 {{-- payment --}}

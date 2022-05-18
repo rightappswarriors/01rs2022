@@ -155,7 +155,7 @@
         })
 
         removeOtherServCap()
-        getServicesCap(result)
+        getServicesCap(result, selected)
 
        
     }
@@ -188,12 +188,6 @@
             document.getElementById("doubledeck").value = null;
         }
 
-
-
-
-
-
-
         document.getElementById('serv_chg').innerHTML = ' ';
 
         getServCap(selected)
@@ -216,17 +210,14 @@
         var myobj = document.getElementById("ServCapCont");
         if (myobj) {
             myobj.remove();
-        }
-        
+        }        
 
         var newDiv = document.createElement("div");
         newDiv.setAttribute("id", "ServCapCont");
         document.getElementById("mainServCap").appendChild(newDiv);
     }
 
-    function getServicesCap(data) {
-       
-
+    function getServicesCap(data, selected) {
 
         data.map((it) => {
            
@@ -238,7 +229,13 @@
                var x = document.createElement("INPUT");
                x.setAttribute("id", it.facid);
                x.setAttribute("onclick", "getFacServCharge()");
-               x.setAttribute("type", "radio");
+
+               if(selected == 1){
+                    x.setAttribute("type", "checkbox");
+               }
+               else{
+                    x.setAttribute("type", "radio");
+               }
                x.setAttribute("value", it.facid);
                x.setAttribute("name", "facid");
                x.setAttribute("class", "custom-control-input");
@@ -390,11 +387,7 @@ console.log(arr)
             document.getElementById("dialysisReqrenew").setAttribute("hidden", "hidden")
             document.getElementById("incstationfrom").value = null;
             document.getElementById("incstationto").value = null;
-           }
-
-           
-
-            
+           }            
  }
 
     function getCheckedValue( groupName ) {
@@ -417,18 +410,20 @@ console.log(arr)
     }
 
     function getFacServCharge(val = null) {
+        
         getChargesPerApplication()
    
         var facids = getCheckedValue('facid')
-
         var arrCol = facids;
-
         let serv_chg = document.getElementById('serv_chg');
+        
         if (arrCol.length > 0) {
+
             let thisFacid = [],
-                    appendToPayment = ['groupThis'],
-                    hospitalFaci = ['H', 'H2', 'H3'];
+                appendToPayment = ['groupThis'],
+                hospitalFaci = ['H', 'H2', 'H3'];
             let sArr = ['_token=' + document.getElementsByName('_token')[0].value, 'appid=' + curAppid, 'hfser_id=' + mhfser_id, 'aptid=' +  document.getElementById("aptidnew").value];
+            
             if (Array.isArray(arrCol)) {
                     for (let i = 0; i < arrCol.length; i++) {
                             sArr.push('facid[]=' + arrCol[i]);
@@ -440,67 +435,63 @@ console.log(arr)
 
             setTimeout(function() {
                     sendRequestRetArr(sArr, "{{asset('client1/request/customQuery/getServiceCharge')}}", "POST", true, {
-                            functionProcess: function(arr) {
+                        functionProcess: function(arr) {
 
+                            // const distinctArr = [...new Set(arr.map(x => x.facname))];
+                            // console.log("fees")
+                            // console.log(arr)
 
-                                    // const distinctArr = [...new Set(arr.map(x => x.facname))];
+                            const subclass = $('#subclass').val()  == "" ||  $('#subclass').val() == undefined ? '{!!((count($fAddress) > 0) ? $fAddress[0]->subClassid: "")!!}' : $('#subclass').val();//appchargetemp
+                            const owns = $('#ocid').val()  == "" ||  $('#ocid').val() == undefined ? '{!!((count($fAddress) > 0) ? $fAddress[0]->ocid: "")!!}' : $('#ocid').val();//appchargetemp
 
-                                    // console.log("fees")
-                                    // console.log(arr)
+                            // console.log("subclass")//appchargetemp
+                            // console.log(subclass)//appchargetemp
 
-                                    const subclass = $('#subclass').val()  == "" ||  $('#subclass').val() == undefined ? '{!!((count($fAddress) > 0) ? $fAddress[0]->subClassid: "")!!}' : $('#subclass').val();//appchargetemp
-                                    const owns = $('#ocid').val()  == "" ||  $('#ocid').val() == undefined ? '{!!((count($fAddress) > 0) ? $fAddress[0]->ocid: "")!!}' : $('#ocid').val();//appchargetemp
-    
-                                    // console.log("subclass")//appchargetemp
-                                    // console.log(subclass)//appchargetemp
+                            var ta=[]; //appchargetemp
 
-                                    var ta=[]; //appchargetemp
+                            console.log("arr")
+                            console.log(arr)
 
-                                    console.log("arr")
-                                    console.log(arr)
+                            const distinctArr = Array.from(new Set(arr.map(s => s.facname))).map(facname => {
+                        
+                                return {
+                                    facname: facname,
+                                    amt: arr.find(s =>
+                                    // amt: subclass == "ND" ? 0 :  arr.find(s =>
+                                    // amt: owns == "G" ? 0 :  arr.find(s =>
+                                        s.facname === facname).amt,
+                                    chgapp_id: arr.find(s =>
+                                        s.facname === facname).chgapp_id
+                                }
+                            })
 
-                                    const distinctArr = Array.from(new Set(arr.map(s => s.facname))).map(facname => {
-                               
-                                            return {
-                                            facname: facname,
-                                            amt: arr.find(s =>
-                                            // amt: subclass == "ND" ? 0 :  arr.find(s =>
-                                            // amt: owns == "G" ? 0 :  arr.find(s =>
-                                                    s.facname === facname).amt,
-                                            chgapp_id: arr.find(s =>
-                                                    s.facname === facname).chgapp_id
+                            if (serv_chg != undefined || serv_chg != null) {
+
+                                if (distinctArr.length > 0) {
+                                    serv_chg.innerHTML = '';
+                                    
+                                    for (let i = 0; i < distinctArr.length; i++) {
+                                        ta.push({reference : distinctArr[i]['facname'],amount: distinctArr[i]['amt'], chgapp_id:  distinctArr[i]['chgapp_id'] }) //appcharge
+                                        serv_chg.innerHTML += '<tr><td>' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas((parseInt(distinctArr[i]['amt'])).toFixed(2)) + '</span></td></tr>';
+                                        // serv_chg.innerHTML += '<tr><td>' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas(subclass == "ND" ? 0 : (parseInt(distinctArr[i]['amt'])).toFixed(2)) + '</span></td></tr>';
+                                    
+                                            // serv_chg.innerHTML += '<tr><td>' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas((parseInt(distinctArr[i]['amt'])).toFixed(2)) + '</span></td></tr>';
                                     }
-                                    })
-
-
-
-                                    if (serv_chg != undefined || serv_chg != null) {
-                                        if (distinctArr.length > 0) {
-                                                serv_chg.innerHTML = '';
-                                                for (let i = 0; i < distinctArr.length; i++) {
-                                                    ta.push({reference : distinctArr[i]['facname'],amount: distinctArr[i]['amt'], chgapp_id:  distinctArr[i]['chgapp_id'] }) //appcharge
-                                                    serv_chg.innerHTML += '<tr><td>' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas((parseInt(distinctArr[i]['amt'])).toFixed(2)) + '</span></td></tr>';
-                                                    // serv_chg.innerHTML += '<tr><td>' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas(subclass == "ND" ? 0 : (parseInt(distinctArr[i]['amt'])).toFixed(2)) + '</span></td></tr>';
-                                               
-                                                        // serv_chg.innerHTML += '<tr><td>' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas((parseInt(distinctArr[i]['amt'])).toFixed(2)) + '</span></td></tr>';
-
-                                                }
-                                        } else {
-                                                serv_chg.innerHTML = '<tr><td colspan="2">No Services selected.</td></tr>';
-                                        }
-                                    }
-
-                                    // console.log("tadss")//appchargetemp
-                                    // console.log(JSON.stringify(ta))//appchargetemp
-                                    document.getElementById('tempAppCharge').value = JSON.stringify(ta)//appchargetemp
+                                } else {
+                                        serv_chg.innerHTML = '<tr><td colspan="2">No Services selected.</td></tr>';
+                                }
                             }
+                            // console.log("tadss")//appchargetemp
+                            // console.log(JSON.stringify(ta))//appchargetemp
+                            document.getElementById('tempAppCharge').value = JSON.stringify(ta)//appchargetemp
+                        }
                     });
             }, 1000);
 
         } else {
             serv_chg.innerHTML = '<tr><td colspan="2">No Payment Necessary.</td></tr>';
         }
-}
+    }
 
     function sendRequestRetArr(arr_data, loc, type, bolRet, objFunction) {
     try {

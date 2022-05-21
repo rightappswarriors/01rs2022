@@ -4649,6 +4649,29 @@ public static function checkConmem($appid)
 		/////// System Settings
 		/// ------------------------------------ PROCESS FLOW
 		/////// View All Process Flow
+		public static function getForComplianceApplication()
+		{
+			$complianceData = DB::table('compliance_data')
+			->where('is_for_compliance', 1)
+			->leftjoin('appform','appform.appid','compliance_data.app_id')
+			->get();
+			
+			return $complianceData;
+		}
+
+		public static function getComplianceDetails($complianceId){
+			$complianceData = DB::table('compliance_item')
+			->where('compliance_id', $complianceId)
+			->leftjoin('assessmentcombinedduplicate','assessmentcombinedduplicate.dupID','compliance_item.assesment_id')
+			->leftjoin('asmt_h1','asmt_h1.asmtH1ID','assessmentcombinedduplicate.asmtH1ID_FK')
+			->leftjoin('asmt_h2','asmt_h2.asmtH2ID','assessmentcombinedduplicate.asmtH2ID_FK')
+			->leftjoin('asmt_h3','asmt_h3.asmtH3ID','assessmentcombinedduplicate.asmtH3ID_FK')
+			->get();
+			
+			return $complianceData;
+		}
+
+
 		public static function getAllApplicantsProcessFlow()
 		{
 			try 

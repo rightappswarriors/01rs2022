@@ -6744,11 +6744,7 @@ use FunctionsClientController;
 						$filteredAssessment = $request->except($arrOfUnneeded);
 						$dataFromDB = AjaxController::forAssessmentHeaders(array(['appform.appid',$request->appid],['asmt_h1.apptype',$data->hfser_id],['asmt_h1.asmtH1ID',$request->part]),array('asmt_h1.*','asmt_h2.*','asmt_h3.*','asmt_title.title_code', 'x08_ft.id as xid'))[0];
 						$uData = AjaxController::getCurrentUserAllData();
-<<<<<<< HEAD
-		
-=======
 
->>>>>>> main
 						foreach ($filteredAssessment as $key => $value) {
 							if(is_numeric($key) && !in_array($key, $getOnDBID)){
 								$res = DB::table('assessmentcombined')->whereIn('asmtComb',[$key])->select('asmtComb','assessmentName','assessmentSeq','headingText')->first();
@@ -6756,7 +6752,7 @@ use FunctionsClientController;
 								$forInsertArray = array('x08_id' => $request->xid, 'asmtComb_FK' => $res->asmtComb, 'assessmentName' => $res->assessmentName, 'asmtH3ID_FK' => $request->part, 'h3name' => $dataFromDB->h3name, 'asmtH2ID_FK' => $dataFromDB->asmtH2ID, 'h2name' => $dataFromDB->h2name, 'asmtH1ID_FK' => $dataFromDB->asmtH1ID, 'partID' => $dataFromDB->title_code, 'h1name' => $dataFromDB->h1name, 'evaluation' => ($value['comp'] == 'false' ? 0 : ($value['comp'] == 'NA' ? 'NA' : 1)), 'remarks' => $value['remarks'], 'assessmentSeq' => $res->assessmentSeq, 'evaluatedBy'=> ($uData['cur_user'] != 'ERROR' ? $uData['cur_user'] : (session()->has('uData') ? session()->get('uData')->uid :'UNKOWN, '.$request->ip())), 'assessmentHead' => $res->headingText, 'monid' => $request->monid, 'selfassess' => ($isSelfAssess ? $isSelfAssess : null), 'appid' => $request->appid);
 								// (isset($request->monid) && $request->monid > 0 ? $forInsertArray['monid'] = $request->monid : '');
 
-<<<<<<< HEAD
+
 							
 								$acdID =  DB::table('assessmentcombinedduplicate')->insertGetId($forInsertArray);
 
@@ -6771,9 +6767,9 @@ use FunctionsClientController;
 									DB::table('compliance_item')->insert($complianceItem);
 								}
 
-=======
+
 								DB::table('assessmentcombinedduplicate')->insert($forInsertArray);
->>>>>>> main
+
 								array_push($getOnDBID, $key);
 							}
 						}

@@ -976,7 +976,7 @@
 			try  
 			{
 				$data = DB::table('ptc_team_members')
-						->join('x08', 'ptc_team_members.uid', '=', 'x08.uid')
+						//->join('x08', 'ptc_team_members.uid', '=', 'x08.uid')
 						->where('ptc_team_members.team_id',$request->team_id)
 						->get();
 
@@ -4553,8 +4553,6 @@ public static function checkConmem($appid)
 					->where('surv_form.rgnid',$Cur_useData['rgnid'] )
 					->get();
 				}
-			
-
 
 				// 	$data = DB::table('surv_form')
 				// ->leftJoin('registered_facility','registered_facility.regfac_id','surv_form.regfac_id')
@@ -4676,7 +4674,6 @@ public static function checkConmem($appid)
 					case 'FDARF':
 
 					case 'NA':			
-							// $anotherData = DB::table('appform')->get();
 							$anotherData = DB::table('appform')
 							->leftJoin('hfaci_serv_type', 'appform.hfser_id', '=', 'hfaci_serv_type.hfser_id')
 							->leftJoin('hfaci_grp', 'appform.facid', '=', 'hfaci_grp.hgpid')
@@ -4693,12 +4690,9 @@ public static function checkConmem($appid)
 							->leftjoin('region AS asrgn','appform.assignedRgn', '=', 'asrgn.rgnid')
 							->select('appform.*', 'hfaci_serv_type.*', 'ptc.propbedcap as pbedcap','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid', 'asrgn.rgn_desc AS asrgn_desc')
 							->where('appform.draft', '=', null)
-							// ->where('appform.assignedRgn', '=', $Cur_useData['rgnid'])
 							->orderBy('appform.appid','desc')
-							->orderBy('appform.t_date','desc')
 							->get();
-
-							//dd($anotherData);
+							
 						break;
 					case 'FDA':
 							$anotherData = DB::table('appform')
@@ -4716,17 +4710,11 @@ public static function checkConmem($appid)
 							->leftjoin('ptc','ptc.appid','appform.appid')
 							->leftjoin('region AS asrgn','appform.assignedRgn', '=', 'asrgn.rgnid')
 							->select('appform.*', 'hfaci_serv_type.*', 'ptc.propbedcap as pbedcap','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid', 'asrgn.rgn_desc AS asrgn_desc')
-							// ->where([
-							// 	['appform.status','A'],
-							// 	['appform.hfser_id','LTO'],
-							// 	['isApprove',1]
-							// ])
-							->where([['appform.hfser_id','LTO']])
-							// ->where([['appform.hfser_id','LTO'],['appform.noofsatellite', '>', 0]]) 7-2-2021
+							->where([['appform.hfser_id','LTO'], ['appform.hfser_id','COA'], ['appform.hfser_id','ATO'], ['appform.hfser_id','COR'],['appform.noofsatellite', '>', 0]]) //7-2-2021
 							->orderBy('appform.appid','desc')
-							->orderBy('appform.t_date','desc')
 							->get();
 							break;
+
 					/*case 'LO':
 						$anotherData = DB::table('appform')
 							->leftJoin('hfaci_serv_type', 'appform.hfser_id', '=', 'hfaci_serv_type.hfser_id')
@@ -4796,7 +4784,6 @@ public static function checkConmem($appid)
 							->join('hferc_team', 'appform.appid', '=', 'appform.appid')
 							->select('appform.*', 'hfaci_serv_type.*', 'ptc.propbedcap as pbedcap','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid', 'asrgn.rgn_desc AS asrgn_desc')
 							->orderBy('appform.appid','desc')
-							->orderBy('appform.t_date','desc')
 							
 							->distinct()
 							->get();
@@ -4825,8 +4812,8 @@ public static function checkConmem($appid)
 							}
 
 							$anotherData->orderBy('appform.appid','desc');
-							$anotherData->orderBy('appform.t_date','desc');
 							$anotherData = $anotherData->get();
+
 						break;
 				}
 				for ($i=0; $i < count($anotherData); $i++) {
@@ -4841,8 +4828,7 @@ public static function checkConmem($appid)
 						$anotherData[$i]->formattedDate = $newD->toFormattedDateString();
 					} else {
 						$anotherData[$i]->formattedDate = 'N/A';
-					}
-					
+					}					
 					
 					//updated
 					$time = $anotherData[$i]->updated_at;
@@ -4850,9 +4836,7 @@ public static function checkConmem($appid)
 					$anotherData[$i]->formattedUpatedTime = $newT->format('g:i A');
 					$date = $anotherData[$i]->updated_at;
 					$newD = Carbon::parse($date);
-					$anotherData[$i]->formattedUpdatedDate = $newD->toFormattedDateString();
-					
-					
+					$anotherData[$i]->formattedUpdatedDate = $newD->toFormattedDateString();				
 					
 					/////  Applied
 					/////  Evaluated
@@ -5128,10 +5112,9 @@ public static function checkConmem($appid)
 					$Cur_useData = AjaxController::getCurrentUserAllData();
 					$settings = AjaxController::getAllSettings();
 					$selected = AjaxController::getUidFrom($request->apid);
+
 					if ($request->selected == 0)  // Rejected
 					{
-
-
 						$updateData = array(
 											'isrecommended'=>0,
 											'recommendedby' => $Cur_useData['cur_user'],
@@ -5139,17 +5122,34 @@ public static function checkConmem($appid)
 											'recommendeddate' =>  $Cur_useData['date'],
 											'recommendedippaddr' =>$Cur_useData['ip'],
 											'status' => 'RE',
+											'isReadyForInspec' => 0
 										);
-
 					}
-					else if ($request->selected == 1)  // Approved
+					// Approved Documentary Evaluation
+					else if ($request->selected == 1)  
 					{
 						$stat = null;
+						
 						switch ($clienthfser_id) {
 							case 'LTO':
 								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
 								$stat = 'FI';
-								// $stat = $curStat;
+								break;
+							case 'COA':
+								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
+								$stat = 'FI';
+								break;
+							case 'ATO':
+								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
+								$stat = 'FI';
+								break;
+							case 'COR':
+								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
+								$stat = 'FI';
+								break;
+							case 'LTO':
+								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
+								$stat = 'FI';
 								break;
 							case 'PTC':
 								if(DB::table('appform')->where([['appid',$request->apid],['isAcceptedFP','<>',1]])->doesntExist()){
@@ -5164,37 +5164,25 @@ public static function checkConmem($appid)
 								break;
 
 						}
-						// (strtolower($clienthfser_id) == 'lto' ? 'FI' : 'FPE')
 						$hfser = DB::table('appform')->where('appid',$request->apid)->select('hfser_id')->first()->hfser_id;
 						$updateData = array(
-											// 'isPayEval'=>1,// updated 5-31-2021
 											'isrecommended'=>1,
 											'recommendedby' => $Cur_useData['cur_user'],
 											'recommendedtime' => $Cur_useData['time'],
 											'recommendeddate' =>  $Cur_useData['date'],
 											'recommendedippaddr' =>$Cur_useData['ip'],
-										//	// 'proposedInspectiontime' => $request->proptime,
-										//	// 'proposedInspectiondate' =>  $request->propdate,
-											// 'status'=> $stat,// updated 5-31-2021
-									// updated 5-31-2021
-										'isPayEval' => 1,
-										'payEvalby' => $Cur_useData['cur_user'],
-										'payEvaldate' => $Cur_useData['date'],
-										'payEvaltime' => $Cur_useData['time'],
-										'payEvalip'=> $Cur_useData['ip'],
-										// 'status' => 'FP'
-										'status' => (strtolower($hfser) == 'lto' || strtolower($hfser) == 'coa' ? 'FI' : 'P'),
-										'isReadyForInspec' => 1
-										// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' :  'FP')
-										// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' :  'FI')
-										// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' : (strtolower($hfser) == 'lto' ? 'FI' :'CE'))
-										// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' : 'CE')
-										// 'FDAStatMach' => 'For Evaluation'
-
-
+											'isPayEval' => 1,
+											'payEvalby' => $Cur_useData['cur_user'],
+											'payEvaldate' => $Cur_useData['date'],
+											'payEvaltime' => $Cur_useData['time'],
+											'payEvalip'=> $Cur_useData['ip'],
+											'status' => (strtolower($hfser) == 'lto' || strtolower($hfser) == 'coa' ? 'FI' : 'P'),
+											'isReadyForInspec' => 1
+											// 'FDAStatMach' => 'For Evaluation'
 										);
 					}
-					else if ($request->selected == 2)  // Revised
+					// Revised Documentary Evaluation
+					else if ($request->selected == 2)  
 					{
 						$getTimeChck = DB::table('appform')->where('appid', '=', $request->apid)->first();
 						$chkUpd = $getTimeChck->no_chklist + 1;
@@ -5212,14 +5200,16 @@ public static function checkConmem($appid)
 											'isReadyForInspec' => 0
 											// 'FDAStatMach' => 'Evaluated, but for Revision'
 										);
-
-
-
 					}
+					
 					$userInf = DB::table('appform')->select('hfser_id','uid')->where('appid',$request->apid)->first();
 					$idForNotify = self::getNotificationIDfromCases($userInf->hfser_id,'eval',$updateData['isrecommended']);
-					if(isset($request->requestFor) && strtolower($request->requestFor) != 'hfsrb'){
+					
+					//FDA
+					if(isset($request->requestFor) && strtolower($request->requestFor) != 'hfsrb')
+					{
 						$suffix = '';
+
 						if(strtolower($request->requestFor) == 'pharma'){
 							$suffix = 'pharma';
 						}
@@ -5232,9 +5222,7 @@ public static function checkConmem($appid)
 							'ispreassessedip'.$suffix =>$Cur_useData['ip'],
 							'FDAstatus' => $updateData['status']
 						);
-
 						$curappf = DB::table('appform')->where('appid',$request->apid)->first();
-
 
 						if($request->selected == 2){
 							$updateData['isReadyForInspecFDA'] = 0;
@@ -5248,8 +5236,8 @@ public static function checkConmem($appid)
 								$updateData['machDocNeedRev'] = 1;
 								$updateData['machDocRevcount'] = $curappf->machDocRevcount + 1;
 							}
-
-						}else{
+						}
+						else{
 							$updateData['isReadyForInspecFDA'] = 1;
 
 							if(strtolower($request->requestFor) == 'pharma'){
@@ -5259,11 +5247,7 @@ public static function checkConmem($appid)
 								$updateData['FDAStatMach'] = "For Payment";
 								// $updateData['FDAStatMach'] = "For Inspection";
 							}
-						}
-
-
-
-						
+						}						
 					}
 					if(isset($request->isCoa) && !isset($appform->coaflag)){
 						$updateData = array(
@@ -5271,6 +5255,7 @@ public static function checkConmem($appid)
 						);
 					}
 					$test = DB::table('appform')->where('appid', '=', $request->apid)->update($updateData);
+
 					try {
 						if ($test) {
 							AjaxController::notifyClient($request->apid,$userInf->uid,$idForNotify);
@@ -5305,10 +5290,6 @@ public static function checkConmem($appid)
 	
 			return $ex;
 		}
-	
-
-
-
 
 		public static function JudgeApplicationFDA(Request $request)
 		{
@@ -5907,76 +5888,73 @@ public static function checkConmem($appid)
 			try 
 			{
 				$data0 = DB::table('appform')
-												->join('x08', 'appform.uid', '=', 'x08.uid')
-												->leftJoin('x08 AS comeval', 'appform.concommittee_evalby', '=', 'comeval.uid')
-												->leftJoin('x08 AS cashval', 'appform.CashierApproveByFDA', '=', 'cashval.uid')
-												->leftJoin('x08 AS recfdaval', 'appform.recommendedbyFDA', '=', 'recfdaval.uid')
-												->leftJoin('x08 AS recbyfda', 'appform.RecobyFDA', '=', 'recbyfda.uid')
-												->leftJoin('x08 AS recbyfdaphar', 'appform.RecobyFDAPhar', '=', 'recbyfdaphar.uid')
-												->leftJoin('x08 AS recbyfdaph', 'appform.CashierApproveByPharma', '=', 'recbyfdaph.uid')
-												->leftJoin('x08 AS evalby', 'appform.recommendedby', '=', 'evalby.uid')
-												->leftJoin('x07', 'comeval.grpid', '=', 'x07.grp_id')
-												->join('barangay', 'appform.brgyid', '=', 'barangay.brgyid')
-												->join('city_muni', 'appform.cmid', '=', 'city_muni.cmid')
-												->join('province', 'appform.provid', '=', 'province.provid')
-												// ->join('type_facility', 'appform.hfser_id', '=', 'type_facility.hfser_id') 
-												->leftjoin('trans_status', 'appform.status', '=', 'trans_status.trns_id')
-												// ->join('orderofpayment', 'type_facility.oop_id', '=', 'orderofpayment.oop_id')
-												// , 'orderofpayment.*'
-												->select('appform.*', 
-												'appform.street_number',  
-												'x08.*',  
-												'comeval.fname as com_fname',  
-												'comeval.pre as com_pre',  
-												'comeval.suf as com_suf',  
-												'comeval.mname as com_mname', 
-												 'comeval.lname as com_lname', 
+						->join('x08', 'appform.uid', '=', 'x08.uid')
+						->leftJoin('x08 AS comeval', 'appform.concommittee_evalby', '=', 'comeval.uid')
+						->leftJoin('x08 AS cashval', 'appform.CashierApproveByFDA', '=', 'cashval.uid')
+						->leftJoin('x08 AS recfdaval', 'appform.recommendedbyFDA', '=', 'recfdaval.uid')
+						->leftJoin('x08 AS recbyfda', 'appform.RecobyFDA', '=', 'recbyfda.uid')
+						->leftJoin('x08 AS recbyfdaphar', 'appform.RecobyFDAPhar', '=', 'recbyfdaphar.uid')
+						->leftJoin('x08 AS recbyfdaph', 'appform.CashierApproveByPharma', '=', 'recbyfdaph.uid')
+						->leftJoin('x08 AS evalby', 'appform.recommendedby', '=', 'evalby.uid')
+						->leftJoin('x07', 'comeval.grpid', '=', 'x07.grp_id')
+						->leftJoin('barangay', 'appform.brgyid', '=', 'barangay.brgyid')
+						->leftJoin('city_muni', 'appform.cmid', '=', 'city_muni.cmid')
+						->leftJoin('province', 'appform.provid', '=', 'province.provid')
+						// ->join('type_facility', 'appform.hfser_id', '=', 'type_facility.hfser_id') 
+						->leftjoin('trans_status', 'appform.status', '=', 'trans_status.trns_id')
+						// ->join('orderofpayment', 'type_facility.oop_id', '=', 'orderofpayment.oop_id')
+						// , 'orderofpayment.*'
+						->select('appform.*', 'appform.street_number',  'x08.*',  'comeval.fname as com_fname',  'comeval.pre as com_pre',  'comeval.suf as com_suf',  'comeval.mname as com_mname', 'comeval.lname as com_lname', 
 
-												 'cashval.fname as cash_fname',  
-												  'cashval.pre as cash_pre',  
-												'cashval.suf as cash_suf',  
-												'cashval.mname as cash_mname', 
-												 'cashval.lname as cash_lname', 
+						'cashval.fname as cash_fname',  
+						'cashval.pre as cash_pre',  
+						'cashval.suf as cash_suf',  
+						'cashval.mname as cash_mname', 
+						'cashval.lname as cash_lname', 
 
-												  'recfdaval.fname as recfdaval_fname',  
-												  'recfdaval.pre as recfdaval_pre',  
-												'recfdaval.suf as recfdaval_suf',  
-												'recfdaval.mname as recfdaval_mname', 
-												 'recfdaval.lname as recfdaval_lname',   
-												 
-												 'evalby.fname as evalby_fname',  
-												  'evalby.pre as evalby_pre',  
-												'evalby.suf as evalby_suf',  
-												'evalby.mname as evalby_mname', 
-												 'evalby.lname as evalby_lname', 
+						'recfdaval.fname as recfdaval_fname',  
+						'recfdaval.pre as recfdaval_pre',  
+						'recfdaval.suf as recfdaval_suf',  
+						'recfdaval.mname as recfdaval_mname', 
+						'recfdaval.lname as recfdaval_lname',   
+							
+						'evalby.fname as evalby_fname',  
+						'evalby.pre as evalby_pre',  
+						'evalby.suf as evalby_suf',  
+						'evalby.mname as evalby_mname', 
+						'evalby.lname as evalby_lname', 
 
-												  'recbyfda.fname as recbyfda_fname',  
-												  'recbyfda.pre as recbyfdal_pre',  
-												'recbyfda.suf as recbyfda_suf',  
-												'recbyfda.mname as recbyfda_mname', 
-												 'recbyfda.lname as recbyfda_lname',  
+						'recbyfda.fname as recbyfda_fname',  
+						'recbyfda.pre as recbyfdal_pre',  
+						'recbyfda.suf as recbyfda_suf',  
+						'recbyfda.mname as recbyfda_mname', 
+						'recbyfda.lname as recbyfda_lname',  
 
- 												 'recbyfdaphar.fname as recbyfdaphar_fname',  
-												  'recbyfdaphar.pre as recbyfdalphar_pre',  
-												'recbyfdaphar.suf as recbyfdaphar_suf',  
-												'recbyfdaphar.mname as recbyfdaphar_mname', 
-												 'recbyfdaphar.lname as recbyfdaphar_lname',  
+						'recbyfdaphar.fname as recbyfdaphar_fname',  
+						'recbyfdaphar.pre as recbyfdalphar_pre',  
+						'recbyfdaphar.suf as recbyfdaphar_suf',  
+						'recbyfdaphar.mname as recbyfdaphar_mname', 
+						'recbyfdaphar.lname as recbyfdaphar_lname',  
 
-												  'recbyfdaph.fname as recbyfdaph_fname',  
-												  'recbyfdaph.pre as recbyfdaph_pre',  
-												'recbyfdaph.suf as recbyfdaph_suf',  
-												'recbyfdaph.mname as recbyfdaph_mname', 
-												 'recbyfdaph.lname as recbyfdaph_lname',  
-												 
-												 'x07.grp_desc', 
-												 'barangay.brgyname', 
-												 'city_muni.cmname',
-												  'province.provname',
-												   'trans_status.trns_desc') //, 'type_facility.*'
-												->where('appform.appid', '=', $appid)
-												// , 'type_facility.*', 'orderofpayment.*'
-												// ->where('type_facility.facid', '=', 'appform.facid')
-												->first();
+						'recbyfdaph.fname as recbyfdaph_fname',  
+						'recbyfdaph.pre as recbyfdaph_pre',  
+						'recbyfdaph.suf as recbyfdaph_suf',  
+						'recbyfdaph.mname as recbyfdaph_mname', 
+						'recbyfdaph.lname as recbyfdaph_lname',  
+							
+						'x07.grp_desc', 
+						'barangay.brgyname', 
+						'city_muni.cmname',
+						'province.provname',
+						'trans_status.trns_desc') //, 'type_facility.*'
+						->where('appform.appid', '=', $appid)
+						// , 'type_facility.*', 'orderofpayment.*'
+						// ->where('type_facility.facid', '=', 'appform.facid')
+						->first();
+						
+						if($data0 != null)
+						{
+							
 						/////  Evaluation
 						if ($data0->isrecommended != null) {
 							$time1 = $data0->recommendedtime;
@@ -6183,6 +6161,8 @@ public static function checkConmem($appid)
 								$data0->FDAAprovalApproverPharma = 'Not Available' ;
 							}
 						}
+						
+					}
 				return $data0;
 			} 
 			catch (Exception $e) 

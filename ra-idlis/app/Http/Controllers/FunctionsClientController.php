@@ -114,239 +114,31 @@ class FunctionsClientController extends Controller {
 			$retArr = [];
 			// if(! empty($appid)) {
 				$curUser = (! empty($curUid)) ? $curUid : (session()->has('uData') ? self::getSessionParamObj("uData", "uid") : DB::table('appform')->where('appid',$appid)->select('uid')->first()->uid);
+
 				switch ($choice) {
 					case 1:
-						$sql = "SELECT 
-							appid,
-							uid, 
-							facilityname, 
-							serv_capabilities, 
-							owner, 
-							email, 
-							contact, 
-							appform.hfser_id, 
-							hfaci_serv_type.hfser_desc, 
-							appform.facid, 
-							appform.ocid, 
-							appform.ocdesc as appformocdesc, 
-							appform.aptid, 
-							appform.ptcCode, 
-							appform.classid, 
-							classdesc, 
-							subClassid, 
-							subClassdesc, 
-							appform.funcid, 
-							appform.facmode, 
-							noofbed, 
-							draft, 
-							appid_payment, 
-							t_date, 
-							t_time, 
-							region.rgnid, 
-							region.rgn_desc, 
-							region.office,
-							region.address,
-							region.iso_desc,
-							province.provid, 
-							province.provname, 
-							city_muni.cmid, 
-							city_muni.cmname, 
-							barangay.brgyid, 
-							barangay.brgyname, 
-							status, 
-							trans_status.trns_desc, 
-							trans_status.allowedpayment, 
-							trans_status.canapply, 
-							facmode.facmdesc, 
-							funcapf.funcdesc, 
-							ownership.ocdesc, 
-							class.classname, 
-							apptype.aptdesc, 
-							appform.rgnid, 
-							noofsatellite, 
-							clab, 
-							cap_inv, 
-							lot_area, 
-							typeamb, 
-							noofamb, 
-							plate_number, 
-							typeamb, 
-							ambOwner, 
-							street_name, 
-							zipcode, 
-							landline, 
-							validDate, 
-							documentSent, 
-							isApproveFDA, 
-							isNotified, 
-							isPayEval, 
-							isCashierApprove, 
-							isrecommended, 
-							isReadyForInspec, 
-							street_number, 
-							isReadyForInspecFDA, 
-							isrecommendedFDA, 
-							FDAstatus, 
-							pharCOC, 
-							xrayCOC, 
-							landline, 
-							faxNumber, 
-							ownerMobile, 
-							ownerLandline, 
-							ownerEmail, 
-							mailingAddress, 
-							faxnumber, 
-							validDateFrom, 
-							licenseNo, 
-							HFERC_swork, 
-							payEvalbyFDA, /*HFERC_comments,*/ 
-							assRgn.rgn_desc AS assRgnDesc, 
-							ishfep, 
-							noofmain, 
-							ambtyp, 
-							areacode, 
-							isAcceptedFP, 
-							fpcomment, 
-							others_oanc, 
-							hfep_funded, 
-							proposedWeek, 
-							approvingauthority, 
-							approvingauthoritypos ,
-							addonDesc,
-							savingStat,
-							noofdialysis,
-							con_number,
-							appform.hgpid,
-							appform.noofstation,
-							appform.assignedRgn,
-							appform.appComment,
-							appform.approvedDate,
-							appform.savedRenewalOpt
-							
-						FROM appform 
-						LEFT JOIN region ON region.rgnid = appform.rgnid 
-						LEFT JOIN class ON class.classid = appform.classid 
-						LEFT JOIN province ON province.provid = appform.provid 
-						LEFT JOIN ownership ON ownership.ocid = appform.ocid 
-						LEFT JOIN funcapf ON funcapf.funcid = appform.funcid 
-						LEFT JOIN apptype ON apptype.aptid = appform.aptid 
-						LEFT JOIN city_muni ON city_muni.cmid = appform.cmid 
-						LEFT JOIN barangay ON barangay.brgyid = appform.brgyid 
-						LEFT JOIN hfaci_serv_type ON hfaci_serv_type.hfser_id = appform.hfser_id 
-						LEFT JOIN trans_status ON trans_status.trns_id = appform.status 
-						LEFT JOIN facmode ON facmode.facmid = appform.facmode 
-						LEFT JOIN region AS assRgn ON assRgn.rgnid = appform.assignedRgn 
-					WHERE 
-						appform.uid = '$curUser' AND appform.draft = 1"; // AND appform.uid = '$curUser' // LEFT JOIN (SELECT facname, servtype_id FROM facilitytyp WHERE facid IN (SELECT facid FROM x08_ft WHERE appid = '$appid')) facilitytyp ON 1=1 LEFT JOIN (SELECT GROUP_CONCAT(hgpdesc) AS hgpdesc FROM hfaci_grp WHERE hgpid IN (SELECT hgpid FROM facilitytyp WHERE facid IN (SELECT facid FROM x08_ft WHERE appid = '$appid'))) hfaci_grp ON 1=1 LEFT JOIN serv_type ON serv_type.servtype_id = facilitytyp.servtype_id
+						$sql = "SELECT appid, uid, facilityname, serv_capabilities, owner, email, contact, appform.hfser_id, hfaci_serv_type.hfser_desc, appform.facid, appform.ocid, appform.ocdesc as appformocdesc, appform.aptid, appform.ptcCode, appform.classid, classdesc, subClassid, subClassdesc, appform.funcid, appform.facmode, noofbed, draft, appid_payment, t_date, t_time, region.rgnid, region.rgn_desc, region.office, region.address, region.iso_desc, province.provid, province.provname, city_muni.cmid, city_muni.cmname, barangay.brgyid, barangay.brgyname, status, trans_status.trns_desc, trans_status.allowedpayment, trans_status.canapply, facmode.facmdesc, funcapf.funcdesc, ownership.ocdesc, class.classname, apptype.aptdesc, appform.rgnid, noofsatellite, clab, cap_inv, lot_area, typeamb, noofamb, plate_number, typeamb, ambOwner, street_name, zipcode, landline, validDate, documentSent, isApproveFDA, isNotified, isPayEval, isCashierApprove, isrecommended, isReadyForInspec, street_number, isReadyForInspecFDA, isrecommendedFDA, FDAstatus, pharCOC, xrayCOC, landline, faxNumber, ownerMobile, ownerLandline, ownerEmail, mailingAddress, faxnumber, validDateFrom, licenseNo, HFERC_swork, payEvalbyFDA,assRgn.rgn_desc AS assRgnDesc, ishfep, noofmain, ambtyp, areacode, isAcceptedFP, FPacceptedDate, FPacceptedTime, fpcomment, others_oanc, hfep_funded, proposedWeek, approvingauthority, approvingauthoritypos , addonDesc, savingStat, noofdialysis, con_number, appform.hgpid, appform.noofstation, appform.assignedRgn, appform.appComment, appform.approvedDate, appform.savedRenewalOpt
+
+								FROM appform 
+								LEFT JOIN region ON region.rgnid = appform.rgnid 
+								LEFT JOIN class ON class.classid = appform.classid 
+								LEFT JOIN province ON province.provid = appform.provid 
+								LEFT JOIN ownership ON ownership.ocid = appform.ocid 
+								LEFT JOIN funcapf ON funcapf.funcid = appform.funcid 
+								LEFT JOIN apptype ON apptype.aptid = appform.aptid 
+								LEFT JOIN city_muni ON city_muni.cmid = appform.cmid 
+								LEFT JOIN barangay ON barangay.brgyid = appform.brgyid 
+								LEFT JOIN hfaci_serv_type ON hfaci_serv_type.hfser_id = appform.hfser_id 
+								LEFT JOIN trans_status ON trans_status.trns_id = appform.status 
+								LEFT JOIN facmode ON facmode.facmid = appform.facmode 
+								LEFT JOIN region AS assRgn ON assRgn.rgnid = appform.assignedRgn 
+
+								WHERE appform.uid = '$curUser' AND appform.draft = 1"; // AND appform.uid = '$curUser' // LEFT JOIN (SELECT facname, servtype_id FROM facilitytyp WHERE facid IN (SELECT facid FROM x08_ft WHERE appid = '$appid')) facilitytyp ON 1=1 LEFT JOIN (SELECT GROUP_CONCAT(hgpdesc) AS hgpdesc FROM hfaci_grp WHERE hgpid IN (SELECT hgpid FROM facilitytyp WHERE facid IN (SELECT facid FROM x08_ft WHERE appid = '$appid'))) hfaci_grp ON 1=1 LEFT JOIN serv_type ON serv_type.servtype_id = facilitytyp.servtype_id
 						break;
 					
 					default:
-						$sql = "SELECT 
-							autoTimeDate, 
-							appid, 
-							uid, 
-							facilityname, 
-							serv_capabilities, 
-							owner, 
-							email, 
-							contact, 
-							appform.hfser_id, 
-							hfaci_serv_type.hfser_desc, 
-							appform.facid, 
-							appform.ocid, 
-							appform.ocdesc as appformocdesc, 
-							appform.aptid, 
-							appform.ptcCode, 
-							appform.classid, 
-							classdesc, 
-							subClassid, 
-							subClassdesc, 
-							appform.funcid, 
-							appform.facmode, 
-							noofbed, 
-							draft, 
-							appid_payment, 
-							t_date, 
-							t_time, 
-							region.rgnid, 
-							region.rgn_desc, 
-							region.office,
-							region.address,
-							region.iso_desc,
-							province.provid, 
-							province.provname, 
-							city_muni.cmid, 
-							city_muni.cmname, 
-							barangay.brgyid, 
-							barangay.brgyname, 
-							status, 
-							trans_status.trns_desc, 
-							trans_status.allowedpayment, 
-							trans_status.canapply, 
-							facmode.facmdesc, 
-							funcapf.funcdesc, 
-							ownership.ocdesc, 
-							class.classname, 
-							apptype.aptdesc, 
-							appform.rgnid, 
-							noofsatellite, 
-							clab, cap_inv, 
-							lot_area, 
-							typeamb, 
-							noofamb, 
-							plate_number, 
-							typeamb, 
-							ambOwner, 
-							street_name, 
-							zipcode, 
-							landline, 
-							validDate, 
-							documentSent, 
-							isApproveFDA, 
-							isNotified, 
-							isPayEval, 
-							isCashierApprove, 
-							isrecommended, 
-							isReadyForInspec, 
-							street_number, 
-							isReadyForInspecFDA, 
-							isrecommendedFDA, 
-							FDAstatus, 
-							pharCOC, 
-							xrayCOC, 
-							landline, 
-							faxNumber, 
-							ownerMobile, 
-							ownerLandline, 
-							ownerEmail, 
-							mailingAddress, 
-							faxnumber, 
-							validDateFrom, 
-							licenseNo, 
-							HFERC_swork, 
-							payEvalbyFDA, /*HFERC_comments,*/ 
-							assRgn.rgn_desc AS assRgnDesc, 
-							ishfep, 
-							noofmain, 
-							ambtyp, 
-							areacode, 
-							isAcceptedFP, 
-							fpcomment, 
-							others_oanc, 
-							hfep_funded, 
-							proposedWeek, 
-							approvingauthority, 
-							approvingauthoritypos ,
-							addonDesc,
-							savingStat,
-							noofdialysis,
-							con_number,
-							appform.hgpid,
-							appform.noofstation,
-							appform.assignedRgn,
-							appform.appComment,
-							appform.approvedDate,
-							appform.savedRenewalOpt
+						$sql = "SELECT autoTimeDate, appid, uid, facilityname, serv_capabilities, owner, email, contact, appform.hfser_id, hfaci_serv_type.hfser_desc, appform.facid, appform.ocid, appform.ocdesc as appformocdesc, appform.aptid, appform.ptcCode, appform.classid, classdesc, subClassid, subClassdesc, appform.funcid, appform.facmode, noofbed, draft, appid_payment, t_date, t_time, region.rgnid, region.rgn_desc, region.office,region.address,region.iso_desc,province.provid, province.provname, city_muni.cmid, city_muni.cmname, barangay.brgyid, barangay.brgyname, status, trans_status.trns_desc, trans_status.allowedpayment, trans_status.canapply, facmode.facmdesc, funcapf.funcdesc, ownership.ocdesc, class.classname, apptype.aptdesc, appform.rgnid, noofsatellite, clab, cap_inv, lot_area, typeamb, noofamb, plate_number, typeamb, ambOwner, street_name, zipcode, landline, validDate, documentSent, isApproveFDA, isNotified, isPayEval, isCashierApprove, isrecommended, isReadyForInspec, street_number, isReadyForInspecFDA, isrecommendedFDA, FDAstatus, pharCOC, xrayCOC, landline, faxNumber, ownerMobile, ownerLandline, ownerEmail, mailingAddress, faxnumber, validDateFrom, licenseNo, HFERC_swork, payEvalbyFDA, /*HFERC_comments,*/ assRgn.rgn_desc AS assRgnDesc, ishfep, noofmain, ambtyp, areacode, isAcceptedFP, FPacceptedDate, FPacceptedTime,fpcomment, others_oanc, hfep_funded, proposedWeek, approvingauthority, approvingauthoritypos ,addonDesc,savingStat,noofdialysis,con_number,appform.hgpid,appform.noofstation,appform.assignedRgn,appform.appComment,appform.approvedDate,appform.savedRenewalOpt
+						
 						FROM appform 
 						LEFT JOIN region ON region.rgnid = appform.rgnid 
 						LEFT JOIN class ON class.classid = appform.classid 
@@ -360,7 +152,7 @@ class FunctionsClientController extends Controller {
 						LEFT JOIN trans_status ON trans_status.trns_id = appform.status 
 						LEFT JOIN facmode ON facmode.facmid = appform.facmode 
 						LEFT JOIN region AS assRgn ON assRgn.rgnid = appform.assignedRgn 
-					WHERE appform.appid = '$appid' AND appform.uid = '$curUser'"; // AND appform.uid = '$curUser' // LEFT JOIN (SELECT facname, servtype_id FROM facilitytyp WHERE facid IN (SELECT facid FROM x08_ft WHERE appid = '$appid')) facilitytyp ON 1=1 LEFT JOIN (SELECT GROUP_CONCAT(hgpdesc) AS hgpdesc FROM hfaci_grp WHERE hgpid IN (SELECT hgpid FROM facilitytyp WHERE facid IN (SELECT facid FROM x08_ft WHERE appid = '$appid'))) hfaci_grp ON 1=1 LEFT JOIN serv_type ON serv_type.servtype_id = facilitytyp.servtype_id
+					WHERE appform.appid = '$appid' "; // AND appform.uid = '$curUser' // LEFT JOIN (SELECT facname, servtype_id FROM facilitytyp WHERE facid IN (SELECT facid FROM x08_ft WHERE appid = '$appid')) facilitytyp ON 1=1 LEFT JOIN (SELECT GROUP_CONCAT(hgpdesc) AS hgpdesc FROM hfaci_grp WHERE hgpid IN (SELECT hgpid FROM facilitytyp WHERE facid IN (SELECT facid FROM x08_ft WHERE appid = '$appid'))) hfaci_grp ON 1=1 LEFT JOIN serv_type ON serv_type.servtype_id = facilitytyp.servtype_id
 						break;
 				}
 				
@@ -444,7 +236,10 @@ class FunctionsClientController extends Controller {
 			// LEFT JOIN trans_status as FDA ON appform.FDAstatus = FDA.trns_id WHERE appform.uid = '$curUser' AND appform.appid $forLicensed (SELECT DISTINCT appid FROM `licensed`) $_where ORDER BY t_date DESC"; $appSql = DB::select($sql);
 		
 		
-		$sql = "SELECT isRecommended,submittedReq ,savingStat,isApprove,requestReeval, appid, proofpaystat, FDAStatMach, FDAStatPhar , FDAstatus, uid, licenseNo, approvedDate, facilityname, hfser_desc, hfaci_serv_type.hfser_id, owner, DATE_FORMAT(t_date, '%b %d, %Y') AS t_date, trans_status.trns_desc, trans_status.color as dohcolor, FDA.color as fdacolor, FDA.trns_desc as FDAstat, trans_status.allowedpayment, trans_status.canapply, trans_status.isapproved, rgnid, DATE_FORMAT(validDate, '%b %d, %Y') AS validDate, DATE_FORMAT(documentSent, '%b %d, %Y') AS documentSent, aptid, isNotified, noofsatellite, isPayEval, noofsatellite, pharCOC, xrayCOC, pharValidity, xrayVal, noofmain FROM appform LEFT JOIN hfaci_serv_type ON appform.hfser_id = hfaci_serv_type.hfser_id LEFT JOIN trans_status ON appform.status = trans_status.trns_id LEFT JOIN trans_status as FDA ON appform.FDAstatus = FDA.trns_id WHERE appform.uid = '$curUser' AND appform.appid $forLicensed (SELECT DISTINCT appid FROM `licensed`) $_where ORDER BY t_date DESC"; $appSql = DB::select($sql);
+		$sql = "SELECT isRecommended,submittedReq ,savingStat,isApprove,requestReeval, appid, proofpaystat, FDAStatMach, FDAStatPhar , FDAstatus, uid, licenseNo, approvedDate, facilityname, hfser_desc, hfaci_serv_type.hfser_id, owner, DATE_FORMAT(t_date, '%b %d, %Y') AS t_date, trans_status.trns_desc, trans_status.color as dohcolor, FDA.color as fdacolor, FDA.trns_desc as FDAstat, trans_status.allowedpayment, trans_status.canapply, trans_status.isapproved, rgnid, DATE_FORMAT(validDate, '%b %d, %Y') AS validDate, DATE_FORMAT(documentSent, '%b %d, %Y') AS documentSent, aptid, isNotified, noofsatellite, isPayEval, noofsatellite, pharCOC, xrayCOC, pharValidity, xrayVal, noofmain FROM appform LEFT JOIN hfaci_serv_type ON appform.hfser_id = hfaci_serv_type.hfser_id LEFT JOIN trans_status ON appform.status = trans_status.trns_id LEFT JOIN trans_status as FDA ON appform.FDAstatus = FDA.trns_id WHERE appform.uid = '$curUser' AND appform.appid $forLicensed (SELECT DISTINCT appid FROM `licensed`) $_where ORDER BY t_date DESC"; 
+		
+		$appSql = DB::select($sql);
+
 			foreach($appSql AS $each) {
 				if(! isset($each->isNotified)) { if(isset($each->validDate)) {
 					self::setEmailExpired($each->appid);

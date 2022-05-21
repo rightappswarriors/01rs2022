@@ -93,6 +93,7 @@ Route::prefix('client1')->group(function() {
 	// Route::match(['get', 'post'], '/request/reeval', 'NewClientController@reqReEval');
 	// Route::match(['get', 'post'], '/sendproofpay', 'NewGeneralController@uploadProofofPay');//6-5-2021
 	// Route::match(['get', 'post'], '/', 'NewClientController@__index')->name('client1.login');
+	Route::match(['get', 'post'], '/', 'NewClientController@__index');
 	Route::match(['get', 'post'], '/register/verify/{token}', 'NewClientController@__rToken')->name('client1.rtoken');
 	Route::match(['get', 'post'], '/forgot/{uid}/a/{token}', 'NewClientController@__forgot');
 	Route::match(['get', 'post'], '/reset/{uid}', 'NewClientController@__reset');
@@ -512,7 +513,8 @@ Route::match(['get', 'post'],  'employee/dashboard/processflow/pre-assessment/FD
 
 
 Route::match(['get', 'post'],  'employee/dashboard/processflow/evaluate/FDA/{request?}', 'DOHController@EvaluateProcessFlowFDA'); // View All // FDA
-Route::match(['get', 'post'], 'employee/dashboard/processflow/evaluate/{appid}/{requestforfda?}/{isdocumentary?}', 'DOHController@EvaluateOneProcessFlow'); // View One
+Route::match(['get', 'post'], 'employee/dashboard/processflow/evaluate/{appid}/{requestforfda?}', 'DOHController@EvaluateOneProcessFlow'); // View One
+Route::match(['get', 'post'], 'employee/dashboard/processflow/evaluatetech/{appid}/{requestforfda?}', 'DOHController@EvaluateTechProcessFlow'); // View One
 Route::match(['get', 'post'], 'employee/dashboard/processflow/LTO/evaluate/', 'DOHController@evaluateLTOReq'); // View One
 Route::match(['get', 'post'], 'employee/dashboard/processflow/evaluate/{appid}/edit', 'DOHController@EditEvaluationOneProcessFlow'); // Edit One
 Route::match(['get', 'post'], 'employee/dashboard/processflow/evaluate/FDA/{appid}/{request}', 'DOHController@EvaluateOneProcessFlowFDA'); // Edit One

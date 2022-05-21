@@ -44,7 +44,7 @@
                           // $cashier = (strtolower($request) == 'machines' ? $data->isCashierApproveFDA : $data->isCashierApprovePharma);
                           @endphp
                         @if($preassess == null || $preassess == 2)
-                          @if(in_array(strtolower($data->hfser_id), ['lto','coa']) &&( $data->isReadyForInspecFDA == 1 || $data->isReadyForInspecFDA == 0) && $oop == 1/* && $cashier == 1*/)
+                          @if(in_array(strtolower($data->hfser_id), ['lto','coa', 'ato', 'cor']) &&( $data->isReadyForInspecFDA == 1 || $data->isReadyForInspecFDA == 0)/* && $oop == 1 && $cashier == 1*/)
                             @php
                               $toCheck = ($request == 'machines' ? 'cdrrhr' : 'cdrr');
                             @endphp

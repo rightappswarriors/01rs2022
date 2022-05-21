@@ -936,7 +936,7 @@
 			{
 				$data = DB::table('x08')
 						->where('rgnid',$request->rgnid)
-						->whereIn('grpid',['LO1','LO2','LO4','RLO','NA','DC'])
+						->whereIn('grpid',['LO1','LO2','LO4','RLO','NA','DC','01','HFERC','HFSRBLO','LO','LO3','CM'])
 						// ->whereIn('grpid',['CM','LO','RLO'])
 						// ->where('grpid','!=','C')
 						// ->where('grpid','=','CM')
@@ -976,7 +976,7 @@
 			try  
 			{
 				$data = DB::table('ptc_team_members')
-						//->join('x08', 'ptc_team_members.uid', '=', 'x08.uid')
+						->join('x08', 'ptc_team_members.uid', '=', 'x08.uid')
 						->where('ptc_team_members.team_id',$request->team_id)
 						->get();
 
@@ -1448,7 +1448,8 @@ public static function checkConmem($appid)
 		{
 			$notInclude = array();
 			$data = AjaxController::getAllDataEvaluateOne($appid);
-			$dataInDB = DB::table('hferc_team')->select('uid')->where([['appid',$appid],['revision',$revCount]])->get();
+			$dataInDB = DB::table('hferc_team')->select('uid')->where([['appid',$appid],['revision',$revCount]])->distinct()->get();
+			
 			if(count($dataInDB) > 0){
 				foreach ($dataInDB as $value) {
 					if(!in_array($value->uid, $notInclude)){
@@ -1466,8 +1467,8 @@ public static function checkConmem($appid)
 				// not in list - all users except above
 					$data = DB::table('x08')
 							->join('x07', 'x08.grpid', '=', 'x07.grp_id')
-							->where([['x08.isBanned',0],['x08.rgnid',$rgn]])
-							//->whereIn('x08.grpid',['LO1','LO2','LO4','RLO','NA','DC'])
+							//->where([['x08.isBanned',0],['x08.rgnid',$rgn]])
+							//->whereIn('x08.grpid',['LO1','LO2','LO4','RLO','NA','DC','01','HFERC','HFSRBLO','LO','LO3','CM'])
 							->whereNotIn('x08.uid',$notInclude)
 							->get();
 							
@@ -1478,9 +1479,9 @@ public static function checkConmem($appid)
 					$data = DB::table('x08')
 							->leftjoin('x07', 'x08.grpid', '=', 'x07.grp_id')
 							->leftjoin('hferc_team','x08.uid','hferc_team.uid')
-							->where([['x08.isBanned',0], ['hferc_team.appid',$appid],['hferc_team.revision',$revCount]])
+							//->where([['x08.isBanned',0], ['hferc_team.appid',$appid],['hferc_team.revision',$revCount]])
 						//	->where([['x08.isBanned',0],['x08.rgnid',$rgn], ['hferc_team.appid',$appid],['hferc_team.revision',$revCount]])
-						//	->whereIn('x08.grpid',['LO1','LO2','LO4','RLO','NA','DC'])
+							//->whereIn('x08.grpid',['LO1','LO2','LO4','RLO','NA','DC','01','HFERC','HFSRBLO','LO','LO3','CM'])
 							->whereIn('x08.uid',$notInclude)
 							->distinct()
 							->get();
@@ -1509,6 +1510,12 @@ public static function checkConmem($appid)
 							->join('x07', 'x08.grpid', '=', 'x07.grp_id')
 							->where([['x08.grpid', 'CM'],['x08.isBanned',0],['x08.rgnid',$rgn]])
 							->orWhere([['x08.grpid', 'LO'],['x08.isBanned',0],['x08.rgnid',$rgn]])
+							->orWhere([['x08.grpid', 'LO1'],['x08.isBanned',0],['x08.rgnid',$rgn]])
+							->orWhere([['x08.grpid', 'LO2'],['x08.isBanned',0],['x08.rgnid',$rgn]])
+							->orWhere([['x08.grpid', 'LO3'],['x08.isBanned',0],['x08.rgnid',$rgn]])
+							->orWhere([['x08.grpid', 'LO4'],['x08.isBanned',0],['x08.rgnid',$rgn]])
+							->orWhere([['x08.grpid', 'NA'],['x08.isBanned',0],['x08.rgnid',$rgn]])
+							->orWhere([['x08.grpid', '01'],['x08.isBanned',0],['x08.rgnid',$rgn]])
 							->orWhere([['x08.grpid', 'RLO'],['x08.isBanned',0],['x08.rgnid',$rgn]])
 							->orWhere([['x08.grpid', 'DC'],['x08.isBanned',0],['x08.rgnid',$rgn]])
 							->whereNotIn('x08.uid',$notInclude)
@@ -1520,6 +1527,12 @@ public static function checkConmem($appid)
 							->join('committee_team','x08.uid','committee_team.uid')
 							->where([['x08.grpid', 'CM'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
 							->orWhere([['x08.grpid', 'LO'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
+							->orWhere([['x08.grpid', 'LO1'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
+							->orWhere([['x08.grpid', 'LO2'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
+							->orWhere([['x08.grpid', 'LO3'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
+							->orWhere([['x08.grpid', 'LO4'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
+							->orWhere([['x08.grpid', 'NA'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
+							->orWhere([['x08.grpid', '01'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
 							->orWhere([['x08.grpid', 'RLO'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
 							->orWhere([['x08.grpid', 'DC'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
 							->whereIn('x08.uid',$notInclude)
@@ -5661,7 +5674,7 @@ public static function checkConmem($appid)
 				$assignedRgn = (DB::table('appform')->select('assignedRgn')->where('appid',$request->id)->first()->assignedRgn ?? $request->rgn);
 				$query = 	"SELECT x08.uid, x08.fname, x08.mname, x08.lname, x08.position, x08.team, x07.grp_desc
 						  	FROM x08 LEFT JOIN  x07 ON x08.grpid = x07.grp_id 
-							WHERE x08.grpid <> 'C' AND x08.team IS null AND x08.rgnid = '$assignedRgn' AND  x08.uid NOT IN (SELECT uid FROM app_team WHERE appid = '$request->id') AND x08.grpid IN ('LO1','LO2','RLO') ";
+							WHERE x08.grpid <> 'C' AND x08.team IS null AND x08.rgnid = '$assignedRgn' AND  x08.uid NOT IN (SELECT uid FROM app_team WHERE appid = '$request->id') AND x08.grpid IN ('LO1','LO2','LO4','RLO','DC','01','HFERC','HFSRBLO','LO','LO3','CM') ";
 				$data = DB::select($query);			
 					if ($data) {
 						for ($i=0; $i < count($data) ; $i++) { 
@@ -5701,7 +5714,7 @@ public static function checkConmem($appid)
 				if($check == 'hfsrb'){
 					$query = 	"SELECT x08.uid, x08.fname, x08.mname, x08.lname, x08.position, x08.team, x07.grp_desc
 					FROM x08 LEFT JOIN  x07 ON x08.grpid = x07.grp_id 
-				  WHERE x08.grpid IN ('LO1','LO2') AND x08.team = '$request->teamid' AND  x08.uid NOT IN (SELECT uid FROM app_team WHERE teamid = '$request->teamid' AND appid = '$request->id')";
+				  WHERE x08.grpid IN ('LO1','LO2','LO4','RLO','DC','01','HFERC','HFSRBLO','LO','LO3','CM') AND x08.team = '$request->teamid' AND  x08.uid NOT IN (SELECT uid FROM app_team WHERE teamid = '$request->teamid' AND appid = '$request->id')";
   
 				}else{
 					$query = 	"SELECT x08.uid, x08.fname, x08.mname, x08.lname, x08.position, x08.team, x07.grp_desc

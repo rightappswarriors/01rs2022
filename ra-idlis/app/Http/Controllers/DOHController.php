@@ -4997,7 +4997,7 @@ use FunctionsClientController;
 					if( $revision > 2 && AjaxController::isRequredToPayPTC($revision) && !FunctionsClientController::existOnDB('chgfil',array(['appform_id',$appid],['uid',AjaxController::getUidFrom($appid)],['revision',$revision],['isPaid',1])) && !AjaxController::isSessionExist(['employee_login'])){
 						return redirect('employee/dashboard/processflow/assignmentofhferc/'.$appid.'/'.(AjaxController::maxRevisionFor($appid) != 0 ? AjaxController::maxRevisionFor($appid)-1 : 1))->with('errRet', ['errAlt'=>'danger', 'errMsg'=>'Payment is not settled.']);
 					}
-	
+
 					if(isset($revision)){
 						if ($request->isMethod('get')) 
 						{
@@ -5012,12 +5012,12 @@ use FunctionsClientController;
 									$checkteam = DB::table('hferc_team')->where([['appid', $appid], ['revision', $revision]])->first();
 	
 									if(is_null($checkteam)){
-											$getTeam = DB::table('hferc_team')->where([['appid', $appid], ['revision', $revision - 1]])->get();
-											foreach($getTeam as $gt){
-												DB::table('hferc_team')->insert(['appid' => $appid, 'uid' => $gt->uid, 'pos' => $gt->pos, 'revision' => $revision, 'permittedtoInspect' => 1]);
-												// DB::table('hferc_team')->insert(['appid' => $appid, 'uid' => $gt['uid'], 'pos' => $gt['pos'], 'revision' => $revision, 'permittedtoInspect' => 1]);
-												AjaxController::notifyClient($appid,$gt->uid,41);
-											}
+										$getTeam = DB::table('hferc_team')->where([['appid', $appid], ['revision', $revision - 1]])->get();
+										foreach($getTeam as $gt){
+											DB::table('hferc_team')->insert(['appid' => $appid, 'uid' => $gt->uid, 'pos' => $gt->pos, 'revision' => $revision, 'permittedtoInspect' => 1]);
+											// DB::table('hferc_team')->insert(['appid' => $appid, 'uid' => $gt['uid'], 'pos' => $gt['pos'], 'revision' => $revision, 'permittedtoInspect' => 1]);
+											AjaxController::notifyClient($appid,$gt->uid,41);
+										}
 									}
 								}
 	
@@ -5051,10 +5051,9 @@ use FunctionsClientController;
 								$dataTeam->where('team.type','ptc');
 								//$dataTeam->where('team.rgnid', $emp->rgnid);
 								$dataTeam->where('team.rgnid', $data->assignedRgn);
-								$dataTeam =	$dataTeam->get();
-	
-	
-	
+								$dataTeam =	$dataTeam->get();	
+
+								//dd($members);
 	
 								$arrRet = [
 									'AppData' => $data,
@@ -5091,16 +5090,16 @@ use FunctionsClientController;
 	
 								if($request->action == 'add'){
 	
-										if($request->type == "PTC" ){
-											$mem = json_decode($request->members, true);
-											foreach($mem as $m){
-												$ret = DB::table('hferc_team')->insert(['appid' => $appid, 'uid' => $m['uid'], 'pos' => $m['pos'], 'revision' => (isset($evaluationResult->revision) ? $evaluationResult->revision : AjaxController::maxRevisionFor($appid) + 1), 'permittedtoInspect' => 1]);
-												AjaxController::notifyClient($appid,$m['uid'],41);
-											}
-										}else{
-											$ret = DB::table('hferc_team')->insert(['appid' => $appid, 'uid' => $request->uid, 'pos' => $request->pos, 'revision' => (isset($evaluationResult->revision) ? $evaluationResult->revision : AjaxController::maxRevisionFor($appid) + 1), 'permittedtoInspect' => 1]);
-											AjaxController::notifyClient($appid,$request->uid,41);
+									if($request->type == "PTC" ){
+										$mem = json_decode($request->members, true);
+										foreach($mem as $m){
+											$ret = DB::table('hferc_team')->insert(['appid' => $appid, 'uid' => $m['uid'], 'pos' => $m['pos'], 'revision' => (isset($evaluationResult->revision) ? $evaluationResult->revision : AjaxController::maxRevisionFor($appid) + 1), 'permittedtoInspect' => 1]);
+											AjaxController::notifyClient($appid,$m['uid'],41);
 										}
+									}else{
+										$ret = DB::table('hferc_team')->insert(['appid' => $appid, 'uid' => $request->uid, 'pos' => $request->pos, 'revision' => (isset($evaluationResult->revision) ? $evaluationResult->revision : AjaxController::maxRevisionFor($appid) + 1), 'permittedtoInspect' => 1]);
+										AjaxController::notifyClient($appid,$request->uid,41);
+									}
 								
 								} else if($request->action == 'edit'){
 									$ret = DB::table('hferc_team')->where('hfercid',$request->id)->update(['pos' => $request->pos]);
@@ -5316,7 +5315,6 @@ use FunctionsClientController;
 						$rgns = DB::table('region')->where('rgnid',$employeeData->rgnid)->get();
 					}
 
-
 					$data = $rgns;
 					$data2 = $dataTeam;
 					// $data2 = AjaxController::getAllTeamsCon();
@@ -5348,9 +5346,6 @@ use FunctionsClientController;
 					// $data = AjaxController::getAllRegion();
 					// $data = AjaxController::getAllRegionGen();
 					$employeeData = session('employee_login');
-					
-
-					
 					$dataTeam = DB::table('team');
 					$dataTeam->join('region', 'team.rgnid', '=', 'region.rgnid');
 					$dataTeam->where('team.type','ptc');
@@ -5359,17 +5354,15 @@ use FunctionsClientController;
 							$dataTeam->where('team.rgnid',$employeeData->rgnid);
 				    }
 					$dataTeam =	$dataTeam->get();
-
 					$rgns = DB::table('region')->get();
+
 					if($employeeData->grpid != 'NA'){
 						$rgns = DB::table('region')->where('rgnid',$employeeData->rgnid)->get();
 					}
 
-
 					$data = $rgns;
 					$data2 = $dataTeam;
-					// $data2 = AjaxController::getAllTeamsCon();
-					
+					// $data2 = AjaxController::getAllTeamsCon();					
 					//dd($data);
 					
 					return view('employee.processflow.pfHfercTeamAss',['region' => $data, 'team' =>$data2]);
@@ -5380,8 +5373,7 @@ use FunctionsClientController;
 					// $chk = DB::table('x08')->where([['rgnid',$request->rgn],['grpid','DC']])->first();
 					// if(!is_null($chk)){
 					// 	DB::table('ptc_team_members')->insert(['uid' => $chk->uid,'pos' => 'C', 'team_id' =>$request->id]);
-					// }
-				
+					// }				
 					
 					return 'DONE';
 				}

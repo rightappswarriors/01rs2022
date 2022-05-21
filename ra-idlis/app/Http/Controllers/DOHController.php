@@ -6605,10 +6605,13 @@ use FunctionsClientController;
 								$forInsertArray = array('x08_id' => $request->xid, 'asmtComb_FK' => $res->asmtComb, 'assessmentName' => $res->assessmentName, 'asmtH3ID_FK' => $request->part, 'h3name' => $dataFromDB->h3name, 'asmtH2ID_FK' => $dataFromDB->asmtH2ID, 'h2name' => $dataFromDB->h2name, 'asmtH1ID_FK' => $dataFromDB->asmtH1ID, 'partID' => $dataFromDB->title_code, 'h1name' => $dataFromDB->h1name, 'evaluation' => ($value['comp'] == 'false' ? 0 : ($value['comp'] == 'NA' ? 'NA' : 1)), 'remarks' => $value['remarks'], 'assessmentSeq' => $res->assessmentSeq, 'evaluatedBy'=> ($uData['cur_user'] != 'ERROR' ? $uData['cur_user'] : (session()->has('uData') ? session()->get('uData')->uid :'UNKOWN, '.$request->ip())), 'assessmentHead' => $res->headingText, 'monid' => $request->monid, 'selfassess' => ($isSelfAssess ? $isSelfAssess : null), 'appid' => $request->appid);
 								// (isset($request->monid) && $request->monid > 0 ? $forInsertArray['monid'] = $request->monid : '');
 
+							
+								$acdID =  DB::table('assessmentcombinedduplicate')->insertGetId($forInsertArray);
+
 								if($value['comp'] == 'false'){
 
 									$complianceItem = array(
-										'assesment_id' => $res->asmtComb,
+										'assesment_id' => $acdID,
 										'compliance_id' => $complianceId,
 										'assesment_status' => 0
 									);
@@ -6616,8 +6619,6 @@ use FunctionsClientController;
 									DB::table('compliance_item')->insert($complianceItem);
 								}
 
-								
-								DB::table('assessmentcombinedduplicate')->insert($forInsertArray);
 								array_push($getOnDBID, $key);
 							}
 						}
@@ -7149,6 +7150,28 @@ use FunctionsClientController;
 			} else {
 				return ($isSelfAssess ? false : back()->with('errRet', ['errAlt'=>'warning', 'errMsg'=>'Assessment records not found.']));
 			}
+		}
+
+		public function complianceChecker($complianceItemId, $assesmentStatus){
+
+			if(session()->has('employee_login')){
+
+				try {
+				$ret = DB::table('compliance_item')->where('compliance_item_id',$complianceItemId)->update(['assesment_status' => $assesmentStatus]);
+					if($ret){
+						return 'done';
+					} 
+					// else {
+					// 	return $request->all();
+					// 	return 'error';
+					// }
+				} catch (Exception $e) {
+					AjaxController::SystemLogs($e);
+					return $e;
+				}
+
+			}
+
 		}
 
 		public function complianceDetails($complianceId = false){

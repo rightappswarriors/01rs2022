@@ -34,8 +34,19 @@
                           <tr>
                             <td class="text-center">{{$index}}</td>
                             <td class="text-center">{!!$data->assessmentName!!}</td>
-                            <td class="text-center"></td>
-                            <td></td>
+                            <td class="text-center">
+                            {!!$data->h1name!!}
+                            <br>
+                            {!!$data->h2name!!}
+                            <br>
+                            {!!$data->h3name!!}
+                            </td>
+                            <td>
+
+                            <input type="checkbox" value="0" class="complianceChecker" {{$data->assesment_status == 0 ? 'checked' : '' }} onclick="complianceChecker({{$data->compliance_item_id}}, 0, {{$data->compliance_id}})"> No
+                            <input type="checkbox" value="1" class="complianceChecker" {{$data->assesment_status == 1 ? 'checked' : '' }} onclick="complianceChecker({{$data->compliance_item_id}}, 1, {{$data->compliance_id}})"> Yes
+                            
+                            </td>
         
                  
                           
@@ -52,7 +63,56 @@
   	$(document).ready(function(){
 
       var table = $('#example').DataTable();
+
+
+      jQuery('.complianceChecker').click(function(e){
+           e.preventDefault();
+      });
+
+
+
+
     });
+
+    function complianceChecker(id, assesment_status, appid){
+            
+    if(assesment_status == 1){
+        $text = 'Are you sure you want to complied this item?';
+    } else {
+        $text = 'Are you sure you want to set this for Compliance?';
+    }
+
+    
+
+    
+
+            Swal.fire({
+              title: 'Please review Compliance Item',
+              text: $text,
+              type: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Confirm!'
+            }).then((result) => {
+              if (result.value) {
+                $.ajax({
+                  url: '{{asset('employee/dashboard/processflow/complianceChecker/')}}/'+id+'/'+assesment_status,
+                  type: 'GET',
+                  success: function(){
+                    Swal.fire({
+                      type: 'success',
+                      title: 'Success',
+                      text: 'Successfully Updated Compliance',
+                      timer: 2000,
+                    }).then(() => {
+                        location.reload();
+                    });
+                  }
+                })
+              }
+            })
+       }
     </script>
   @endsection
 @else

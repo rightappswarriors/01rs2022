@@ -4651,7 +4651,10 @@ public static function checkConmem($appid)
 		public static function getComplianceDetails($complianceId){
 			$complianceData = DB::table('compliance_item')
 			->where('compliance_id', $complianceId)
-			->leftjoin('assessmentcombined','assessmentcombined.asmtComb','compliance_item.assesment_id')
+			->leftjoin('assessmentcombinedduplicate','assessmentcombinedduplicate.dupID','compliance_item.assesment_id')
+			->leftjoin('asmt_h1','asmt_h1.asmtH1ID','assessmentcombinedduplicate.asmtH1ID_FK')
+			->leftjoin('asmt_h2','asmt_h2.asmtH2ID','assessmentcombinedduplicate.asmtH2ID_FK')
+			->leftjoin('asmt_h3','asmt_h3.asmtH3ID','assessmentcombinedduplicate.asmtH3ID_FK')
 			->get();
 			
 			return $complianceData;

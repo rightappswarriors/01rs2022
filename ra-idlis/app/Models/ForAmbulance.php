@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class ForAmbulance extends Model
 {
-    protected $table = 'forambulance';
+    protected $table = 'forAmbulance';
     protected $primaryKey = 'ambid';
 }

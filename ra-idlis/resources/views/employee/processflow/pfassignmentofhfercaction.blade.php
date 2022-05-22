@@ -71,7 +71,8 @@
           @isset($evaluation->HFERC_evalDate)
             <h5 class="font-weight-bold">Date Evaluated: {{Date('F j, Y, g:i A',strtotime($evaluation->HFERC_evalDate))}}</h5>
           @endisset
-        </div>                
+        </div>          
+              
         <hr>
 
         @if(isset($AppData->isAcceptedFP))

@@ -18,7 +18,6 @@
       <ul class="navbar-nav ml-auto">
           <li class="nav-item S01_allow dropdown" id="navEmpl">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><i id="AlertBell" class="fa fa-bell"></i>&nbsp;<span id="NumOfUnreadMsgs"></span>
-
             </a>
             <div class="dropdown-menu dropdown-menu-right" style="width: 300px;background-color: transparent;border: 0;" >
               <ul class="list-group" style="margin: 0;padding: 0;" id="AlertBoxes">
@@ -30,9 +29,11 @@
           </li>
           {{-- <li class="nav-item S02_allow"><a href="#" class="nav-link "><i class="fa fa-bell"></i>1</a></li> --}}
           <li class="nav-item dropdown">
-              <a href="#" id="dd_user" class="nav-link dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> @if ($employeeData->grpid != 'NA')
+              <a href="#" id="dd_user" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-user"></i> 
+                @if ($employeeData->grpid != 'NA')
                   {{$employeeData->name}}
-              @endif
+                @endif
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dd_user">
                   {{-- <a href="#" class="dropdown-item S03_allow">Settings</a> --}}

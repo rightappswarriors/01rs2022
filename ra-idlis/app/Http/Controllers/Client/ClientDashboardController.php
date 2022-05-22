@@ -13,8 +13,6 @@ use App\Models\Barangay;
 use App\Models\HFACIGroup;
 use App\Models\FACLGroup;
 use AjaxController;
-
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;

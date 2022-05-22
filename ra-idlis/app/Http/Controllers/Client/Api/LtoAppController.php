@@ -481,8 +481,8 @@ class LtoAppController extends Controller
         $appform->hfep_funded           = $ptcapp->hfep_funded;
         $appform->assignedRgn           = $ptcapp->assignedRgn;
         $appform->ptcCode               = $ptcapp->hfser_id.'R'.$ptcapp->rgnid.'-'.$ptcapp->appid;
-        // $appform->ptcCode               = $ptcapp->ptcCode;
         $appform->con_number            = '';
+        // $appform->ptcCode               = $ptcapp->ptcCode;
         $appform->noofmain              = $ptcapp->noofmain;
         $appform->noofdialysis          = $ptcapp->noofdialysis;
         // $appform->noofsatellite         = $ptcapp->noofsatellite;
@@ -506,7 +506,6 @@ class LtoAppController extends Controller
        
         $appformConv = array();
         $appformConv[] = $appform;
-        
         $chk =  DB::table('x08_ft')->where([['appid', $appid]])->first();
         $chkFacid = new stdClass();
         $chkFacid->facid = $chk->facid;
@@ -525,17 +524,17 @@ class LtoAppController extends Controller
             $sql4 = "SELECT hgpid, hgpdesc FROM hfaci_grp WHERE hgpid IN ($sql1)";
             $arrRet1 = [DB::select($sql1), [$chkFacid], DB::select($sql3), DB::select($sql4)];
         }
-
         $proceesedAmb = [];
-					foreach (AjaxController::getForAmbulanceList(false,'forAmbulance.hgpid') as $key => $value) {
-						array_push($proceesedAmb, $value->hgpid);
-					}
 
-         $hfLocs = [
-                        'client1/apply/app/COA/'.$appid, 
-                        'client1/apply/app/COA/'.$appid.'/hfsrb', 
-                        'client1/apply/app/COA/'.$appid.'/fda'
-                    ];
+        foreach (AjaxController::getForAmbulanceList(false,'forAmbulance.hgpid') as $key => $value) {
+            array_push($proceesedAmb, $value->hgpid);
+        }
+        $hfLocs = [
+                'client1/apply/app/COA/'.$appid, 
+                'client1/apply/app/COA/'.$appid.'/hfsrb', 
+                'client1/apply/app/COA/'.$appid.'/fda'
+        ];
+
         if(isset($hideExtensions)) {
             $hfLocs = [
                 'client1/apply/employeeOverride/app/COA/'.$appid, 

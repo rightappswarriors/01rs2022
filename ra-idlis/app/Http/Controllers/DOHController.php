@@ -2455,7 +2455,7 @@ use FunctionsClientController;
 				if(!isset($request->action)){
 					try 
 					{
-						$id = DB::table('forambulance')->insertGetId(['hgpid'=> $request->name]);
+						$id = DB::table('forAmbulance')->insertGetId(['hgpid'=> $request->name]);
 						return $id;
 					} 
 					catch (Exception $e) {
@@ -2463,7 +2463,7 @@ use FunctionsClientController;
 						return 'ERROR';
 					}
 				} else if(strtolower($request->action) == 'delete'){
-					return DB::table('forambulance')->where('ambid',$request->id)->delete();
+					return DB::table('forAmbulance')->where('ambid',$request->id)->delete();
 				}
 			}
 		}

@@ -79,6 +79,7 @@ Route::prefix('cont')->group(function() {
 });
 Route::prefix('cont')->group(function() {
 	Route::match(['get', 'post'], '/lto/{appid}', 'Client\Api\LtoAppController@contfromPtcTemp');
+	Route::match(['get', 'post'], '/coa/{appid}', 'Client\Api\LtoAppController@contfromPtcTemp_COA');
 	// Route::match(['get', 'post'], '/lto/{appid}', 'Client\Api\LtoAppController@contfromPtc');
 });
 

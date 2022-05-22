@@ -28,10 +28,6 @@
         <div class="card-header bg-white font-weight-bold">
           @isset($APPID)<input type="text" id="APPID" value="{{$APPID}}" hidden>@endisset
           <input type="" id="token" value="{{ Session::token() }}" hidden>
-          <script>
-
-          </script>
-
           <!-- <button class="btn btn-primary" onclick="location.replace(document.referrer);">Back</button>&nbsp; -->
           @if(app('request')->input('from') == 'rec')
           <button class="btn btn-primary" onclick="window.history.back();">Back</button>&nbsp;
@@ -44,29 +40,38 @@
           
         </div>
         <div class="card-body">
-          <table class="table table-borderless">
-          <thead>
-            <tr>
-              <td width="100%">
-                <h2>@isset($AppData) {{$AppData->facilityname}} @endisset</h2>
-                <h5>@isset($AppData) 
-                  {{
-                    $AppData->street_number?  strtoupper($AppData->street_number).',' : ' '
-                  }}
-                  {{
-                    $AppData->streetname?  strtoupper($AppData->streetname).',': ' '
-                  }}
-                   {{strtoupper($AppData->brgyname)}}, {{$AppData->cmname}}, {{$AppData->provname}} @endisset</h5>
-                <h5>
-                  Code: <span class="font-weight-bold">{{$code}}</span>
-                </h5>
-                <h6>@isset($AppData) Status: @if ($AppData->isCashierApprove === null) <span style="color:blue">For Payment Evaluation</span> @elseif($AppData->isCashierApprove == 1)  <span style="color:green">Payment Evaluated</span> @else <span style="color:red">Disapproved Payment</span> @endif @endisset</h6>
-              </td>
-            </tr>
-          </thead>
-          </tbody>  
-        </table>
-        <hr>
+          <div class="col-sm-12">
+
+            <h2>@isset($AppData)[<strong>{{$AppData->hfser_id}}R{{$AppData->rgnid}}-{{$AppData->appid}}</strong>]
+                &nbsp;{{$AppData->facilityname}} @endisset</h2>
+            <h5>
+              @isset($AppData)
+                {{ $AppData->street_number?  strtoupper($AppData->street_number).',' : ' ' }}
+                {{ $AppData->streetname?  strtoupper($AppData->streetname).',': ' '}}
+                {{strtoupper($AppData->brgyname)}}, 
+                {{$AppData->cmname}}, {{$AppData->provname}} 
+              @endisset
+            </h5>
+            <label>Process Type:&nbsp;</label>
+            <span class="font-weight-bold">
+              @if($AppData->aptid == 'R'){{'Renewal'}}@elseif($AppData->aptid == 'IN'){{'Initial New'}}@else{{'Unidentified'}}@endif
+              @if(isset($AppData->hfser_id)){{' '.$AppData->hfser_id}}@endif
+            </span>
+
+            <h6>
+              <label>Institutional Character: </label>
+              @if(isset($AppData) && isset($AppData->facmdesc))
+                <strong>{{$AppData->facmdesc}}</strong>
+              @else
+                <span style="color:red">Not Available</span>
+              @endif                  
+            </h6>
+            @isset($evaluation->HFERC_evalDate)
+              <h5 class="font-weight-bold">Date Evaluated: {{Date('F j, Y, g:i A',strtotime($evaluation->HFERC_evalDate))}}</h5>
+            @endisset
+            <h6>@isset($AppData) Status: @if ($AppData->isCashierApprove === null) <span style="color:blue">For Payment Evaluation</span> @elseif($AppData->isCashierApprove == 1)  <span style="color:green">Payment Evaluated</span> @else <span style="color:red">Disapproved Payment</span> @endif @endisset</h6>
+          </div>     
+
         <div class="container-fluid border mb-3">
             <div class="row">
               @if($AppData->isCashierApprove != 1)

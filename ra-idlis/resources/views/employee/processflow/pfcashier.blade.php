@@ -14,7 +14,9 @@
               <table class="table table-hover" id="example" style="font-size:13px;">
                   <thead>
                   <tr>
+                      <th ></th>
                       <th class="select-filter"></th>
+                      <th ></th>
                       <th ></th>
                       <th ></th>
                       <th ></th>
@@ -23,13 +25,13 @@
                      
                   </tr>
                   <tr>
-                      {{-- <td scope="col" class="text-center">ID</td> --}}
+                      <td scope="col" class="text-center">ID</td>
+                      <td scope="col" class="text-center">Process</td>
                       <td scope="col" class="text-center">Type</td>
-                      <td scope="col" class="text-center">Application Code</td>
-                      <td scope="col" class="text-center">Name of Facility</tdth>
+                      <td scope="col" class="text-center">App.Code</td>
+                      <td scope="col" class="text-center">Facility Name</tdth>
                       {{-- <td scope="col" class="text-center">Type of Facility</td> --}}
                       <td scope="col" class="text-center">Date</td>
-                      {{-- <td scope="col" class="text-center">&nbsp;</td> --}}
                       <td scope="col" class="text-center">Current Status</td>
                       <td scope="col" class="text-center">Options</td>
                   </tr>
@@ -58,14 +60,14 @@
 
                               @endphp
                               <tr>
-                                {{-- <td class="text-center">{{$status}}</td> --}}
-                                <td class="text-center">{{$data->hfser_id}}</td>
+                                <td class="text-center">{{$status}}</td>
+                                <td class="text-center">{{$data->aptdesc}}</td>
+                                <td class="text-center"><strong>{{$data->hfser_id}}</strong></td>
                                 <td class="text-center">{{$data->hfser_id}}R{{$data->rgnid}}-{{$data->appid}}</td>
-                                <td class="text-center"><strong>{{$data->facilityname}}</strong></td>
+                                <td class="text-center">{{$data->facilityname}}</td>
                                 {{-- <td class="text-center">{{$data->hgpdesc}}</td> --}}
                                 <td class="text-center">{{$data->formattedDate}}</td>
-                                {{-- <td class="text-center">{{$data->aptdesc}}</td> --}}
-                                <td class="text-center" style="font-weight:bold;">{{isset($data->isCashierApprove) && $data->isCashierApprove == 1 ? 'Paid' : 'For Payment'}}</td>
+                                <td class="text-center">{{isset($data->isCashierApprove) && $data->isCashierApprove == 1 ? 'Paid' : 'For Payment'}}</td>
                                   <td>
                                     <div class="container">
                                       <div class="row">
@@ -197,7 +199,7 @@
       // $('#example').DataTable();
       var table = $('#example').DataTable();
       $("#example thead .select-filter").each( function ( i ) {
-      var e = i == 0 ? 0 :  4 ;
+      var e = i == 0 ? 1 :  6 ;
         var select = $('<select><option value=""></option></select>')
             .appendTo( $(this).empty() )
             // .appendTo( $(this).empty() )

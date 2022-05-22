@@ -161,10 +161,13 @@ class NewClientController extends Controller {
 			}
 			$uid = $data[0]->uid;
 			$appGet = FunctionsClientController::getApplicationDetailsWithTransactions(FunctionsClientController::getSessionParamObj("uData", "uid"), "IN", true);
+			
 			foreach ($appGet as $key => $value) {
 				switch ($value[0]->hfser_id) {
 					case 'PTC':
 						$appGet[$key][4] = DB::table('hferc_evaluation')->where([['appid',$value[0]->appid],['HFERC_eval',1]])->first();
+						$appGet[$key][5] = AjaxController::getAuthorizationTypeExceptCONPTC($value[0]->appid);
+						//dd($appGet);
 						break;
 
 					case 'LTO':
@@ -176,6 +179,7 @@ class NewClientController extends Controller {
 						break;
 				}
 			}
+			//dd($appGet);
 			$arrRet = [
 				'appDet'=>$appGet,
 				'userInf'=>$data,

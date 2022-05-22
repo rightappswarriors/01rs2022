@@ -5,8 +5,10 @@
   <input type="text" id="CurrentPage" hidden="" value="PF013">
   <div class="content p-4">
       <div class="card">
-          <div class="card-header bg-white font-weight-bold">
-             Evaluate Applicants (PTC) @include('employee.tableDateSearch')
+          <div class="card-header bg-white">
+          <span style="font-size: larger;font-weight: bold;">Evaluation Tool </span> <br/>
+          <span style="font-style: italic;">Checklist for Review of Floor Plan </span>
+            @include('employee.tableDateSearch')
           </div>
           <div class="card-body table-responsive">
           
@@ -30,8 +32,7 @@
                       <th scope="col" class="text-center">Name of Health Facility</th>
                       <th scope="col" class="text-center">Type of Health Facility</th>
                       <th scope="col" class="text-center">Date</th>
-                      <th scope="col" class="text-center">Revision Count</th>
-                      {{-- <th scope="col" class="text-center">Application Status</th> --}}
+                      <th scope="col" class="text-center">Revision</th>
                       <th scope="col" class="text-center">Current Status</th>
                       <th scope="col" class="text-center">Options</th>
                   </tr>
@@ -39,7 +40,7 @@
                   <tbody id="FilterdBody">
                       @if (isset($BigData))
                         @foreach ($BigData as $data)
-                          @if($data->isPayEval == 1 && $data->isrecommended == 1 && $data->isCashierApprove == 1 && $data->isInspected == null && strtolower($data->hfser_id) == 'ptc' && ($user['cur_user'] == 'ADMIN' ? true : FunctionsClientController::existOnDB('hferc_team',[['uid',$user['cur_user']],['appid',$data->appid]])) )
+                          @if($data->status != 'A' && $data->isPayEval == 1 && $data->isrecommended == 1 && $data->isCashierApprove == 1 && $data->isInspected == null && strtolower($data->hfser_id) == 'ptc' && ($user['cur_user'] == 'ADMIN' ? true : FunctionsClientController::existOnDB('hferc_team',[['uid',$user['cur_user']],['appid',$data->appid]])) )
                           @php
                             $status = ''; $link = '';
                             $paid = $data->appid_payment;
@@ -59,14 +60,13 @@
                             @break
                           @endswitch
                           <tr>
-                            <td class="text-center">{{$data->hfser_id}}</td>
+                            <td class="text-center"><strong>{{$data->hfser_id}}</strong></td>
                             <td class="text-center">{{$data->hfser_id}}R{{$data->rgnid}}-{{$data->appid}}</td>
-                            <td class="text-center"><strong>{{$data->facilityname}}</strong></td>
+                            <td class="text-center">{{$data->facilityname}}</td>
                             <td class="text-center">{{(ajaxController::getFacilitytypeFromHighestApplicationFromX08FT($data->appid)->hgpdesc ?? 'NOT FOUND')}}</td>
                             <td class="text-center">{{$data->formattedDate}}</td>
                             <td class="text-center">{{AjaxController::maxRevisionFor($data->appid) + 1}}</td>
-                            {{-- <td class="text-center">{{$data->aptdesc}}</td> --}}
-                            <td style="color:{{$color}};font-weight:bold;" class="text-center">{{$data->trns_desc}}</td>
+                            <td style="color:{{$color}};" class="text-center">{{$data->trns_desc}}</td>
                               <td>
                               	<center>
                                   <button type="button" title="Assess {{$data->facilityname}}" class="btn btn-outline-primary" onclick="window.location.href='{{$link}}'"><i class="fa fa-fw fa-clipboard-check"></i></button>

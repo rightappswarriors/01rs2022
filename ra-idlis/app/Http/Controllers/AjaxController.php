@@ -1457,9 +1457,7 @@ public static function checkConmem($appid)
 					}
 				}
 			}
-			
-		    //dd($notInclude);
-			
+					
 			$rgn = FunctionsClientController::isFacilityFor($appid);
 			
 			switch ($order) {
@@ -1471,8 +1469,6 @@ public static function checkConmem($appid)
 							//->whereIn('x08.grpid',['LO1','LO2','LO4','RLO','NA','DC','01','HFERC','HFSRBLO','LO','LO3','CM'])
 							->whereNotIn('x08.uid',$notInclude)
 							->get();
-							
-							
 					break;
 				case 2:
 				// in list
@@ -1480,19 +1476,17 @@ public static function checkConmem($appid)
 							->leftjoin('x07', 'x08.grpid', '=', 'x07.grp_id')
 							->leftjoin('hferc_team','x08.uid','hferc_team.uid')
 							//->where([['x08.isBanned',0], ['hferc_team.appid',$appid],['hferc_team.revision',$revCount]])
-						//	->where([['x08.isBanned',0],['x08.rgnid',$rgn], ['hferc_team.appid',$appid],['hferc_team.revision',$revCount]])
+							//	->where([['x08.isBanned',0],['x08.rgnid',$rgn], ['hferc_team.appid',$appid],['hferc_team.revision',$revCount]])
 							//->whereIn('x08.grpid',['LO1','LO2','LO4','RLO','NA','DC','01','HFERC','HFSRBLO','LO','LO3','CM'])
 							->whereIn('x08.uid',$notInclude)
 							->distinct()
 							->get();
-							
-							//dd($data);
-					break;
-				
+					break;	
 			}
 			
 			return $data;
 		}
+
 		public static function getMembersIncommittee($appid,$rgn,$order)
 		{
 			$notInclude = array();
@@ -8724,6 +8718,7 @@ public static function getAllUidByRegFac($regfac_id) {
 		$h1 = $h2 = $h3 = $h4 = array();
 		$monid = ($monid ? $monid : null);
 		$selfAssess = ($selfAssess ? 1 : null);
+
 		if(!$isPtc){
 			$table = 'assessmentcombinedduplicate';
 			$whereClause = [['appid',$appid],['monid',$monid],['selfassess',$selfAssess]];
@@ -8732,6 +8727,7 @@ public static function getAllUidByRegFac($regfac_id) {
 			$whereClause = [['appid',$appid],['evaluatedBy',session()->get('employee_login')->uid],['revision',$revision]];
 		}
 		$db = DB::table($table)->where($whereClause)->select('asmtH3ID_FK','asmtH2ID_FK','asmtH1ID_FK','partID')->distinct()->get();
+		
 		foreach ($db as $key => $value) {
 			for ($i=0; $i < 4; $i++) { 
 				
@@ -8869,6 +8865,7 @@ public static function forDoneHeadersNew($appid,$monid,$selfAssess,$isPtc = fals
 
 	public static function assessedDone($cond,$appid,$monid = null,$selfAssess = null, $isPtc = false){
 		$arrayToSend = array();
+
 		if(isset($cond)){
 
 			$arrAssessd = array();
@@ -9013,6 +9010,7 @@ public static function forDoneHeadersNew($appid,$monid,$selfAssess,$isPtc = fals
 		try {
 			$arrRet = array();
 			$toPush = false;
+			
 			if(is_array($session) && count($session) > 0){
 
 				foreach ($session as $key) {
@@ -9032,6 +9030,7 @@ public static function forDoneHeadersNew($appid,$monid,$selfAssess,$isPtc = fals
 	public static function isRequestForFDA($request){
 		$selection = array('machines','pharma');
 		$selected = null;
+
 		if(!in_array($request, $selection)){
 			$selected = 'machines';
 		} else {
@@ -9072,17 +9071,15 @@ public static function forDoneHeadersNew($appid,$monid,$selfAssess,$isPtc = fals
 			->get();
 
 			$st = 1;
+			
 			foreach($check as $c){
 				if($c->hgpid == 6 && !is_null($c->specified)){
 					$st = $c->servtype_id;
 				}
-			}
+			}			
 			
-			
-			return DB::table('x08_ft')->join('facilitytyp','x08_ft.facid','facilitytyp.facid')->join('hfaci_grp','facilitytyp.hgpid','hfaci_grp.hgpid')
-			->where([['x08_ft.appid',$appid],['facilitytyp.servtype_id',$st]])
-			->orderBy('x08_ft.id', 'ASC')
-			->first();
+			return DB::table('x08_ft')->join('facilitytyp','x08_ft.facid','facilitytyp.facid')->join('hfaci_grp','facilitytyp.hgpid','hfaci_grp.hgpid')->where([['x08_ft.appid',$appid],['facilitytyp.servtype_id',$st]])
+			->orderBy('x08_ft.id', 'ASC')->first();
 			// return DB::table('x08_ft')->join('facilitytyp','x08_ft.facid','facilitytyp.facid')->join('hfaci_grp','facilitytyp.hgpid','hfaci_grp.hgpid')->where([['x08_ft.appid',$appid],['facilitytyp.servtype_id',1]])->first();
 		}
 	}
@@ -9091,6 +9088,18 @@ public static function forDoneHeadersNew($appid,$monid,$selfAssess,$isPtc = fals
 		if(!empty($appid)){
 			return ( isset( self::getHighestApplicationFromX08FT($appid)->hgpid ) ? DB::table('hfaci_grp')->where('hgpid',self::getHighestApplicationFromX08FT($appid)->hgpid)->first() : null);
 		}
+	}
+	//All authorization except CON and PTC
+	public static function getAuthorizationTypeExceptCONPTC($appid){
+		$hfser_id="";
+		$data = DB::select("SELECT facl_grp.hfser_id FROM x08_ft LEFT JOIN facilitytyp ON x08_ft.facid=facilitytyp.facid LEFT JOIN facl_grp ON facl_grp.hgpid=facilitytyp.hgpid WHERE x08_ft.appid!='NULL' AND facl_grp.hfser_id!='PTC' AND facl_grp.hfser_id!='CON' AND x08_ft.appid='$appid' ORDER BY ABS(appid)");		
+		
+		if(count($data)){
+			foreach($data AS $each){
+				$hfser_id = $each->hfser_id;
+			}
+		}
+		return $hfser_id;
 	}
 
 	public static function deleteUploadedOnPublic($filename){

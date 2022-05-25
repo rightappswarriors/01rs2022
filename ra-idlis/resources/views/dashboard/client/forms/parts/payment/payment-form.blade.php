@@ -41,7 +41,7 @@
                                 </tr>
                             </tbody>
 
-                            <tbody id="totalfees">
+                            <tbody id="totalfees" style="display:none;"">
                                 <tr>
                                     <td colspan="2"><br/><center><b style="font-size:150%;">TOTAL FEES: ₱0.00</b></center></td>
                                 </tr>

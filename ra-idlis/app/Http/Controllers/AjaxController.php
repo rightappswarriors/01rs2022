@@ -1448,16 +1448,18 @@ public static function checkConmem($appid)
 		{
 			$notInclude = array();
 			$data = AjaxController::getAllDataEvaluateOne($appid);
-			$dataInDB = DB::table('hferc_team')->select('uid')->where([['appid',$appid],['revision',$revCount]])->distinct()->get();
+			$dataInDB = DB::table('hferc_team')
+						->leftjoin('x08','x08.uid', '=','hferc_team.uid')
+						->leftjoin('x07', 'x08.grpid', '=', 'x07.grp_id')->select('*')->where([['hferc_team.appid',$appid],['hferc_team.revision',$revCount]])->distinct()->get();
 			
-			if(count($dataInDB) > 0){
+			/*if(count($dataInDB) > 0){
 				foreach ($dataInDB as $value) {
 					if(!in_array($value->uid, $notInclude)){
 						array_push($notInclude, $value->uid);
 					}
 				}
 			}
-					
+		
 			$rgn = FunctionsClientController::isFacilityFor($appid);
 			
 			switch ($order) {
@@ -1484,7 +1486,9 @@ public static function checkConmem($appid)
 					break;	
 			}
 			
-			return $data;
+			return $data;*/
+			//dd( $dataInDB);
+			return $dataInDB;
 		}
 
 		public static function getMembersIncommittee($appid,$rgn,$order)

@@ -469,14 +469,27 @@ console.log(arr)
 
                                 if (distinctArr.length > 0) {
                                     serv_chg.innerHTML = '';
+                                    console.log('hgpid asc')
+                                    console.log(document.getElementsByName("hgpid")[0].checked);
+
+                                        if(document.getElementsByName("hgpid")[0].checked){
+
+                                            ta.push({reference : 'Ambulance Surgical Clinic',amount: '1400.00', chgapp_id:  'ASC-003' }) //appcharge
+                                            serv_chg.innerHTML += '<tr><td>[<strong>ASC-003</strong>] Ambulance Surgical Clinic</td><td>&#8369;&nbsp;<span>' + numberWithCommas((parseInt('1400.00')).toFixed(2)) + '</span></td></tr>';
+                                            
+                                        }
+                                        else {
+                                            for (let i = 0; i < distinctArr.length; i++) {
+                                                ta.push({reference : distinctArr[i]['facname'],amount: distinctArr[i]['amt'], chgapp_id:  distinctArr[i]['chgapp_id'] }) //appcharge
+                                                serv_chg.innerHTML += '<tr><td>[<strong>' + distinctArr[i]['chgapp_id'] + '</strong>] '+ distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas((parseInt(distinctArr[i]['amt'])).toFixed(2)) + '</span></td></tr>';
+
+                                                // serv_chg.innerHTML += '<tr><td>' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas(subclass == "ND" ? 0 : (parseInt(distinctArr[i]['amt'])).toFixed(2)) + '</span></td></tr>';
+                                            
+                                                    // serv_chg.innerHTML += '<tr><td>' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas((parseInt(distinctArr[i]['amt'])).toFixed(2)) + '</span></td></tr>';
+                                            }   
+                                        }
                                     
-                                    for (let i = 0; i < distinctArr.length; i++) {
-                                        ta.push({reference : distinctArr[i]['facname'],amount: distinctArr[i]['amt'], chgapp_id:  distinctArr[i]['chgapp_id'] }) //appcharge
-                                        serv_chg.innerHTML += '<tr><td>' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas((parseInt(distinctArr[i]['amt'])).toFixed(2)) + '</span></td></tr>';
-                                        // serv_chg.innerHTML += '<tr><td>' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas(subclass == "ND" ? 0 : (parseInt(distinctArr[i]['amt'])).toFixed(2)) + '</span></td></tr>';
-                                    
-                                            // serv_chg.innerHTML += '<tr><td>' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas((parseInt(distinctArr[i]['amt'])).toFixed(2)) + '</span></td></tr>';
-                                    }
+                                                             
                                 } else {
                                         serv_chg.innerHTML = '<tr><td colspan="2">No Services selected.</td></tr>';
                                 }

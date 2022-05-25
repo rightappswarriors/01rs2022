@@ -46,6 +46,7 @@
                 <table class="table table-hover display" id="example" style="overflow-x: scroll;" >
                   <thead>
                     <tr>
+                      <th>ID</th>
                       <th>OOP</th>
                       <th>Code</th>
                       <th>Charge</th>
@@ -275,6 +276,7 @@
                         $('#example').DataTable()
                              .row
                              .add([
+                                  d.chgapp_id, 
                                   d.oop_id, 
                                   '<a href="#" data-toggle="tooltip" title="" data-original-title="'+test+'">'+d.chg_code+'</a>',
                                   d.chg_desc, ((d.hfser_desc != null) ? d.hfser_desc : "No Application type"), d.aptdesc,

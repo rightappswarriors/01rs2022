@@ -474,9 +474,9 @@ console.log(arr)
 
                                         if(document.getElementsByName("hgpid")[0].checked){
 
-                                            ta.push({reference : 'Ambulance Surgical Clinic',amount: '1400.00', chgapp_id:  'ASC-003' }) //appcharge
-                                            serv_chg.innerHTML += '<tr><td>[<strong>ASC-003</strong>] Ambulance Surgical Clinic</td><td>&#8369;&nbsp;<span>' + numberWithCommas((parseInt('1400.00')).toFixed(2)) + '</span></td></tr>';
-                                            
+                                            ta.push({reference : 'Ambulance Surgical Clinic',amount: '1400.00', chgapp_id:  '1225' }) //appcharge
+                                            serv_chg.innerHTML += '<tr><td>[<strong>1225</strong>] Ambulance Surgical Clinic</td><td>&#8369;&nbsp;<span>' + numberWithCommas((parseInt('1400.00')).toFixed(2)) + '</span></td></tr>';
+
                                         }
                                         else {
                                             for (let i = 0; i < distinctArr.length; i++) {

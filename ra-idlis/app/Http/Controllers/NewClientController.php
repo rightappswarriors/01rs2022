@@ -552,7 +552,7 @@ class NewClientController extends Controller {
 					break;
 				case 'LTO':
 					$proceesedAmb = [];
-					foreach (AjaxController::getForAmbulanceList(false,'forambulance.hgpid') as $key => $value) {
+					foreach (AjaxController::getForAmbulanceList(false,'forAmbulance.hgpid') as $key => $value) {
 						array_push($proceesedAmb, $value->hgpid);
 					}
 

@@ -640,6 +640,12 @@
 
                             </span>
 
+                            <span class="PF002_allow">
+
+                            <li><a href="{{asset('/employee/dashboard/processflow/compliance')}}">&nbsp;&nbsp;&nbsp;&nbsp;For Compliance</a></li>
+
+                            </span>
+
                             {{-- @endif --}}
 
                             {{-- @if($employeeData->grpid == 'NA' || $employeeData->grpid == 'CS' || $employeeData->grpid == 'FDA' || $employeeData->grpid == 'PO') --}}

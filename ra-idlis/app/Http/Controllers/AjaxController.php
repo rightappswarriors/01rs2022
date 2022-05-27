@@ -5712,12 +5712,12 @@ public static function checkConmem($appid)
 				if($check == 'hfsrb'){
 					$query = 	"SELECT x08.uid, x08.fname, x08.mname, x08.lname, x08.position, x08.team, x07.grp_desc
 					FROM x08 LEFT JOIN  x07 ON x08.grpid = x07.grp_id 
-				  WHERE x08.grpid IN ('LO1','LO2','LO4','RLO','DC','01','HFERC','HFSRBLO','LO','LO3','CM') AND x08.team = '$request->teamid' AND  x08.uid NOT IN (SELECT uid FROM app_team WHERE teamid = '$request->teamid' AND appid = '$request->id')";
+				  WHERE x08.team = '$request->teamid' AND  x08.uid NOT IN (SELECT uid FROM app_team WHERE teamid = '$request->teamid' AND appid = '$request->id')";
   
 				}else{
 					$query = 	"SELECT x08.uid, x08.fname, x08.mname, x08.lname, x08.position, x08.team, x07.grp_desc
 					FROM x08 LEFT JOIN  x07 ON x08.grpid = x07.grp_id 
-				  WHERE x08.grpid IN ('RLO','LO') AND x08.team = '$request->teamid' AND  x08.uid NOT IN (SELECT uid FROM app_team WHERE teamid = '$request->teamid' AND appid = '$request->id')";
+				  WHERE x08.team = '$request->teamid' AND  x08.uid NOT IN (SELECT uid FROM app_team WHERE teamid = '$request->teamid' AND appid = '$request->id')";
   
 				}
 

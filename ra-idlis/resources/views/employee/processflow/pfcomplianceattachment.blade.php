@@ -9,8 +9,8 @@
 
 
       <div class="card-header bg-white font-weight-bold">
-       For Compliance Details / 
-      <a href="{{asset('employee/dashboard/processflow/complianceattachment/')}}/{{$complianceId}}"> Attachment</a> / 
+      <a href="{{asset('employee/dashboard/processflow/compliancedetails/')}}/{{$complianceId}}"> For Compliance Details</a> / 
+      Attachment / 
       <a href="{{asset('employee/dashboard/processflow/complianceremarks/')}}/{{$complianceId}}"> Remarks </a> / 
 
        
@@ -25,10 +25,12 @@
               
                   <tr>
                       <!-- <td scope="col" class="text-center"></td> -->
-                      <td scope="col" class="text-center">ID</td>
-                      <td scope="col" class="text-center">For Compliance</td>
-                      <td scope="col" class="text-center">Area of Concern</td>
-                      <td scope="col" class="text-center">Complied?</td>
+                      <td scope="col" class="text-center">Timestamp</td>
+                      <td scope="col" class="text-center">File Name</td>
+                      <td scope="col" class="text-center">Description</td>
+                      <td scope="col" class="text-center">Type</td>
+                      <td scope="col" class="text-center">Uploaded By</td>
+                      <td scope="col" class="text-center">Action</td>
                   </tr>
                   </thead>
 
@@ -39,20 +41,19 @@
                       @foreach ($BigData as $index => $data)
                       
                           <tr>
-                            <td class="text-center">{{$index}}</td>
-                            <td class="text-center">{!!$data->assessmentName!!}</td>
-                            <td class="text-center">
-                            {!!$data->h1name!!}
-                            <br>
-                            {!!$data->h2name!!}
-                            <br>
-                            {!!$data->h3name!!}
-                            </td>
+                            <td class="text-center">{{$data->date_submitted}}</td>
+                            <td class="text-center">{{$data->attachment_name}}</td>
+                            <td class="text-center">{{$data->description}}</td>
+                            <td class="text-center">{{$data->type}}</td>
+                            <td class="text-center">{{$data->fname}} {{$data->lname}}</td>
+                           
                             <td>
 
-                            <input type="checkbox" value="0" class="complianceChecker" {{$data->assesment_status == 0 ? 'checked' : '' }} onclick="complianceChecker({{$data->compliance_item_id}}, 0, {{$data->compliance_id}})"> No
-                            <input type="checkbox" value="1" class="complianceChecker" {{$data->assesment_status == 1 ? 'checked' : '' }} onclick="complianceChecker({{$data->compliance_item_id}}, 1, {{$data->compliance_id}})"> Yes
-                            
+                            <a href="#" class="btn btn-primary"> 
+                            <i class="fa fa-fw fa-eye"></i>
+                            </td>
+                            <a href="#" class="btn btn-success"> 
+                            <i class="fa fa-fw fa-download"></i>
                             </td>
         
                  

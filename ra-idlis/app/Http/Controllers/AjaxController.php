@@ -60,6 +60,8 @@
 				return 'ERROR';
 			}
 		}
+
+
 		public static function SystemLogs($message) // Writes Error Messages to Notepad {location : ra-idlis/storage/app/system/logs}
 		{
 			$Cur_useData = AjaxController::getCurrentUserAllData();
@@ -4664,6 +4666,25 @@ public static function checkConmem($appid)
 			->leftjoin('asmt_h1','asmt_h1.asmtH1ID','assessmentcombinedduplicate.asmtH1ID_FK')
 			->leftjoin('asmt_h2','asmt_h2.asmtH2ID','assessmentcombinedduplicate.asmtH2ID_FK')
 			->leftjoin('asmt_h3','asmt_h3.asmtH3ID','assessmentcombinedduplicate.asmtH3ID_FK')
+			->get();
+			
+			return $complianceData;
+		}
+
+
+		public static function getComplianceAttachment($complianceId){
+			$complianceData = DB::table('compliance_attachment')
+			->where('compliance_id', $complianceId)
+			->leftjoin('x08','x08.uid','compliance_attachment.user_id')
+			->get();
+			
+			return $complianceData;
+		}
+
+		public static function getComplianceRemarks($complianceId){
+			$complianceData = DB::table('compliance_remarks')
+			->where('compliance_id', $complianceId)
+			->leftjoin('x08','x08.uid','compliance_remarks.user_id')
 			->get();
 			
 			return $complianceData;

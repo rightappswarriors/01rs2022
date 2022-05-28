@@ -7331,13 +7331,48 @@ use FunctionsClientController;
 
 				// dd($data);
 				// exit;
-				return view('employee.processflow.pfcompliancedetails', ['BigData'=>$data, 'type'=>'technical', 'isdocumentary'=>'false']);
+				return view('employee.processflow.pfcompliancedetails', ['BigData'=>$data, 'complianceId' => $complianceId, 'type'=>'technical', 'isdocumentary'=>'false']);
 			} 
 			catch (Exception $e) 
 			{
 				AjaxController::SystemLogs($e);
 				session()->flash('system_error','ERROR');
 				return view('employee.processflow.pfcompliance');
+			}
+		}
+
+
+		public function complianceRemarks($complianceId = false){
+			try 
+			{
+				$data = AjaxController::getComplianceRemarks($complianceId);
+
+			
+				return view('employee.processflow.pfcomplianceremarks', ['BigData'=>$data, 'complianceId' => $complianceId, 'type'=>'technical', 'isdocumentary'=>'false']);
+			} 
+			catch (Exception $e) 
+			{
+				
+				AjaxController::SystemLogs($e);
+				session()->flash('system_error','ERROR');
+				return view('employee.processflow.pfcomplianceremarks');
+			}
+		}
+
+		public function complianceAttachment($complianceId = false){
+			try 
+			{
+				$data = AjaxController::getComplianceAttachment($complianceId);
+
+				// dd($data);
+				// exit;
+				return view('employee.processflow.pfcomplianceattachment', ['BigData'=>$data, 'complianceId' => $complianceId, 'type'=>'technical', 'isdocumentary'=>'false']);
+			} 
+			catch (Exception $e) 
+			{
+				AjaxController::SystemLogs($e);
+				session()->flash('system_error','ERROR');
+				return view('employee.processflow.pfcomplianceattachment');
 			}
 		}
 

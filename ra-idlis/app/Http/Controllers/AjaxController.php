@@ -4661,7 +4661,9 @@ public static function checkConmem($appid)
 
 		public static function getComplianceDetails($complianceId){
 			$complianceData = DB::table('compliance_item')
-			->where('compliance_id', $complianceId)
+			->where('compliance_item.compliance_id', $complianceId)
+			->leftjoin('compliance_data','compliance_data.compliance_id','compliance_item.compliance_id')
+			->where('compliance_data.is_for_compliance', 1)
 			->leftjoin('assessmentcombinedduplicate','assessmentcombinedduplicate.dupID','compliance_item.assesment_id')
 			->leftjoin('asmt_h1','asmt_h1.asmtH1ID','assessmentcombinedduplicate.asmtH1ID_FK')
 			->leftjoin('asmt_h2','asmt_h2.asmtH2ID','assessmentcombinedduplicate.asmtH2ID_FK')
@@ -4674,7 +4676,9 @@ public static function checkConmem($appid)
 
 		public static function getComplianceAttachment($complianceId){
 			$complianceData = DB::table('compliance_attachment')
-			->where('compliance_id', $complianceId)
+			->where('compliance_attachment.compliance_id', $complianceId)
+			->leftjoin('compliance_data','compliance_data.compliance_id','compliance_attachment.compliance_id')
+			->where('compliance_data.is_for_compliance', 1)
 			->leftjoin('x08','x08.uid','compliance_attachment.user_id')
 			->get();
 			
@@ -4683,7 +4687,9 @@ public static function checkConmem($appid)
 
 		public static function getComplianceRemarks($complianceId){
 			$complianceData = DB::table('compliance_remarks')
-			->where('compliance_id', $complianceId)
+			->where('compliance_remarks.compliance_id', $complianceId)
+			->leftjoin('compliance_data','compliance_data.compliance_id','compliance_remarks.compliance_id')
+			->where('compliance_data.is_for_compliance', 1)
 			->leftjoin('x08','x08.uid','compliance_remarks.user_id')
 			->get();
 			

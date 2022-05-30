@@ -14,6 +14,27 @@
          Remarks / 
 
        
+         <div class="row mt-3">
+
+              <!-- <div class="col-sm-3">
+                <button type="button" class="btn btn-info w-100" data-toggle="modal" data-target="#monModal">
+                  <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;
+                  Add Licensed Facility
+                </button>
+              </div> -->
+               
+               <div class="col-sm-3">
+                <button type="button"  class="btn btn-info w-100" data-toggle="modal" data-target="#unregModal">
+                  <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;
+                  Add Remarks
+                </button>
+              </div>
+
+      
+              
+             </div>
+
+       
       </div>
         
           
@@ -39,7 +60,7 @@
                           <tr>
                             <td class="text-center">{{$data->remarks_date}}</td>
                             <td class="text-center">{{$data->fname}} {{$data->lname}}</td>
-                            <td class="text-center">{{$data->message}}</td>
+                            <td class="text-center">{!!$data->message!!}</td>
                  
                             </td>
         
@@ -53,6 +74,46 @@
               </table>
           </div>
   	</div>
+
+    <div class="modal fade" id="unregModal" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content " style="border-radius: 0px;border: none;">
+        <div class="modal-body text-justify" style=" background-color: #5a636b;color: white;">
+          <h5 class="modal-title text-center">
+            <strong>Add Remarks</strong> 
+          </h5>
+          <hr>
+          <div class="input-group form-inline">
+            <div class="card-body">
+              <form id="unreg" method="POST" action="{{asset('employee/dashboard/processflow/complianceaddremarks')}}" data-parsley-validate>
+
+                {{csrf_field()}}
+                <input type="hidden" name="compliance_id" value="{{$complianceId}}">
+           
+                <div class="row mb-3">
+                  <div class="col-sm-4">
+                    <b>Message:<span style="color:red">*</span></b>
+                  </div>
+                  <div class="col-sm-8">
+                    <textarea name="message" cols="62" rows="10" class="form-control" required="required"></textarea>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-6">
+                    <button type="" name="btn_sub" class="btn btn-primary" {{-- data-toggle="modal" data-target="#uprModal" onclick="submitprompt(document.getElementById('u_nameoffaci'))" --}}><b>SUBMIT</b></button>
+                  </div>
+                  <div class="col-sm-6">
+                    <button type="button" data-dismiss="modal"  name="btn_sub" class="btn btn-danger w-100"><b>CLOSE</b></button>
+                  </div>
+                </div>
+              </form> 
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   </div>
   <script type="text/javascript">
   	$(document).ready(function(){

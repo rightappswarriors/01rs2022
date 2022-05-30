@@ -51,7 +51,7 @@
                             <td>
 
                             <input type="checkbox" value="0" class="complianceChecker" {{$data->assesment_status == 0 ? 'checked' : '' }} onclick="complianceChecker({{$data->compliance_item_id}}, 0, {{$data->compliance_id}})"> No
-                            <input type="checkbox" value="1" class="complianceChecker" {{$data->assesment_status == 1 ? 'checked' : '' }} onclick="complianceChecker({{$data->compliance_item_id}}, 1, {{$data->compliance_id}})"> Yes
+                            <input type="checkbox" value="1" class="complianceChecker compliance_complied" {{$data->assesment_status == 1 ? 'checked' : '' }} onclick="complianceChecker({{$data->compliance_item_id}}, 1, {{$data->compliance_id}})"> Yes
                             
                             </td>
         
@@ -63,7 +63,28 @@
                     @endif
                   </tbody>
               </table>
-          </div>
+
+              <div class="complied-btn mt-3" style="display: inline-block;text-align: right;width: 100%;/* display: inline-flex; */">
+
+                
+                <div class="" style="display:inline-block;">
+                  <button type="button" onclick="complied(2, {{$complianceId}})" class="btn btn-info w-100">
+                    <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;
+                    Complied
+                  </button>
+                </div>
+                <div class="" style="display:inline-block;">
+                  <button type="button" onclick="complied(0, {{$complianceId}})" class="btn btn-danger w-100">
+                    <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;
+                    For Denial
+                  </button>
+                </div>
+
+
+
+                </div>
+          
+            </div>
   	</div>
   </div>
   <script type="text/javascript">
@@ -75,11 +96,56 @@
       jQuery('.complianceChecker').click(function(e){
            e.preventDefault();
       });
+     
 
-
-
+      if(jQuery('.compliance_complied').not(':checked').length == 0){
+          jQuery('.complied-btn').css('display', 'block');
+      } else {
+          jQuery('.complied-btn').css('display', 'none');
+      }
 
     });
+
+    function complied(assesment_status, compID){
+
+      if(assesment_status == 0){
+        $text = 'Are you sure you want to deny this application?';
+    } else {
+        $text = 'Are you sure you want to set this Complied?';
+    }
+
+    
+
+    
+
+            Swal.fire({
+              title: 'Please review Application',
+              text: $text,
+              type: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Confirm!'
+            }).then((result) => {
+              if (result.value) {
+                $.ajax({
+                  url: '{{asset('employee/dashboard/processflow/complianceSubmit/')}}/'+assesment_status+'/'+compID,
+                  type: 'GET',
+                  success: function(){
+                    Swal.fire({
+                      type: 'success',
+                      title: 'Success',
+                      text: 'Successfully Updated Compliance',
+                      timer: 2000,
+                    }).then(() => {
+                        window.location.href = '{{asset('employee/dashboard/processflow/compliance')}}';
+                    });
+                  }
+                })
+              }
+            })
+
+    }
 
     function complianceChecker(id, assesment_status, appid){
             

@@ -7359,6 +7359,57 @@ use FunctionsClientController;
 			}
 		}
 
+
+		public function complianceAddRemarks(Request $r){
+
+			if ($r->isMethod('post')) {
+				$currData = $email = null;		
+
+				
+				$currentuser = AjaxController::getCurrentUserAllData();
+
+			
+
+				$data = array(
+					'remarks_date'=>date('Y-m-d'), 
+					'compliance_id'=>$r->compliance_id, 
+					'message'=>$r->message, 
+					'user_id' => $currentuser['cur_user']
+				);
+
+
+
+				DB::table('compliance_remarks')->insert($data);
+
+
+
+				return redirect()->back()->with('errRet', ['errAlt'=>'success', 'errMsg'=>'Added new entry Successfully.']);
+
+
+			}
+			
+		}
+
+		public function complianceSubmit($status = 1, $complianceId ){
+			
+				$data = array(
+					'is_for_compliance'=> $status, 
+				);
+
+				
+				DB::table('compliance_data')
+				->where('compliance_id', $complianceId)
+				->update($data);
+
+
+
+
+				return redirect()->back()->with('errRet', ['errAlt'=>'success', 'errMsg'=>'Compliance Updated Successfully.']);
+
+
+			
+		}
+
 		public function complianceAttachment($complianceId = false){
 			try 
 			{

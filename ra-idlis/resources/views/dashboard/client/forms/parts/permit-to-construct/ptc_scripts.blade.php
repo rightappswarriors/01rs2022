@@ -464,6 +464,21 @@ console.log(arr)
                                     // console.log("tadss")//appchargetemp
                                     // console.log(JSON.stringify(ta))//appchargetemp
                                     document.getElementById('tempAppCharge').value = JSON.stringify(ta)//appchargetemp
+                                        else {
+                                            for (let i = 0; i < distinctArr.length; i++) {
+                                                ta.push({reference : distinctArr[i]['facname'],amount: distinctArr[i]['amt'], chgapp_id:  distinctArr[i]['chgapp_id'] }) //appcharge
+                                                serv_chg.innerHTML += '<tr><td>[<strong>' + distinctArr[i]['chgapp_id'] + '</strong>] '+ distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas((parseInt(distinctArr[i]['amt'])).toFixed(2)) + '</span></td></tr>';
+
+                                                // serv_chg.innerHTML += '<tr><td>' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas(subclass == "ND" ? 0 : (parseInt(distinctArr[i]['amt'])).toFixed(2)) + '</span></td></tr>';
+                                            
+                                                // serv_chg.innerHTML += '<tr><td>' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas((parseInt(distinctArr[i]['amt'])).toFixed(2)) + '</span></td></tr>';
+                                            }   
+                                        }
+                                    
+                                                             
+                                } else {
+                                        serv_chg.innerHTML = '<tr><td colspan="2">No Services selected.</td></tr>';
+                                }
                             }
                     });
             }, 1000);

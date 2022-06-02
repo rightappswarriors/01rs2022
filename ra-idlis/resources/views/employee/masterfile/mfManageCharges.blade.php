@@ -266,19 +266,22 @@
                       for (var i = 0; i < x.length; i++) {
                         var d = data.data[i];
                         var sq = "";
+
                         if (data.TotalNumber > 1) {
                           if (d.chgopp_seq == 1) {sq='&nbsp;<a href="#"><button onclick="Rearranged(\'down\',\''+d.oop_id+'\','+d.chgopp_seq+','+d.chgapp_id+')" class="btn btn-outline-info" title="Go Down"><i class="fa fa-sort-down"></i></button></a>';}
                           else if (d.chgopp_seq > 1 && d.chgopp_seq < data.TotalNumber) {sq = '&nbsp;<a href="#"><button onclick="Rearranged(\'up\',\''+d.oop_id+'\','+d.chgopp_seq+','+d.chgapp_id+')" class="btn btn-outline-warning" title="Go Up"><i class="fa fa-sort-up"></i></button></a>&nbsp;<a href="#"><button  onclick="Rearranged(\'down\',\''+d.oop_id+'\','+d.chgopp_seq+','+d.chgapp_id+')" class="btn btn-outline-info" title="Go Down"><i class="fa fa-sort-down"></i></button></a>';}
                           else {sq='&nbsp;<a href="#"><button onclick="Rearranged(\'up\',\''+d.oop_id+'\','+d.chgopp_seq+','+d.chgapp_id+')" class="btn btn-outline-warning" title="Go Up"><i class="fa fa-sort-up"></i></button></a>';}
                         }
+
                         var test = (d.chg_rmks == null)? 'No Remarks' : d.chg_rmks;
+
                         $('#example').DataTable()
                              .row
                              .add([
                                   d.oop_id, 
                                   '<a href="#" data-toggle="tooltip" title="" data-original-title="'+test+'">'+d.chg_code+'</a>',
                                   d.chg_desc, ((d.hfser_desc != null) ? d.hfser_desc : "No Application type"), d.aptdesc,
-                                  '<center>' + d.amt + '</center>',
+                                  '<center>' + d.amt.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</center>',
                                   d.remarks,
                                   '<center>'+
                                     '<a href="#">'+

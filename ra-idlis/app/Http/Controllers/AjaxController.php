@@ -3381,6 +3381,7 @@ public static function checkConmem($appid)
 				return 'ERROR';
 			}
 		}
+
 		public static function ManageChargesOOPFiltered(Request $request) // Get all manage charges filtered by order of payment
 		{
 			try 
@@ -3392,7 +3393,7 @@ public static function checkConmem($appid)
 					->join('category', 'charges.cat_id', '=', 'category.cat_id')
 					->join('apptype', 'chg_app.aptid', '=', 'apptype.aptid')
 					->leftJoin('hfaci_serv_type', 'chg_app.hfser_id', '=', 'hfaci_serv_type.hfser_id')
-					->where('chg_app.oop_id', '=', $request->id)
+					//->where('chg_app.oop_id', '=', $request->id)
 					->orderBy('chg_app.chgopp_seq','asc')
 					->get();
 				if ($data) { return response()->json(['data'=>$data,'TotalNumber'=>count($data)]);} 
@@ -3407,6 +3408,33 @@ public static function checkConmem($appid)
 				return 'ERROR';
 			}
 		}
+
+		public static function ManageChargesListOOP() // Get all manage charges
+		{
+			try 
+			{
+				$data = DB::table('chg_app')
+					->join('charges', 'chg_app.chg_code', '=', 'charges.chg_code')
+					->join('orderofpayment', 'chg_app.oop_id', '=', 'orderofpayment.oop_id')
+					// ->join('chg_app', 'chg_app.chgapp_id', '=', 'chg_app.chgapp_id')
+					->join('category', 'charges.cat_id', '=', 'category.cat_id')
+					->join('apptype', 'chg_app.aptid', '=', 'apptype.aptid')
+					->leftJoin('hfaci_serv_type', 'chg_app.hfser_id', '=', 'hfaci_serv_type.hfser_id')
+					->orderBy('chg_app.chgopp_seq','asc')
+					->get();
+				if ($data) { return response()->json(['data'=>$data,'TotalNumber'=>count($data)]);} 
+				else {
+					AjaxController::SystemLogs('No data has been fetch from chg_app table. (ManageChargesOOPFiltered)');
+					return 'ERROR';
+				}
+			} 
+			catch (Exception $e) 
+			{
+				AjaxController::SystemLogs($e->getMessage());
+				return 'ERROR';
+			}
+		}
+
 		public static function saveManageChargesAmount(Request $request) // Update Amount
 		{
 			try 

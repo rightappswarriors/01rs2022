@@ -107,7 +107,7 @@
                 @endif
 
                 @if($grpid != 'C')
-                    @if(app('request')->input('grp') != 'c' && app('request')->input('cont') != 'yes' && app('request')->input('grpn') != 'c')
+                    @if(app('request')->input('cont') != 'yes')
                         <div class="col-md-12" id="divRem" >
                             <label for="remarks" >Remarks</label>
                             <textarea class="form-control" name="remarks" id="remarks" >

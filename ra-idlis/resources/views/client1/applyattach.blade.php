@@ -14,6 +14,18 @@
 	@php
 		$currentStatus = null;
 	@endphp
+	<br/>
+	<div class="row">
+		<div class="container text-center">
+			<div class=" pt-1">
+				<h3><span class="font-weight-bold text-uppercase">[{{$appform->hfser_id}}R{{$appform->rgnid}}-{{$appform->appid}}] {{$appform->facilityname}}</span> </h3>
+			</div>			
+			<div class=" pt-1">
+				<span class="font-weight-normal text-uppercase">{{$appform->street_name}} {{$appform->street_number}} {{$appform->brgyname}} {{$appform->cmname}} {{$appform->provname}} {{$appform->rgn_desc}}</span>
+			</div>
+		</div>
+	</div>
+
 	<div class="container mt-5 mb-5">
 	
 		<table class="table table-striped">
@@ -110,16 +122,27 @@
 							</div>
 						</td>
 						<td>Please submit Floor Plan / Blue Print to HFSRB/CHD Office prior to Payment.</td>
-						<td>
+						<td colspan='2'>
 							{!!(isset($appform->isAcceptedFP) ? '<span class="text-success">RECEIVED</span>' :'<span class="text-danger">NOT YET RECEIVED</span>')!!}
 							<p class="font-weight-bold pt-5">Floor plan Status:</p>
-							<span class="font-weight-bold pt-5">{!!($appform->isAcceptedFP == 0) ? '<span class="text-danger">Not Accepted</span>' : '<span class="text-success">Accepted</span>'!!}</span>
+							<span class="font-weight-bold pt-5">
+								
+								@if($appform->isAcceptedFP == 1)
+									<span class="text-success">
+										Accepted 
+										@if(isset($appform->FPacceptedDate))
+											{{ ' on '. date("F j, Y", strtotime($appform->FPacceptedDate)).' '. date("h:i:s a", strtotime($appform->FPacceptedTime)) }}
+										@endif
+									</span>
+								@else
+									<span class="text-danger">Not Accepted</span>
+								@endif
+							</span>
 							@if(isset($appform->fpcomment))
 							<p class="font-weight-bold pt-5">With Remarks:</p>
 							<span class="">{{$appform->fpcomment}}</span>
 							@endif
-						</td>
-						<td><span class="font-weight-bold">Option Not Available</span></td>
+						</td>						
 					</tr>
 						
 					@endif
@@ -342,19 +365,18 @@
 
 		@if($prompt == true)
 
-		alert('Requirements submitted. Payment will follow after documents are evaluated.');
+		alert('Uploaded requirements are submitted.');
 		
 
 		var aptid = '{{$appform->aptid}}';
 		var hfser_id = '{{$appform->hfser_id}}';
 
-		if(aptid == 'R' && hfser_id == 'COA'){
-			window.location.href = "{{asset('client1/apply/app/COA/')}}/{{$appform->appid}}/hfsrb"
-			
-		}else{
-			window.location.href = "{{url('client1/apply')}}"
-		}
-
+		//if(aptid == 'R' && hfser_id == 'COA'){
+			if(hfser_id == 'LTO' || hfser_id == 'COA' || hfser_id == 'ATO' || hfser_id == 'COR'){
+				window.location.href = "{{asset('client1/apply/app/"+hfser_id+"/')}}/{{$appform->appid}}/hfsrb"
+			}else{
+				window.location.href = "{{url('client1/apply')}}"
+			}
 		
 		// if (r == true) { window.location.href = "{{url('client1/payment/'.FunctionsClientController::getToken().'/'.$appid)}}" };
 		// var r = confirm('Requirements submitted. Proceed to Payment Method?');

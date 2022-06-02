@@ -28,14 +28,10 @@
   </style>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
-
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-
 <!-- (Optional) Latest compiled and minified JavaScript translation files -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
-
-
 
   {{-- <input type="text" id="CurrentPage" hidden="" value="PF012"> --}}
   <div class="content p-4">
@@ -43,45 +39,51 @@
       <div class="card-header bg-white font-weight-bold">
       <button class="btn btn-primary" onclick="window.history.back();">Back</button> 
          HFERC Assignment 
-      
       </div>
       <div class="card-body">
+        
         <div class="col-sm-12">
-          <h2>@isset($AppData) {{$AppData->facilityname}} @endisset</h2>
-          <h5>@isset($AppData)
-          {{
-                    $AppData->street_number?  strtoupper($AppData->street_number).',' : ' '
-                  }}
-                  {{
-                    $AppData->streetname?  strtoupper($AppData->streetname).',': ' '
-                  }} 
-            
-          {{strtoupper($AppData->brgyname)}}, {{$AppData->cmname}}, {{$AppData->provname}} @endisset</h5>  
+
+          <h2>@isset($AppData)[<strong>{{$AppData->hfser_id}}R{{$AppData->rgnid}}-{{$AppData->appid}}</strong>]
+              &nbsp;{{$AppData->facilityname}} @endisset</h2>
+          <h5>
+            @isset($AppData)
+              {{ $AppData->street_number?  strtoupper($AppData->street_number).',' : ' ' }}
+              {{ $AppData->streetname?  strtoupper($AppData->streetname).',': ' '}}
+              {{strtoupper($AppData->brgyname)}}, 
+              {{$AppData->cmname}}, {{$AppData->provname}} 
+            @endisset
+          </h5>
+          <label>Process Type:&nbsp;</label>
+          <span class="font-weight-bold">
+            @if($AppData->aptid == 'R'){{'Renewal'}}@elseif($AppData->aptid == 'IN'){{'Initial New'}}@else{{'Unidentified'}}@endif
+            @if(isset($AppData->hfser_id)){{' '.$AppData->hfser_id}}@endif
+          </span>
+
+          <h6>
+            <label>Institutional Character: </label>
+            @if(isset($AppData) && isset($AppData->facmdesc))
+              <strong>{{$AppData->facmdesc}}</strong>
+            @else
+              <span style="color:red">Not Available</span>
+            @endif                  
+          </h6>
           @isset($evaluation->HFERC_evalDate)
-          <h5 class="font-weight-bold">Date Evaluated: {{Date('F j, Y, g:i A',strtotime($evaluation->HFERC_evalDate))}}</h5>
+            <h5 class="font-weight-bold">Date Evaluated: {{Date('F j, Y, g:i A',strtotime($evaluation->HFERC_evalDate))}}</h5>
           @endisset
-        </div>
+        </div>          
+              
         <hr>
-      
+
         @if(isset($AppData->isAcceptedFP))
         
         <div class="row">
-        <div class="col-sm">
+          <div class="col-sm">
             <div class="container-fluid">
               <button class="btn btn-primary " data-toggle="modal" data-target="#viewModalteam"><i class="fa fa-plus-circle"></i> Select Team</button>
+            </div>
           </div>
-          </div>
-          @if(count($free) > 0 && in_array($currentUser->grpid, ['PO','NA','PO1','PO2','RLO']))
-         
-            <!-- <div class="col-md-2">
-              <button class="btn btn-primary p-2" data-toggle="modal" data-target="#viewModal"><i class="fa fa-plus-circle"></i> Add Member</button>
-            </div> -->
-            @else 
-            <!-- <div class="col-md-1">
-              <button class="btn btn-warning p-2" disable>No availbale evaluator for this region/office</button>
-            </div> -->
-          @endif
-          
+
           @if($isHead)
             @if($canEval && EvaluationController::checkRev($appid,$revisionCountCurent))
               <div class="col-md-3">
@@ -90,12 +92,10 @@
             @endif
           @endif
 
- 
-
         <!-- if(isset($membDone) && $canViewOthers) -->
-        <div class="col-md-2" id="toFrame">
-          
-        </div>
+          <div class="col-md-2" id="toFrame">
+            
+          </div>
         <!-- <div class="col-md-2">
             <button class="btn btn-primary p-2" onclick="window.location.href='{{asset('employee/dashboard/processflow/view/hfercevaluation/'.$AppData->appid.'/'.$revisionCountCurent)}}'" data-toggle="modal" data-target="#evaluate"><i class="fa fa-file"> </i> View Evaluation</button>
           </div> -->
@@ -142,13 +142,12 @@ while($i>0) {
             <table class="table table-stripped" id="example">
               <thead>
                 <tr>
-                  <th>Member Name</th>
+                  <th>Members Name</th>
                   <th>Committee Position</th>
-                  {{-- <th>Position</th> --}}
                   {{-- <th>Permitted To Inspect</th> --}}
                   <th>Status</th>
                   <th>Date Evaluated</th>
-  {{--                 <th>View Inspection</th> --}}
+                  {{-- <th>View Inspection</th> --}}
                   <th>Options</th>
                 </tr>
               </thead>
@@ -157,25 +156,22 @@ while($i>0) {
               @foreach($hferc as $members)
                 <tr>
                   <td style="font-size: 20px;">
-                    {{ucfirst($members->fname.' '.$members->lname)}}
+                    ({{ucfirst($members->uid)}}) {{ucfirst($members->fname.' '.$members->lname)}}
                   </td>
-                 {{--  <td>
-                    {{(!empty($members->position) ? ucfirst($members->position) : 'No Position Indicated')}}
-                  </td> --}}
                   <td>
                     @switch($members->pos)
                       @case('C')
                         Chairperson
-                      @break
+                        @break
                       @case('VC')
                         Vice Chairperson
-                      @break
+                        @break
                       @case('E')
                         Member
                       @break
-                     {{--  @case('S')
-                        Secretariat
-                      @break --}}
+                      {{--  @case('S')
+                          Secretariat
+                        @break --}}
                     @endswitch
                   </td>
                   {{-- <td>
@@ -198,9 +194,9 @@ while($i>0) {
                       <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#viewModalEdit" onclick="showData('{{$members->hfercid}}','{{ucfirst($members->fname.' '. (!empty($members->mname) ? $members->mname.',' :'').$members->lname)}}','{{$members->pos}}')">
                         <i class="fa fa-fw fa-edit"></i>
                       </button>
-                      <!-- <button type="button" class="btn btn-danger" onclick="showDelete('{{$members->hfercid}}');">
+                      <button type="button" class="btn btn-danger" onclick="showDelete('{{$members->hfercid}}');">
                         <i class="fa fa-ban" aria-hidden="true"></i>
-                      </button> -->
+                      </button>
                     @else
                     
                    
@@ -249,40 +245,6 @@ while($i>0) {
                 <form id="memberadd">
                   {{csrf_field()}}
                     <div class="container pl-5">
-
-
-                      <!-- 
-                        <div class="row mb-2">
-                        <div class="col-sm">
-                          Member Name:
-                        </div>
-                        <div class="col-sm-11">
-                          <select name="uid" id="uidadd" class="form-control" required>
-                            @if(count($free) > 0)
-                              @foreach($free as $f)
-                                <option value="{{$f->uid}}">{{$f->uid}} - {{ucfirst($f->fname.' '.$f->lname)}}</option>
-                              @endforeach
-                            @else
-                              <option value="">No Available Employee on this Region</option>
-                            @endif
-                          </select>
-                        </div>
-                      </div>
-
-                    <div class="row mb-2 mt-3">
-                      <div class="col-sm">
-                        Commitee Position:
-                      </div>
-                      <div class="col-sm-11">
-                        <select name="pos" id="pos" class="form-control" required>
-                          <option value="E">Member</option>
-                          <option value="C">Chairperson</option>
-                          <option value="VC">Vice ChairPerson</option>
-                          {{-- <option value="S">Secretariat</option> --}}
-                        </select>
-                      </div>
-                    </div>
-                     -->
 
                     <div style="width:95%; padding-left: 35px">
 

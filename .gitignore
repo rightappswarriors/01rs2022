@@ -1,0 +1,4 @@
+ra-idlis/.env
+ra-idlis.zip
+# Ignore visual studio files
+.vs

@@ -6,13 +6,13 @@
   <div class="content p-4">
   	<div class="card">
   		<div class="card-header bg-white font-weight-bold">
-             Evaluate Applicants  ({{$type == 'technical' ? 'Technical' : 'Documentary'}})  @include('employee.tableDateSearch')
+        {{$type == 'technical' ? 'Technical' : 'Documentary'}}  Evaluation  @include('employee.tableDateSearch')
           </div>
-          @if($type != 'technical')
+         {{-- @if($type != 'technical')  --}}
           <div  class="card-header bg-white text-center">
               <span class=" font-weight-bold">Legend:</span> <span class=" font-weight-bold">Gray Background </span>= Not yet Viewed/Not yet Opened Document(s).  <span class=" font-weight-bold">White Background</span> = Viewed/Opened Document(s).
           </div>
-          @endif
+          {{-- @endif --}}
           
           <div class="card-body table-responsive">
          
@@ -51,94 +51,55 @@
                                  continue
                               endif --}} -->
                   <tbody id="FilterdBody">
+              
                    @if (isset($BigData))
-                        @foreach ($BigData as $data)
-                         {{-- @if($data->isCashierApprove == 1)  --}}     
-                        @if(true) 
-                        @if( $data->aptid == 'R' || $data->isReadyForInspec == 1 || $data->isrecommended == 2  &&  (isset($data->isCashierApprove) && $data->isCashierApprove == 1 ) )
-                            
-                            @if(strtolower($data->hfser_id) == 'ptc' )
-                              
-                           
-                            
-                            @else
+                      @foreach ($BigData as $data)
+                        @if(($data->status != 'A' ))
+                          @php
+                            $status = '';
+                            $paid = $data->appid_payment;
+                            $reco = $data->isrecommended;
+                            $ifdisabled = '';$color = '';
+                          @endphp
 
-                            <!-- Place the  data->isrecommended [2,null] here-->
-
-
-                            @endif
-                            @php
-                              $status = '';
-                              $paid = $data->appid_payment;
-                              $reco = $data->isrecommended;
-                              $ifdisabled = '';$color = '';
-                            @endphp
-
-                            @if($type == 'technical' && strtolower($data->hfser_id) != 'lto' )
-                                <?php continue; ?>
-                            @elseif($type == 'documentary' && strtolower($data->hfser_id) == 'lto' )
-                            <?php continue; ?>
-                             @endif
-
-                             @if($data->status == 'A' )
-                                <?php continue; ?>
-                              @endif
-
-                            @if($data->isrecommended == 1 && strtolower($data->hfser_id) != 'lto')
-                          {{--  @if($data->isrecommended == 1 ) --}}
-                                <?php continue; ?>
-                              @endif
-
-                              @if(strtolower($data->hfser_id) == 'con' && $data->isrecommended == 2 && $data->status == 'REV')
-                              
-                              <?php continue; ?>
-                              
-                              @endif
-
-                           @if(strtolower($data->hfser_id) == 'ptc' && $data->isReadyForInspec == 0 && $data->status == 'REV')
-                              
-                              <?php  continue; ?>
-                              
-                              @endif 
-
-
-
-                             {{--  @if($data->aptid == 'R' || $data->hasAssessors == 'T' || strtolower($data->hfser_id) != 'lto')--}}
-                            @if($data->hasAssessors == 'T' || strtolower($data->hfser_id) != 'lto')
-
-                            <tr @if(!isset($data->documentSent) || $data->isrecommended == 2)style="background-color: #c4c1bb";@endif>
-                              <!-- <td class="text-center">{{$data->isCashierApprove}}</td> -->
-                              <td class="text-center">@if($data->aptid == 'R'){{'Renewal'}}@elseif($data->aptid == 'IN'){{'Initial New'}}@else{{'Unidentified'}}@endif</td>
-                              <td class="text-center">{{$data->hfser_id}}</td>
-                              <td class="text-center">{{$data->hfser_id}}R{{$data->rgnid}}-{{$data->appid}}</td>
-                              <td class="text-center"><strong>{{$data->facilityname}}</strong></td>
-                              <td class="text-center">{{(ajaxController::getFacilitytypeFromHighestApplicationFromX08FT($data->appid)->hgpdesc ?? 'NOT FOUND')}}</td>
-                              <td class="text-center">{{$data->formattedUpdatedDate}}</td>
-                              {{-- <td class="text-center">{{$data->aptdesc}}</td> --}}
-                              <td class="text-center" style="font-weight:bold;">{{$data->trns_desc}}</td>
-                                <td>
-                                  <center>
-                                    @if(!isset($data->documentSent))
-                                      <button type="button" title="Evaluate {{$data->facilityname}}" class="btn btn-outline-primary" onclick="acceptDocu({{$data->appid}})"  {{$ifdisabled}}><i class="fa fa-fw fa-clipboard-check" {{$ifdisabled}}></i></button>&nbsp;
-                                      {{-- <button type="button" title="Edit {{$data->facilityname}}" class="btn btn-outline-warning" onclick="window.location.href = '{{ asset('/employee/dashboard/processflow/evaluate') }}/{{$data->appid}}/edit'"  {{$ifdisabled}}><i class="fa fa-fw fa-edit" {{$ifdisabled}}></i></button> --}}
-                                    @else
-                                      <button type="button" title="Evaluate {{$data->facilityname}}" class="btn btn-outline-primary" onclick="window.location.href = '{{ asset('/employee/dashboard/processflow/evaluate') }}/{{$data->appid}}'"  {{$ifdisabled}}><i class="fa fa-fw fa-clipboard-check" {{$ifdisabled}}></i></button>&nbsp;
-                                    {{-- <button type="button" title="Edit {{$data->facilityname}}" class="btn btn-outline-warning" onclick="window.location.href = '{{ asset('/employee/dashboard/processflow/evaluate') }}/{{$data->appid}}/edit'"  {{$ifdisabled}}><i class="fa fa-fw fa-edit" {{$ifdisabled}}></i></button> --}}
-                                    @endif
-                                </center>
-                              </td>
-                            </tr>
-
-
-                              @endif
-
-                            {{-- @endif --}}
+                          @if((strtolower($data->hfser_id) == 'con' && $data->isrecommended == 2 && $data->status == 'REV')
+                            || (strtolower($data->hfser_id) == 'ptc' && $data->isReadyForInspec == 0 && $data->status == 'REV') 
+                            || (strtolower($data->hfser_id) == 'ptc'  && $data->submittedReq != 1) 
+                            || (strtolower($data->hfser_id) == 'ptc' && $type == 'technical' ) 
+                            || ((strtolower($data->hfser_id) != 'ptc') && $data->isCashierApprove != 1))
+                            <?php  continue; ?>
                           @endif
-
-
+                          
+                          <tr @if(!isset($data->documentSent) || $data->isrecommended == 2)style="background-color: #c4c1bb";@endif>
+                            <!-- <td class="text-center">{{$data->isCashierApprove}}</td> -->
+                            <td class="text-center">@if($data->aptid == 'R'){{'Renewal'}}@elseif($data->aptid == 'IN'){{'Initial New'}}@else{{'Unidentified'}}@endif</td>
+                            <td class="text-center">{{$data->hfser_id}}</td>
+                            <td class="text-center">{{$data->hfser_id}}R{{$data->rgnid}}-{{$data->appid}}</td>
+                            <td class="text-center"><strong>{{$data->facilityname}}</strong></td>
+                            <td class="text-center">{{(ajaxController::getFacilitytypeFromHighestApplicationFromX08FT($data->appid)->hgpdesc ?? 'NOT FOUND')}}</td>
+                            <td class="text-center">{{$data->formattedUpdatedDate}}</td>
+                            {{-- <td class="text-center">{{$data->aptdesc}}</td> --}}
+                            <td class="text-center" style="font-weight:bold;">{{$data->trns_desc}}</td>
+                              <td>
+                                <center>
+                                  @if(!isset($data->documentSent))
+                                    <button type="button" title="Evaluate {{$data->facilityname}}" class="btn btn-outline-primary ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" onclick="acceptDocu({{$data->appid}})"  {{$ifdisabled}}><i class="fa fa-fw fa-clipboard-check" {{$ifdisabled}}></i></button>&nbsp;
+                                    
+                                    {{-- for documentary evaluation  --}}
+                                  @else
+                                    @if($type == 'technical') 
+                                      <button type="button" title="Evaluate {{$data->facilityname}}" class="btn btn-outline-primary ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" onclick="window.location.href = '{{ asset('/employee/dashboard/processflow/evaluatetech') }}/{{$data->appid}}/{{'hfsrb'}}/'"  {{$ifdisabled}}><i class="fa fa-fw fa-clipboard-check" {{$ifdisabled}}></i></button>&nbsp;
+                                    @else
+                                      <button type="button" title="Evaluate {{$data->facilityname}}" class="btn btn-outline-primary ml-3 pb-2 pt-2 mt-2 mb-2 font-weight-bold" onclick="window.location.href = '{{ asset('/employee/dashboard/processflow/evaluate') }}/{{$data->appid}}/{{'hfsrb'}}/'"  {{$ifdisabled}}><i class="fa fa-fw fa-clipboard-check" {{$ifdisabled}}></i></button>&nbsp;
+                                    @endif
+                                  
+                                  @endif
+                              </center>
+                            </td>
+                          </tr>
                         @endif
-                        @endforeach
-                      @endif
+                      @endforeach
+                    @endif
                   </tbody>
               </table>
           </div>
@@ -162,9 +123,6 @@
 
     $('#min').datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
     $('#max').datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
-
-
-
       
       var table = $('#example').DataTable();
     

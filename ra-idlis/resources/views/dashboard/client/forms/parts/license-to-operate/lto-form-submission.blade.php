@@ -319,6 +319,27 @@ function submitProper(e){
         // tempAppChargeAmb
     }
 
+    if(data.hfser_id == 'PTC')
+    {
+        if( $('input[name="hgpid"]:checked').val() == 1 || $('input[name="hgpid"]:checked').val() == 5 || $('input[name="hgpid"]:checked').val() == 8 || $('input[name="hgpid"]:checked').val() == 9 || $('input[name="hgpid"]:checked').val() == 12  ){
+
+            data.assignedRgn = 'hfsrb';
+        }
+    }
+
+    if(data.hfser_id == 'LTO' || data.hfser_id == 'COA')
+    {
+        if( $('input[name="hgpid"]:checked').val() == 1 || $('input[name="hgpid"]:checked').val() == 5 || $('input[name="hgpid"]:checked').val() == 8 || $('input[name="hgpid"]:checked').val() == 9 || $('input[name="hgpid"]:checked').val() == 12  ){
+
+            data.assignedRgn = 'hfsrb';
+        }
+
+        if( $('input[name="facid"]:checked').val() == 'H2' || $('input[name="facid"]:checked').val() == 'H3' ){
+            data.assignedRgn = 'hfsrb';
+        }
+    }
+    
+
     
     console.log("data",data)
     if(confirm("Are you sure you want to proceed ?")){

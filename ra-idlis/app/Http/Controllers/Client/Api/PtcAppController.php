@@ -258,6 +258,8 @@ class PtcAppController extends Controller
         $ptc->incstationfrom = null;
         $ptc->incstationto =null;
         $ptc->construction_description = null;
+        $ptc->singlebed = null;
+        $ptc->doubledeck = null;
         $ptc->renoOption = null;
 
         $appformConv = array();
@@ -425,7 +427,7 @@ class PtcAppController extends Controller
                          
                 //     ]);
 
-                DB::insert('insert into ptc (appid,  type, construction_description, propbedcap, renoOption,incbedcapfrom, incbedcapto, conCode,ltoCode, incstationfrom, incstationto) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',[$appid, $d["type"], $d["construction_description"], $d["propbedcap"], $d["renoOption"], $d["incbedcapfrom"], $d["incbedcapto"], $d["connum"], $d["ltonum"], $d["incstationfrom"], $d["incstationto"]]);
+                DB::insert('insert into ptc (appid,  type, construction_description, propbedcap, renoOption,incbedcapfrom, incbedcapto, conCode,ltoCode, incstationfrom, incstationto, singlebed, doubledeck) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',[$appid, $d["type"], $d["construction_description"], $d["propbedcap"], $d["renoOption"], $d["incbedcapfrom"], $d["incbedcapto"], $d["connum"], $d["ltonum"], $d["incstationfrom"], $d["incstationto"], $d["singlebed"], $d["doubledeck"] ]);
 
             }else{
                 DB::table('ptc')

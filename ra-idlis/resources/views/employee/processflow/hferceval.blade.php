@@ -197,6 +197,21 @@
 	      <div class="container text-center" style="margin-top: 50px; font-size: 20px;">
 	      	<div class="row">
 	      	@php $col = 0; @endphp
+			  @php $membercount = 0; @endphp
+			  @php $c = ''; @endphp
+			  @php $vc = ''; @endphp
+			  @php $member = ''; @endphp
+
+			  @foreach($members as $m)
+			  @switch($m->pos)
+	                @case('E')
+	                  <!-- @php $posname = 'Member'; @endphp -->
+					  @php $membercount++; @endphp
+	                @break
+	             @endswitch
+
+			  @endforeach
+
 		      @foreach($members as $m)
 		     	@switch($m->pos)
 	                @case('C')
@@ -208,23 +223,28 @@
 	                @case('E')
 	                  @php $posname = 'Member'; @endphp
 	                @break
-	                {{-- @case('S')
-	                  @php $posname = 'Secretariat'; @endphp
-	                @break --}}
 	             @endswitch
-		      	 @if($m->pos == 'C' || $m->pos == 'VC')
+
+
+		      	 @if($m->pos == 'C')
 		      		@php $col = 12; @endphp
-		      	 @else
-		      	 	@php $col = 6; @endphp
-		      	 @endif
+					@php $c .= '<div class="col-md-'.$col.' mt-3"><u>'.ucfirst($m->pre.' '. $m->fname.' '.(isset($m->mname) ? $m->mname.'. ' :''). $m->lname . ' '.$m->suf).'</u><div class="container">'.$m->position . ' / '.$posname.'</div></div>'; @endphp
+				@elseif($m->pos == 'VC') 
+					@php $col = 12; @endphp
+					@php $vc .= '<div class="col-md-'.$col.' mt-3"><u>'.ucfirst($m->pre.' '. $m->fname.' '.(isset($m->mname) ? $m->mname.'. ' :''). $m->lname . ' '.$m->suf).'</u><div class="container">'.$m->position . ' / '.$posname.'</div></div>'; @endphp
+				@else 
+					@if($membercount > 2)
+					@php $col = 4; @endphp
+					@else 
+					@php $col = 6; @endphp
+					@endif
+				@php $member .= '<div class="col-md-'.$col.' mt-3"><u>'.ucfirst($m->pre.' '. $m->fname.' '.(isset($m->mname) ? $m->mname.'. ' :''). $m->lname . ' '.$m->suf).'</u><div class="container">'.$m->position . ' / '.$posname.'</div></div>'; @endphp
+				@endif
 		      	 {{-- {{$col}} --}}
-					<div class="col-md-{{$col}} mt-3">
-						<u>{{ucfirst($m->pre.' '. $m->fname.' '.(isset($m->mname) ? $m->mname.'. ' :''). $m->lname . ' '.$m->suf)}}</u>
-						<div class="container">
-							{{$m->position . ' / '.$posname}}
-						</div>
-					</div>
 		      @endforeach
+			  {!! $c !!}
+			  {!! $vc !!}
+			  {!! $member !!}
 		    </div>
 	      </div>
 		</div>

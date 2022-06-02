@@ -60,7 +60,7 @@
     @endif
 </div>
 <div class="col-md-3">
-    <label for="brgy">Baranggay<span class="text-danger">*</span></label>
+    <label for="brgy">Barangay<span class="text-danger">*</span></label>
     @if(isset($fAddress) && count($fAddress) > 0)
     <input class="form-control "  id="brgyU" name="brgyidU" value="{{$fAddress[0]->brgyname}}" disabled />
     @else

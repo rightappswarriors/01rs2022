@@ -64,7 +64,9 @@
 			        </div>
 					{{-- <div class="_forIntro col-lg-6">
 			        </div> --}}
-			        <div class="_forIntro col-lg-6">
+
+					{{-- Display past applications  --}}
+			        <div class="_forIntro col-lg-6" style="display:none;">
 			          <div class="card flex-lg-row mb-4 box-shadow h-lg-250" style="border-radius: 1rem; box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);height: 300px;">
 						<div class="container table-responsive">
 							<h3 class="mb-0 pt-3 pb-3 text-center">
@@ -109,8 +111,8 @@
 							<th style="white-space: nowrap;">Type of Application</th>
 							<th>Owner</th>
 							<th>Type</th>
-							<th style="white-space: nowrap;">Date applied</th>
-							<th style="white-space: nowrap;">Date approved</th>
+							<th style="white-space: nowrap;">Date Applied</th>
+							<th style="white-space: nowrap;">Date Approved</th>
 							{{-- <th>Status</th> --}}
 							{{-- <th>FDA Status</th> --}}
 							{{-- <th>FDA COC Number</th> --}}
@@ -168,7 +170,14 @@
 											@if($each[0]->hfser_id == 'CON')
 											<button style="margin-top: 10px;" class="btn btn-light" data-toggle="tooltip" data-placement="top" title="Continue Application" onclick="window.location.href='{{asset('/cont/ptc')}}/{{$each[0]->appid}}?cont=yes'"><i class="fa fa-arrow-right"></i></button>
 											@elseif($each[0]->hfser_id == 'PTC')
-											<button style="margin-top: 10px;" class="btn btn-light" data-toggle="tooltip" data-placement="top" title="Continue Application" onclick="window.location.href='{{asset('/cont/lto')}}/{{$each[0]->appid}}?cont=yes'"><i class="fa fa-arrow-right"></i></button>
+												@php 
+													$next_hfser_id = 'lto';
+
+													if(isset($each[5])){
+														$next_hfser_id = strtolower($each[5]);
+													}
+												@endphp
+											<button style="margin-top: 10px;" class="btn btn-light" data-toggle="tooltip" data-placement="top" title="Continue Application" onclick="window.location.href='{{asset('/cont')}}/{{$next_hfser_id}}/{{$each[0]->appid}}?cont=yes'"><i class="fa fa-arrow-right"></i></button>
 											@endif
 										@endif
 										<button style="margin-top: 10px;" class="btn btn-light" data-toggle="tooltip" data-placement="top" title="Print" onclick="window.location.href='{{asset('client1/certificates')}}/{{strtoupper($each[0]->hfser_id)}}/{{$each[0]->appid}}'"><i class="fa fa-print"></i></button>

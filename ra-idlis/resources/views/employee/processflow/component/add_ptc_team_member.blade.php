@@ -159,10 +159,8 @@
                   method: 'POST',
                   data : {  _token : $('#token').val(),rgnid : rgnid},
                   success: function(data){
-                      
-
-console.log(data)
-data.map((h) => {
+                  console.log(data)
+                  data.map((h) => {
                             var opt = document.createElement("option");
                             opt.value = h.uid;
                             opt.setAttribute('class', 'optsusers')

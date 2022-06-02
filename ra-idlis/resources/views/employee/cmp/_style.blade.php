@@ -372,7 +372,7 @@
             margin-left: -15em;
             /*background-color: rgba(0,0,0,.5);*/
         }
-        .parsley-errors-list {color:red;}
+      .parsley-errors-list {color:red;}
         @media print{
           #menu, #return-to-top, nav:first-child, div.sidebar, button{
             display: none!important;

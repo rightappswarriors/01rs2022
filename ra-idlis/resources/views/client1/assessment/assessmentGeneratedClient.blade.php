@@ -84,12 +84,13 @@
 			@if (session()->exists('uData'))
 			
 			<div class="col-md-12 text-left font-weight-bold text-center">
+				<a href="{{url('client1/apply/attachment/')}}/{{$hfser_id}}/{{$appid}}" class="btn btn-primary">Proceed to attachments <i class="fa fa-chevron-right"></i> </a>
 
-			@if($hfser_id == 'COA')
+			{{-- @if($hfser_id == 'COA')
 		     	<a href="{{url('client1/apply/attachment/')}}/COA/{{$appid}}" class="btn btn-primary">Proceed to attachments <i class="fa fa-chevron-right"></i> </a>
 			@else
 				<a href="{{url('client1/apply/app/LTO/'.$appid.'/'.'hfsrb')}}" class="btn btn-primary">Proceed to DOH Requirements <i class="fa fa-chevron-right"></i> </a>
-			@endif	
+			@endif	--}}
 				
 		
 			</div>

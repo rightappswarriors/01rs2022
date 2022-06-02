@@ -280,7 +280,7 @@
                                   d.oop_id, 
                                   '<a href="#" data-toggle="tooltip" title="" data-original-title="'+test+'">'+d.chg_code+'</a>',
                                   d.chg_desc, ((d.hfser_desc != null) ? d.hfser_desc : "No Application type"), d.aptdesc,
-                                  '<center>' + d.amt + '</center>',
+                                  '<center>' + d.amt.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + '</center>',
                                   d.remarks,
                                   '<center>'+
                                     '<a href="#">'+

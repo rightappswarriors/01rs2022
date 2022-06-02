@@ -3393,7 +3393,7 @@ public static function checkConmem($appid)
 					->join('category', 'charges.cat_id', '=', 'category.cat_id')
 					->join('apptype', 'chg_app.aptid', '=', 'apptype.aptid')
 					->leftJoin('hfaci_serv_type', 'chg_app.hfser_id', '=', 'hfaci_serv_type.hfser_id')
-					//->where('chg_app.oop_id', '=', $request->id)
+					->where('chg_app.oop_id', '=', $request->id)
 					->orderBy('chg_app.chgopp_seq','asc')
 					->get();
 				if ($data) { return response()->json(['data'=>$data,'TotalNumber'=>count($data)]);} 

@@ -645,11 +645,11 @@ class FunctionsClientController extends Controller {
 
 			if($aptid == "IN")
 			{
-				$retArr = DB::select(DB::raw("SELECT id AS chgapp_id, `service_id` AS chg_code, charges.chg_desc, `initial_new_amount` AS amt, charges.hgpid FROM `service_fees` LEFT JOIN charges ON charges.chg_code=service_fees.service_id WHERE service_fees.id IN (SELECT chg_code FROM charges WHERE hgpid IN ($hgpidIn)) ANDservice_fees.hfser_id='$hfser_id'"));
+				$retArr = DB::select(DB::raw("SELECT id AS chgapp_id, `service_id` AS chg_code, charges.chg_desc, `initial_new_amount` AS amt, charges.hgpid FROM `service_fees` LEFT JOIN charges ON charges.chg_code=service_fees.service_id WHERE service_fees.id IN (SELECT chg_code FROM charges WHERE hgpid IN ($hgpidIn)) AND service_fees.hfser_id='$hfser_id'"));
 			}
 			else
 			{
-				$retArr = DB::select(DB::raw("SELECT id AS chgapp_id, `service_id` AS chg_code, charges.chg_desc, `renewal_amount` AS amt, charges.hgpid FROM `service_fees` LEFT JOIN charges ON charges.chg_code=service_fees.service_id WHERE service_fees.id IN (SELECT chg_code FROM charges WHERE hgpid IN ($hgpidIn)) ANDservice_fees.hfser_id='$hfser_id'"));
+				$retArr = DB::select(DB::raw("SELECT id AS chgapp_id, `service_id` AS chg_code, charges.chg_desc, `renewal_amount` AS amt, charges.hgpid FROM `service_fees` LEFT JOIN charges ON charges.chg_code=service_fees.service_id WHERE service_fees.id IN (SELECT chg_code FROM charges WHERE hgpid IN ($hgpidIn)) AND service_fees.hfser_id='$hfser_id'"));
 			}
 		}
 		// else{

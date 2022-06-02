@@ -301,175 +301,226 @@ function getFacServCharge (val = null){
     getChargesPerApplication()
     getChargesPerAmb()
 
-setTimeout(function(){  
-                var adser = document.getElementsByName("addOnServ");
+    setTimeout(function(){  
+        var adser = document.getElementsByName("addOnServ");
 
-                var chkad = 'no';
-                    for(var ad = 0; ad < adser.length ; ad++){
-                        if(adser[ad].value == 'H3ADC'){
-                            chkad = 'yes';
+        var chkad = 'no';
+            for(var ad = 0; ad < adser.length ; ad++){
+                if(adser[ad].value == 'H3ADC'){
+                    chkad = 'yes';
+                }
+            }
+
+        var l3 = document.getElementById("H3ADC");
+        
+            //if(l3 || chkad == 'yes'){
+                try{
+                    if(13!=null)
+                    {
+                        if(l3.checked == true || chkad == 'yes'){
+                        document.getElementById("noDal").removeAttribute("hidden")
+                        document.getElementById("noDal").removeAttribute("class")
+                        }else{
+                            document.getElementById("noDal").setAttribute("hidden", "hidden")
+                            document.getElementById("noofdialysis").value = null;
                         }
                     }
-
-                var l3 = document.getElementById("H3ADC");
-                
-                    //if(l3 || chkad == 'yes'){
-                        if(13!=null)
-                        {
-                            if(l3.checked == true || chkad == 'yes'){
-                            document.getElementById("noDal").removeAttribute("hidden")
-                            document.getElementById("noDal").removeAttribute("class")
-                            }else{
-                                document.getElementById("noDal").setAttribute("hidden", "hidden")
-                                document.getElementById("noofdialysis").value = null;
-                            }
-                        }
-                        
-                   // }else{
-                    //        document.getElementById("noDal").setAttribute("hidden", "hidden")
-                   //         document.getElementById("noofdialysis").value = null;
-                   // }
-   }, 2000);
-
-        var addons= [];
-
-        var asc = document.getElementById("H3AmbulatorySurgicalClinic");
-        var ascType = document.getElementById("1");
-        if(asc ||  ascType?.checked == true){
-            if (asc?.checked == true || ascType?.checked == true){
-                document.getElementsByClassName('ambulSurgCli')[0].removeAttribute("hidden")
-                var hgp1 = document.getElementById("hgpid1")
-                if(hgp1 == null){
-                ASCfacilities ()
                 }
-            }else{
-                $('#hgpid1').remove()
-                document.getElementsByClassName('ambulSurgCli')[0].setAttribute("hidden", "hidden")
+                catch {}
+                
+                
+        // }else{
+            //        document.getElementById("noDal").setAttribute("hidden", "hidden")
+        //         document.getElementById("noofdialysis").value = null;
+        // }
+    }, 2000);
+
+    var addons= [];
+
+    var asc = document.getElementById("H3AmbulatorySurgicalClinic");
+    var ascType = document.getElementById("1");
+
+    if(asc ||  ascType?.checked == true){
+        if (asc?.checked == true || ascType?.checked == true){
+
+            document.getElementsByClassName('ambulSurgCli')[0].removeAttribute("hidden")
+            var hgp1 = document.getElementById("hgpid1")
+
+            if(hgp1 == null)
+            {
+                ASCfacilities ()
+            }
+        }else{
+            $('#hgpid1').remove()
+            document.getElementsByClassName('ambulSurgCli')[0].setAttribute("hidden", "hidden")
+        }
+    }
+    if(val == 2){
+        addons = getaddonsValues();
+    }
+
+    var facids = getCheckedValue('facid') 
+    var anxsel = getCheckedValue('anxsel') 
+    var arrCol = facids;
+    var arrCol2 = anxsel;
+
+    let serv_chg = document.getElementById('serv_chg');
+
+    if( ascType.checked) 
+    {
+        var ta=[];
+        //alert(ascType.getCheckedValue());
+        const distinctArr = [['chgapp_id', 'facname','amt']]; 
+        distinctArr[0]['chgapp_id']='48';
+        distinctArr[0]['facname']='Ambulatory Surgical Clinic';
+        distinctArr[0]['amt']='14000.00';
+        var amt = distinctArr[0]['amt'];
+
+        serv_chg.innerHTML = '';
+        
+        if(distinctArr[i]['chgapp_id']){
+            ta.push({reference : distinctArr[i]['facname'],amount: amt, chgapp_id:  distinctArr[i]['chgapp_id'] }) //appcharge
+
+            serv_chg.innerHTML += '<tr><td>[<strong>'  + distinctArr[i]['chgapp_id'] + '</strong>] ' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas(subclass == "ND" ? 0 : (parseInt(amt)).toFixed(2)) + '</span></td></tr>';
+        }
+    }
+    else if (document.getElementById("34").checked)
+    {
+        var ta=[];
+        //alert(ascType.getCheckedValue());
+        const distinctArr = [['chgapp_id', 'facname','amt']]; 
+        distinctArr[0]['chgapp_id']='83';
+        distinctArr[0]['facname']='Ambulance Service Provider';
+        distinctArr[0]['amt']='15000.00';
+        var amt = distinctArr[0]['amt'];
+
+        serv_chg.innerHTML = '';
+        
+        if(distinctArr[i]['chgapp_id']){
+            ta.push({reference : distinctArr[i]['facname'],amount: amt, chgapp_id:  distinctArr[i]['chgapp_id'] }) //appcharge
+
+            serv_chg.innerHTML += '<tr><td>[<strong>'  + distinctArr[i]['chgapp_id'] + '</strong>] ' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas(subclass == "ND" ? 0 : (parseInt(amt)).toFixed(2)) + '</span></td></tr>';
+        }
+    }
+    else if(arrCol.length > 0)
+    {
+        let thisFacid = [], appendToPayment = ['groupThis'], hospitalFaci = ['H','H2','H3'];
+        let sArr = ['_token='+document.getElementsByName('_token')[0].value, 'appid='+curAppid, 'hfser_id='+mhfser_id, 'aptid='+ document.getElementById("aptidnew").value];
+        
+        if(Array.isArray(arrCol)) {
+            for(let i = 0; i < arrCol.length; i++) {
+                sArr.push('facid[]='+arrCol[i]); 
+                thisFacid.push(arrCol[i]);
+            } 
+        }
+
+        if(arrCol2.length > 0){
+            if(Array.isArray(arrCol2)) {
+                for(let i = 0; i < arrCol2.length; i++) {
+                    sArr.push('facid[]='+arrCol2[i]); 
+                    thisFacid.push(arrCol2[i]);
+                } 
             }
         }
-        if(val == 2){
-             addons = getaddonsValues();
+
+        if(addons.length > 0){
+            if(Array.isArray(addons)) {
+                for(let i = 0; i < addons.length; i++) {
+                    sArr.push('facid[]='+addons[i]); 
+                    thisFacid.push(addons[i]);
+                } 
+            }
         }
 
-        var facids = getCheckedValue('facid') 
-        var anxsel = getCheckedValue('anxsel') 
-        var arrCol = facids;
-        var arrCol2 = anxsel;
-
-        let serv_chg = document.getElementById('serv_chg');
-
-				if(arrCol.length > 0){
-					let thisFacid = [], appendToPayment = ['groupThis'], hospitalFaci = ['H','H2','H3'];
-					let sArr = ['_token='+document.getElementsByName('_token')[0].value, 'appid='+curAppid, 'hfser_id='+mhfser_id, 'aptid='+ document.getElementById("aptidnew").value];
-					if(Array.isArray(arrCol)) {
-						for(let i = 0; i < arrCol.length; i++) {
-					  		sArr.push('facid[]='+arrCol[i]); 
-					  		thisFacid.push(arrCol[i]);
-						} 
-					}
-
-                    if(arrCol2.length > 0){
-                            if(Array.isArray(arrCol2)) {
-                                for(let i = 0; i < arrCol2.length; i++) {
-                                    sArr.push('facid[]='+arrCol2[i]); 
-                                    thisFacid.push(arrCol2[i]);
-                                } 
-                            }
+        if(!document.getElementById('6').checked){
+            for(let j = 0; j < thisFacid.length; j++) {
+                if($.inArray(thisFacid[j], hospitalFaci) < 0){
+                    if(document.getElementsByName('ambtyp').length){
+                        for(let k = 0; k < document.getElementsByName('ambtyp').length; k++) {
+                            // document.getElementsByName('ambtyp')[k].value = "";
+                        } 
                     }
+                }
+            } 
+        }
 
-                    if(addons.length > 0){
-                        if(Array.isArray(addons)) {
-                                for(let i = 0; i < addons.length; i++) {
-                                    sArr.push('facid[]='+addons[i]); 
-                                    thisFacid.push(addons[i]);
-                                } 
-                            }
-                    }
+        setTimeout(function(){ 
+            sendRequestRetArr(sArr, "{{asset('client1/request/customQuery/getServiceCharge')}}", "POST", true, {
+                functionProcess: function(arr) {
+                    const subclass = $('#subclass').val()  == "" ||  $('#subclass').val() == undefined ? '{!!((count($fAddress) > 0) ? $fAddress[0]->subClassid: "")!!}' : $('#subclass').val();//appchargetemp
+                    const owns = $('#ocid').val()  == "" ||  $('#ocid').val() == undefined ? '{!!((count($fAddress) > 0) ? $fAddress[0]->ocid: "")!!}' : $('#ocid').val();//appchargetemp
+                    var ta=[]; //appchargetemp
 
-					if(!document.getElementById('6').checked){
-						for(let j = 0; j < thisFacid.length; j++) {
-							if($.inArray(thisFacid[j], hospitalFaci) < 0){
-								if(document.getElementsByName('ambtyp').length){
-									for(let k = 0; k < document.getElementsByName('ambtyp').length; k++) {
-										// document.getElementsByName('ambtyp')[k].value = "";
-									} 
-								}
-							}
-						} 
-					}
+                    const distinctArr = Array.from(new Set(arr.map(s => s.facname))).map(facname => {
+                                        return {
+                                            facid:  arr.find(s =>
+                                                    s.facname === facname).facid,
+                                            facname: facname,
+                                            amt: subclass == "ND" ? 0 :  arr.find(s =>
+                                                    s.facname === facname).amt,
+                                            chgapp_id: arr.find(s =>
+                                                    s.facname === facname).chgapp_id
+                                        }})
+                                        
+                    if(serv_chg != undefined || serv_chg != null) {
 
-                        setTimeout(function(){ 
-                            sendRequestRetArr(sArr, "{{asset('client1/request/customQuery/getServiceCharge')}}", "POST", true, {
-                                functionProcess: function(arr) {
-                                    const subclass = $('#subclass').val()  == "" ||  $('#subclass').val() == undefined ? '{!!((count($fAddress) > 0) ? $fAddress[0]->subClassid: "")!!}' : $('#subclass').val();//appchargetemp
-                                    const owns = $('#ocid').val()  == "" ||  $('#ocid').val() == undefined ? '{!!((count($fAddress) > 0) ? $fAddress[0]->ocid: "")!!}' : $('#ocid').val();//appchargetemp
-                                    var ta=[]; //appchargetemp
+                        if(distinctArr.length > 0) {
 
-                                    const distinctArr = Array.from(new Set(arr.map(s => s.facname))).map(facname => {
-                                    return {
-                                    facid:  arr.find(s =>
-                                            s.facname === facname).facid,
-                                    facname: facname,
-                                    amt: subclass == "ND" ? 0 :  arr.find(s =>
-                                            s.facname === facname).amt,
-                                    chgapp_id: arr.find(s =>
-                                            s.facname === facname).chgapp_id
+                            serv_chg.innerHTML = '';
+
+                            for(let i = 0; i < distinctArr.length; i++) {
+
+                                serv_chg.innerHTML = '';
+
+                                for (let i = 0; i < distinctArr.length; i++) {
+                                    
+                                    var amt = parseFloat(distinctArr[i]['amt']) + 0;
+
+                                    if(isNaN(amt)){
+                                        amt = 0;
                                     }
-                                    })
-                                
-                                    if(serv_chg != undefined || serv_chg != null) {
-                                        if(distinctArr.length > 0) {
-                                            serv_chg.innerHTML = '';
-                                            for(let i = 0; i < distinctArr.length; i++) {
-                                                serv_chg.innerHTML = '';
-                                                for (let i = 0; i < distinctArr.length; i++) {
-                                                        var amt = parseFloat(distinctArr[i]['amt']) + 0;
-                                                        if(isNaN(amt)){
-                                                            amt = 0;
-                                                        }
-
-                                                        if(  owns == "G" ){
-                                                            if(distinctArr[i]['facid'] == "H" ||distinctArr[i]['facid'] == "H2" || distinctArr[i]['facid'] == "H3" ){
-                                                                amt = 0
-                                                            }
-                                                            
-                                                        }
-                                                        //Services Fee Display
-                                                        if(distinctArr[i]['chgapp_id']){
-                                                            ta.push({reference : distinctArr[i]['facname'],amount: amt, chgapp_id:  distinctArr[i]['chgapp_id'] }) //appcharge
-                                                            serv_chg.innerHTML += '<tr><td>[<strong>'  + distinctArr[i]['chgapp_id'] + '</strong>] ' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas(subclass == "ND" ? 0 : (parseInt(amt)).toFixed(2)) + '</span></td></tr>';
-                                                        }
-                                                }
-                                            }
-                                        } else {
-                                            serv_chg.innerHTML = '<tr><td colspan="2">No Services selected.</td></tr>';
+                                    if(  owns == "G" ){
+                                        if(distinctArr[i]['facid'] == "H" ||distinctArr[i]['facid'] == "H2" || distinctArr[i]['facid'] == "H3" ){
+                                            amt = 0
                                         }
+                                        
                                     }
-                                        document.getElementById('tempAppCharge').value = JSON.stringify(getUnique(ta,'chgapp_id'))//appchargetemp
+                                    //Services Fee Display
+                                    if(distinctArr[i]['chgapp_id']){
+                                        ta.push({reference : distinctArr[i]['facname'],amount: amt, chgapp_id:  distinctArr[i]['chgapp_id'] }) //appcharge
+                                        serv_chg.innerHTML += '<tr><td>[<strong>'  + distinctArr[i]['chgapp_id'] + '</strong>] ' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas(subclass == "ND" ? 0 : (parseInt(amt)).toFixed(2)) + '</span></td></tr>';
+                                    }
                                 }
-                            });
-                        }, 1000);
+                            }
+                        } else {
+                            serv_chg.innerHTML = '<tr><td colspan="2">No Services selected.</td></tr>';
+                        }
+                    }
+                    
+                    document.getElementById('tempAppCharge').value = JSON.stringify(getUnique(ta,'chgapp_id'))//appchargetemp
+                }
+            });
+        }, 1000);
 
-				} else {
-					serv_chg.innerHTML = '<tr><td colspan="2">No Payment Necessary.</td></tr>';
-				}
-   
+    } else {
+        serv_chg.innerHTML = '<tr><td colspan="2">No Payment Necessary.</td></tr>';
+    }
 
 }
 
-        function getUnique(arr, comp) {
+    function getUnique(arr, comp) {
 
-            // store the comparison  values in array
-            const unique =  arr.map(e => e[comp])
+        // store the comparison  values in array
+        const unique =  arr.map(e => e[comp])
 
-            // store the indexes of the unique objects
-            .map((e, i, final) => final.indexOf(e) === i && i)
+        // store the indexes of the unique objects
+        .map((e, i, final) => final.indexOf(e) === i && i)
 
-            // eliminate the false indexes & return unique objects
-            .filter((e) => arr[e]).map(e => arr[e]);
+        // eliminate the false indexes & return unique objects
+        .filter((e) => arr[e]).map(e => arr[e]);
 
-            return unique;
-        }
+        return unique;
+    }
 
     function getCheckedValue(groupName) {
 

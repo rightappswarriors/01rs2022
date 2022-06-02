@@ -16,39 +16,38 @@
           	<table class="table table-hover" style="font-size:13px;" id="example">
                   <thead>
 	                  <tr>
-                        <th scope="col">Type of Facility</th>
-	                  	  <th scope="col">Name of Facility</th>
+                        <th scope="col">Type</th>
 	                      <th scope="col">Application Code</th>
-	                      <th scope="col">Information</th>
+	                  	  <th scope="col">Name of Facility</th>
+	                      <th scope="col">Proposed Schedule</th>
+	                      <th scope="col">Option</th>						  
 	                  </tr>
                   </thead>
                   <tbody id="FilterdBody" >
                     
                    	@foreach($applicant as $apply)
-					   <script>
-						console.log("{!! $apply->hasAssessors.'---'. $apply->facilityname.'---' . AjaxController::canProcessNextStepFDA($apply->appid,'isCashierApproveFDA','isCashierApprovePharma') !!}")
-						</script>
-					  
+					   @if(($apply->status != 'A' ))
+							<script>
+								console.log("{!! $apply->hasAssessors.'---'. $apply->facilityname.'---' . AjaxController::canProcessNextStepFDA($apply->appid,'isCashierApproveFDA','isCashierApprovePharma') !!}")
+							</script>
+						
+							@if($apply->isReadyForInspec == 1 && $apply->isPayEval == 1 && $apply->isCashierApprove == 1 && in_array($apply->hfser_id, ['LTO','COA', 'COR', 'ATO']))					
 
-
-                      @if($apply->isPayEval == 1 && $apply->isCashierApprove == 1 && in_array($apply->hfser_id, ['LTO','COA']) && AjaxController::canProcessNextStepFDA($apply->appid,'isCashierApproveFDA','isCashierApprovePharma'))
-					  
-					
-					  <!-- if($apply->isrecommended == 1 && $apply->isPayEval == 1 && $apply->isCashierApprove == 1 && in_array($apply->hfser_id, ['LTO','COA']) && AjaxController::canProcessNextStepFDA($apply->appid,'isCashierApproveFDA','isCashierApprovePharma')) -->
-                     		@if($apply->hasAssessors == 'T')
-            							<tr style="padding-right: 20px!important;">
-                            <td scope="row" class="font-weight-bold">{{$apply->hfser_id}}</td>
-            								<td scope="row" class="">{{$apply->facilityname}}</td>
-            								<td scope="row" class="">{{$apply->hfser_id.'R'.$apply->rgnid.'-'.$apply->appid}}</td>
-            								<td scope="row" class="">
-            									<center>
-            										 <button type="button" title="Show details for  {{$apply->facilityname}}" class="btn btn-outline-primary" onclick="window.location.href = '{{ asset('employee/dashboard/processflow/inspection') }}/{{$apply->appid}}'"><i class="fa fa-fw fa-clipboard-check"></i></button>&nbsp;
-            									</center>
-            								</td>
-            							</tr>
-  						          @endif
-                      @endif
-
+								@if($apply->hasAssessors == 'T')
+									<tr style="padding-right: 20px!important;">
+										<td scope="row" class="font-weight-bold">{{$apply->hfser_id}}</td>
+										<td scope="row" class="">{{$apply->hfser_id.'R'.$apply->rgnid.'-'.$apply->appid}}</td>
+										<td scope="row" class="">{{$apply->facilityname}}</td>
+										<td scope="row" class="">@php $strdates = str_replace('<br>' , '', $apply->proposedWeek); echo str_replace('"' , '', $strdates); @endphp</td>
+										<td scope="row" class="">
+											<center>
+												<button type="button" title="Show details for  {{$apply->facilityname}}" class="btn btn-outline-primary" onclick="window.location.href = '{{ asset('employee/dashboard/processflow/inspection') }}/{{$apply->appid}}'"><i class="fa fa-fw fa-clipboard-check"></i></button>&nbsp;
+											</center>
+										</td>
+									</tr>
+								@endif
+							@endif
+						@endif
                    	@endforeach
                   </tbody>
               </table>

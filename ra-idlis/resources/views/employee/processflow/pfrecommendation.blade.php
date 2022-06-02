@@ -24,12 +24,12 @@
                      
                   </tr>
                   <tr>
+                      <th scope="col" class="text-center">Process</th>
                       <th scope="col" class="text-center">Type</th>
-                      <th scope="col" class="text-center">Application Code</th>
-                      <th scope="col" class="text-center">Name of Facility</th>
-                      <th scope="col" class="text-center">Type of Facility</th>
+                      <th scope="col" class="text-center">App. Code</th>
+                      <th scope="col" class="text-center">Facility Name</th>
+                      <th scope="col" class="text-center">Facility Type</th>
                       <th scope="col" class="text-center">Date</th>
-                      <th scope="col" class="text-center">&nbsp;</th>
                       <th scope="col" class="text-center">Current Status</th>
                       <th scope="col" class="text-center">Options</th>
                   </tr>
@@ -37,19 +37,18 @@
                   <tbody id="FilterdBody">
                       @if (isset($BigData))
                         @foreach ($BigData as $data)
-                          @if($data->isPayEval == 1 &&( $data->isrecommended == 1 ||   $data->aptid == 'R')&& $data->isCashierApprove == 1 /*&& $data->isRecoForApproval == null*/)
-                          @php
-                            $status = '';
-                            $paid = $data->appid_payment;
-                            $reco = $data->isrecommended;
-                            $ifdisabled = '';$color = '';
+                          @if($data->status != 'A' && $data->isPayEval == 1 &&( $data->isrecommended == 1 ||   $data->aptid == 'R')&& $data->isCashierApprove == 1 /*&& $data->isRecoForApproval == null*/)
+                            @php
+                              $status = '';
+                              $paid = $data->appid_payment;
+                              $reco = $data->isrecommended;
+                              $ifdisabled = '';$color = '';
 
-                            if(strtolower($data->hfser_id) == 'lto' && (AjaxController::canViewFDAOOP($data->appid)[0] || AjaxController::canViewFDAOOP($data->appid)[1]) ){
-                              if( ($data->isCashierApproveFDA != 1 && AjaxController::canViewFDAOOP($data->appid)[0]) || ($data->isCashierApprovePharma != 1 && AjaxController::canViewFDAOOP($data->appid)[1]) ){
-                                continue;
-                              }
-                            }
-                           
+                              if(strtolower($data->hfser_id) == 'lto' && (AjaxController::canViewFDAOOP($data->appid)[0] || AjaxController::canViewFDAOOP($data->appid)[1]) ){
+                                if( ($data->isCashierApproveFDA != 1 && AjaxController::canViewFDAOOP($data->appid)[0]) || ($data->isCashierApprovePharma != 1 && AjaxController::canViewFDAOOP($data->appid)[1]) ){
+                                  continue;
+                                }
+                              }                           
                             @endphp
                             <script>
                             console.log('{!!strtolower($data->hfser_id)."--". $data->appid. "--" . !FunctionsClientController::existOnDB("hferc_evaluation",[["appid",$data->appid]])."--". $data->trns_desc !!}')
@@ -62,28 +61,23 @@
 
                             if(strtolower($data->hfser_id) == 'ptc' && !FunctionsClientController::existOnDB('hferc_evaluation',[['appid',$data->appid]]) ){
                               continue;
-                            }
-                            
+                            }                            
                            
                             if($data->isApprove !== null && $data->requestReeval != '1'){
                               continue;
                             }
-
                             
-                            
-                          
-
                           @endphp
                           {{--if($data->status == 'P' || $data->status == 'RA' || $data->status == 'RE' || $data->status == 'RI' ){
                               $ifdisabled = 'disabled';
                             } --}} 
                           <tr>
-                            <td class="text-center">{{$data->hfser_id}}</td>
+                            <td class="text-center">{{$data->aptdesc}}</td>
+                            <td class="text-center"><strong>{{$data->hfser_id}}</strong></td>
                             <td class="text-center">{{$data->hfser_id}}R{{$data->rgnid}}-{{$data->appid}}</td>
-                            <td class="text-center"><strong>{{$data->facilityname}}</strong></td>
+                            <td class="text-center">{{$data->facilityname}}</td>
                             <td class="text-center">{{(ajaxController::getFacilitytypeFromHighestApplicationFromX08FT($data->appid)->hgpdesc ?? 'NOT FOUND')}}</td>
                             <td class="text-center">{{$data->formattedDate}}</td>
-                            <td class="text-center">{{$data->aptdesc}}</td>
                             <td class="text-center" style="font-weight:bold;">{{$data->trns_desc}}</td>
                               <td><center>
                                   <button type="button" title="Evaluate Payment for {{$data->facilityname}}" class="btn btn-outline-primary" onclick="window.location.href='{{asset('employee/dashboard/processflow/recommendation')}}/{{$data->appid}}'"  ><i class="fa fa-fw fa-clipboard-check" ></i></button>

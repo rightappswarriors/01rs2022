@@ -11,19 +11,12 @@
           <div class="card-body table-responsive">
         
             @php
-            $lname = preg_replace('/\s*/', '', $uilastname);
-            $lname = strtolower($lname);
+              $lname = preg_replace('/\s*/', '', $uilastname);
+              $lname = strtolower($lname);
 
-            $position = preg_replace('/\s*/', '', $uiposition);
-            $position = strtolower($position);
-
-            
-
-            @endphp
-<!-- 
-            {{$lname}}
-            {{$position}} -->
-          
+              $position = preg_replace('/\s*/', '', $uiposition);
+              $position = strtolower($position);
+            @endphp          
             
               <table class="table table-hover" id="example" style="font-size:13px;">
                   <thead>
@@ -39,12 +32,12 @@
                      
                   </tr>
                   <tr>
+                      <th scope="col" class="text-center">Process</th>
                       <th scope="col" class="text-center">Type</th>
-                      <th scope="col" class="text-center">Application Code</th>
-                      <th scope="col" class="text-center">Name of Facility</th>
-                      <th scope="col" class="text-center">Type of Facility</th>
+                      <th scope="col" class="text-center">App.Code</th>
+                      <th scope="col" class="text-center">Facility Name</th>
+                      <th scope="col" class="text-center">Facility Type</th>
                       <th scope="col" class="text-center">Date</th>
-                      <th scope="col" class="text-center">Application Status</th>
                       <th scope="col" class="text-center">Current Status</th>
                       <th scope="col" class="text-center">Options</th>
                   </tr>
@@ -62,35 +55,16 @@
                               if($data->status == 'P' || $data->status == 'RA' || $data->status == 'RE' || $data->status == 'RI' ){
                                 $ifdisabled = 'disabled';
                               }
-
                             @endphp
-
-                            @if(strtolower($uirgnid) == 'hfsrb')
-                              @if($lname == 'eugenio' && ($position == 'directoriii' || $position == 'director3') && $data->hfser_id == 'PTC')
-                                  @if($data->pbedcap >= 100)
-                                      @php continue; @endphp
-                                  @endif
-                              @endif
-                              @if($lname == 'lutero' && ($position == 'directoriv' || $position == 'director4') && $data->hfser_id == 'PTC')
-                                  @if($data->pbedcap <= 99)
-                                      @php continue; @endphp
-                                  @endif
-                              @endif
-                            @endif
-
-
-
-
-
                             <tr>
                               <!-- <td class="text-center">{{$data->pbedcap}}</td> -->
-                              <td class="text-center">{{$data->hfser_id}}</td>
+                              <td class="text-center">{{$data->aptdesc}}</td>
+                              <td class="text-center"><strong>{{$data->hfser_id}}</strong></td>
                               <td class="text-center">{{$data->hfser_id}}R{{$data->rgnid}}-{{$data->appid}}</td>
-                              <td class="text-center"><strong>{{$data->facilityname}}</strong></td>
+                              <td class="text-center">{{$data->facilityname}}</td>
                               <td class="text-center">{{(ajaxController::getFacilitytypeFromHighestApplicationFromX08FT($data->appid)->hgpdesc ?? 'NOT FOUND')}}</td>
                               <td class="text-center">{{$data->formattedDate}}</td>
-                              <td class="text-center">{{$data->aptdesc}}</td>
-                              <td class="text-center" style="font-weight:bold;">{{$data->trns_desc}}</td>
+                              <td class="text-center">{{$data->trns_desc}}</td>
                                 <td><center>
                                     <button type="button" title="Evaluate Payment for {{$data->facilityname}}" class="btn btn-outline-primary" onclick="window.location.href='{{asset('employee/dashboard/processflow/approval')}}/{{$data->appid}}'"  {{$ifdisabled}}><i class="fa fa-fw fa-clipboard-check" {{$ifdisabled}}></i></button>
                                 </center></td>

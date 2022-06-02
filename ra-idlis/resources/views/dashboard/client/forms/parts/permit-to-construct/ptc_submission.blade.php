@@ -48,9 +48,14 @@ const savePartialPtc = async (e) => {
 
         if($('#construction_description').val() == ""){errors +=1; ermsg += "Scope of works, "}
 
-        if($('input[name="type"]:checked').val() == 0){
-        if($('#propbedcap').val() == ""){errors +=1; ermsg += "Proposed bed capacity, "}
-}
+        if($('input[name="hgpid"]:checked').val() == 6 || $('input[name="hgpid"]:checked').val() == 17 || $('input[name="hgpid"]:checked').val() == 18){
+        if($('#propbedcap').val() == ""){errors +=1; ermsg += "Proposed Number of Bed, "}
+        }
+
+        if($('input[name="hgpid"]:checked').val() == 9){
+        if($('#singlebed').val() == ""){errors +=1; ermsg += "Proposed Number of Single Bed, "}
+        if($('#doubledeck').val() == ""){errors +=1; ermsg += "Proposed Number of Double Deck, "}
+        }
         
         var allFacids = getAllFacids();
         if(allFacids.length <= 0){errors +=1; ermsg += "No facilities/Services selected, "}
@@ -173,6 +178,8 @@ function submitProper (e){
         type:                   $('input[name="type"]:checked').val(),
         construction_description:$('#construction_description').val(),
         propbedcap:             $('#propbedcap').val(),
+        singlebed:              $('#singlebed').val(),
+        doubledeck:             $('#doubledeck').val(),
         renoOption:             $('#renoOption').val(),
         incbedcapfrom:          $('#incbedcapfrom').val(),
         incbedcapto:            $('#incbedcapto').val(),
@@ -237,6 +244,7 @@ function submitProper (e){
         // aptid: "IN"
     }
     console.log(data)
+    console.log(ptcDet)
     console.log("submit")
     if(confirm("Are you sure you want to proceed?")){
         callApi('/api/application/ptc/save', data, 'POST').then(d => {

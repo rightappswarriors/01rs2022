@@ -79,6 +79,7 @@ Route::prefix('cont')->group(function() {
 });
 Route::prefix('cont')->group(function() {
 	Route::match(['get', 'post'], '/lto/{appid}', 'Client\Api\LtoAppController@contfromPtcTemp');
+	Route::match(['get', 'post'], '/coa/{appid}', 'Client\Api\LtoAppController@contfromPtcTemp_COA');
 	// Route::match(['get', 'post'], '/lto/{appid}', 'Client\Api\LtoAppController@contfromPtc');
 });
 
@@ -93,6 +94,7 @@ Route::prefix('client1')->group(function() {
 	// Route::match(['get', 'post'], '/request/reeval', 'NewClientController@reqReEval');
 	// Route::match(['get', 'post'], '/sendproofpay', 'NewGeneralController@uploadProofofPay');//6-5-2021
 	// Route::match(['get', 'post'], '/', 'NewClientController@__index')->name('client1.login');
+	Route::match(['get', 'post'], '/', 'NewClientController@__index');
 	Route::match(['get', 'post'], '/register/verify/{token}', 'NewClientController@__rToken')->name('client1.rtoken');
 	Route::match(['get', 'post'], '/forgot/{uid}/a/{token}', 'NewClientController@__forgot');
 	Route::match(['get', 'post'], '/reset/{uid}', 'NewClientController@__reset');
@@ -438,6 +440,7 @@ Route::match(['get', 'post'], 'employee/dashboard/mf/service_fees', 'DOHControll
 Route::match(['get', 'post'], 'employee/dashboard/mf/category_fees', 'DOHController@CategoryFees'); // Main, Add
 Route::get('employee/mf/assessment/get_ServiceCharges', 'AjaxController@getServiceCharges'); // Get
 Route::post('employee/mf/assessment/del_ServiceCharges', 'AjaxController@delServiceCharges'); // Del
+Route::match(['get', 'post'], 'employee/dashboard/mf/charge_fees', 'DOHController@ChargeFees'); // Main, Add
 // Assessment Category
 Route::match(['get', 'post'], 'employee/dashboard/mf/cat_assessment', 'DOHController@AssessmentCategory'); // Main, Add
 Route::post('employee/mf/assessment/save_category', 'AjaxController@saveAssessmentCategory'); // Update 
@@ -512,6 +515,7 @@ Route::match(['get', 'post'],  'employee/dashboard/processflow/pre-assessment/FD
 
 Route::match(['get', 'post'],  'employee/dashboard/processflow/evaluate/FDA/{request?}', 'DOHController@EvaluateProcessFlowFDA'); // View All // FDA
 Route::match(['get', 'post'], 'employee/dashboard/processflow/evaluate/{appid}/{requestforfda?}', 'DOHController@EvaluateOneProcessFlow'); // View One
+Route::match(['get', 'post'], 'employee/dashboard/processflow/evaluatetech/{appid}/{requestforfda?}', 'DOHController@EvaluateTechProcessFlow'); // View One
 Route::match(['get', 'post'], 'employee/dashboard/processflow/LTO/evaluate/', 'DOHController@evaluateLTOReq'); // View One
 Route::match(['get', 'post'], 'employee/dashboard/processflow/evaluate/{appid}/edit', 'DOHController@EditEvaluationOneProcessFlow'); // Edit One
 Route::match(['get', 'post'], 'employee/dashboard/processflow/evaluate/FDA/{appid}/{request}', 'DOHController@EvaluateOneProcessFlowFDA'); // Edit One
@@ -615,6 +619,15 @@ Route::match(['get', 'post'], 'employee/dashboard/processflow/registerAssess', '
 
 ///// new assessment end
 
+////// Compliance 
+Route::match(['get', 'post'], 'employee/dashboard/processflow/compliance', 'DOHController@complianceProcessFlow');
+Route::match(['get', 'post'], 'employee/dashboard/processflow/compliancedetails/{compliance_id}', 'DOHController@complianceDetails');
+Route::match(['get', 'post'], 'employee/dashboard/processflow/complianceattachment/{compliance_id}', 'DOHController@complianceAttachment');
+Route::match(['get', 'post'], 'employee/dashboard/processflow/complianceremarks/{compliance_id}', 'DOHController@complianceRemarks');
+
+Route::match(['get', 'post'], 'employee/dashboard/processflow/complianceaddremarks', 'DOHController@complianceAddRemarks');
+Route::match(['get', 'post'], 'employee/dashboard/processflow/complianceChecker/{compliance_item_id}/{assesment_status}', 'DOHController@complianceChecker');
+Route::match(['get', 'post'], 'employee/dashboard/processflow/complianceSubmit/{status}/{complianceId}', 'DOHController@complianceSubmit');
 
 
 Route::match(['get', 'post'], 'employee/dashboard/processflow/assessment/{session?}', 'DOHController@AssessmentProcessFlow'); // assessment

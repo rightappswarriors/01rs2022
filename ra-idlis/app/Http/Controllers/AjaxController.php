@@ -60,6 +60,8 @@
 				return 'ERROR';
 			}
 		}
+
+
 		public static function SystemLogs($message) // Writes Error Messages to Notepad {location : ra-idlis/storage/app/system/logs}
 		{
 			$Cur_useData = AjaxController::getCurrentUserAllData();
@@ -936,7 +938,7 @@
 			{
 				$data = DB::table('x08')
 						->where('rgnid',$request->rgnid)
-						->whereIn('grpid',['LO1','LO2','LO4','RLO','NA','DC'])
+						->whereIn('grpid',['LO1','LO2','LO4','RLO','NA','DC','01','HFERC','HFSRBLO','LO','LO3','CM'])
 						// ->whereIn('grpid',['CM','LO','RLO'])
 						// ->where('grpid','!=','C')
 						// ->where('grpid','=','CM')
@@ -1448,17 +1450,18 @@ public static function checkConmem($appid)
 		{
 			$notInclude = array();
 			$data = AjaxController::getAllDataEvaluateOne($appid);
-			$dataInDB = DB::table('hferc_team')->select('uid')->where([['appid',$appid],['revision',$revCount]])->get();
-			if(count($dataInDB) > 0){
+			$dataInDB = DB::table('hferc_team')
+						->leftjoin('x08','x08.uid', '=','hferc_team.uid')
+						->leftjoin('x07', 'x08.grpid', '=', 'x07.grp_id')->select('*')->where([['hferc_team.appid',$appid],['hferc_team.revision',$revCount]])->distinct()->get();
+			
+			/*if(count($dataInDB) > 0){
 				foreach ($dataInDB as $value) {
 					if(!in_array($value->uid, $notInclude)){
 						array_push($notInclude, $value->uid);
 					}
 				}
 			}
-			
-		    //dd($notInclude);
-			
+		
 			$rgn = FunctionsClientController::isFacilityFor($appid);
 			
 			switch ($order) {
@@ -1466,32 +1469,30 @@ public static function checkConmem($appid)
 				// not in list - all users except above
 					$data = DB::table('x08')
 							->join('x07', 'x08.grpid', '=', 'x07.grp_id')
-							->where([['x08.isBanned',0],['x08.rgnid',$rgn]])
-							//->whereIn('x08.grpid',['LO1','LO2','LO4','RLO','NA','DC'])
+							//->where([['x08.isBanned',0],['x08.rgnid',$rgn]])
+							//->whereIn('x08.grpid',['LO1','LO2','LO4','RLO','NA','DC','01','HFERC','HFSRBLO','LO','LO3','CM'])
 							->whereNotIn('x08.uid',$notInclude)
 							->get();
-							
-							
 					break;
 				case 2:
 				// in list
 					$data = DB::table('x08')
 							->leftjoin('x07', 'x08.grpid', '=', 'x07.grp_id')
 							->leftjoin('hferc_team','x08.uid','hferc_team.uid')
-							->where([['x08.isBanned',0], ['hferc_team.appid',$appid],['hferc_team.revision',$revCount]])
-						//	->where([['x08.isBanned',0],['x08.rgnid',$rgn], ['hferc_team.appid',$appid],['hferc_team.revision',$revCount]])
-						//	->whereIn('x08.grpid',['LO1','LO2','LO4','RLO','NA','DC'])
+							//->where([['x08.isBanned',0], ['hferc_team.appid',$appid],['hferc_team.revision',$revCount]])
+							//	->where([['x08.isBanned',0],['x08.rgnid',$rgn], ['hferc_team.appid',$appid],['hferc_team.revision',$revCount]])
+							//->whereIn('x08.grpid',['LO1','LO2','LO4','RLO','NA','DC','01','HFERC','HFSRBLO','LO','LO3','CM'])
 							->whereIn('x08.uid',$notInclude)
 							->distinct()
 							->get();
-							
-							//dd($data);
-					break;
-				
+					break;	
 			}
 			
-			return $data;
+			return $data;*/
+			//dd( $dataInDB);
+			return $dataInDB;
 		}
+
 		public static function getMembersIncommittee($appid,$rgn,$order)
 		{
 			$notInclude = array();
@@ -1509,6 +1510,12 @@ public static function checkConmem($appid)
 							->join('x07', 'x08.grpid', '=', 'x07.grp_id')
 							->where([['x08.grpid', 'CM'],['x08.isBanned',0],['x08.rgnid',$rgn]])
 							->orWhere([['x08.grpid', 'LO'],['x08.isBanned',0],['x08.rgnid',$rgn]])
+							->orWhere([['x08.grpid', 'LO1'],['x08.isBanned',0],['x08.rgnid',$rgn]])
+							->orWhere([['x08.grpid', 'LO2'],['x08.isBanned',0],['x08.rgnid',$rgn]])
+							->orWhere([['x08.grpid', 'LO3'],['x08.isBanned',0],['x08.rgnid',$rgn]])
+							->orWhere([['x08.grpid', 'LO4'],['x08.isBanned',0],['x08.rgnid',$rgn]])
+							->orWhere([['x08.grpid', 'NA'],['x08.isBanned',0],['x08.rgnid',$rgn]])
+							->orWhere([['x08.grpid', '01'],['x08.isBanned',0],['x08.rgnid',$rgn]])
 							->orWhere([['x08.grpid', 'RLO'],['x08.isBanned',0],['x08.rgnid',$rgn]])
 							->orWhere([['x08.grpid', 'DC'],['x08.isBanned',0],['x08.rgnid',$rgn]])
 							->whereNotIn('x08.uid',$notInclude)
@@ -1520,6 +1527,12 @@ public static function checkConmem($appid)
 							->join('committee_team','x08.uid','committee_team.uid')
 							->where([['x08.grpid', 'CM'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
 							->orWhere([['x08.grpid', 'LO'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
+							->orWhere([['x08.grpid', 'LO1'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
+							->orWhere([['x08.grpid', 'LO2'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
+							->orWhere([['x08.grpid', 'LO3'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
+							->orWhere([['x08.grpid', 'LO4'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
+							->orWhere([['x08.grpid', 'NA'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
+							->orWhere([['x08.grpid', '01'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
 							->orWhere([['x08.grpid', 'RLO'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
 							->orWhere([['x08.grpid', 'DC'],['x08.isBanned',0],['x08.rgnid',$rgn], ['committee_team.appid',$appid]])
 							->whereIn('x08.uid',$notInclude)
@@ -2009,6 +2022,7 @@ public static function checkConmem($appid)
 				->join('hfaci_grp','hfaci_grp.hgpid','forAmbulance.hgpid')
 				->select($select)
 				->get();
+				
 				return ($tojson ? json_encode($data) : $data);
 			} 
 			catch (Exception $e) 
@@ -2387,6 +2401,7 @@ public static function checkConmem($appid)
 							->select('facility_requirements.*','upload.*')
 							->where('facility_requirements.typ_id', '=', $request->tyf_id)
 							->get();
+
 				if (count($Requirements) != 0) { return $Requirements;} 
 				else { return "NONE";}
 			} 
@@ -3305,6 +3320,23 @@ public static function checkConmem($appid)
 				return 'ERROR';
 			}
 		}
+
+		public static function getAllChargeFees() // Get All Charges (with Category)
+		{
+			try 
+			{
+				$data = DB::table('chargefees')
+				//->join('category', 'charges.cat_id', '=', 'category.cat_id')
+				->get();
+				return $data;
+			} 
+			catch (Exception $e) 
+			{
+				AjaxController::SystemLogs($e->getMessage());
+				return 'ERROR';
+			}
+		}
+
 		public static function getAllCharges() // Get All Charges
 		{
 			try 
@@ -4562,8 +4594,6 @@ public static function checkConmem($appid)
 					->where('surv_form.rgnid',$Cur_useData['rgnid'] )
 					->get();
 				}
-			
-
 
 				// 	$data = DB::table('surv_form')
 				// ->leftJoin('registered_facility','registered_facility.regfac_id','surv_form.regfac_id')
@@ -4647,6 +4677,54 @@ public static function checkConmem($appid)
 		/////// System Settings
 		/// ------------------------------------ PROCESS FLOW
 		/////// View All Process Flow
+		public static function getForComplianceApplication()
+		{
+			$complianceData = DB::table('compliance_data')
+			->where('is_for_compliance', 1)
+			->leftjoin('appform','appform.appid','compliance_data.app_id')
+			->get();
+			
+			return $complianceData;
+		}
+
+		public static function getComplianceDetails($complianceId){
+			$complianceData = DB::table('compliance_item')
+			->where('compliance_item.compliance_id', $complianceId)
+			->leftjoin('compliance_data','compliance_data.compliance_id','compliance_item.compliance_id')
+			->where('compliance_data.is_for_compliance', 1)
+			->leftjoin('assessmentcombinedduplicate','assessmentcombinedduplicate.dupID','compliance_item.assesment_id')
+			->leftjoin('asmt_h1','asmt_h1.asmtH1ID','assessmentcombinedduplicate.asmtH1ID_FK')
+			->leftjoin('asmt_h2','asmt_h2.asmtH2ID','assessmentcombinedduplicate.asmtH2ID_FK')
+			->leftjoin('asmt_h3','asmt_h3.asmtH3ID','assessmentcombinedduplicate.asmtH3ID_FK')
+			->get();
+			
+			return $complianceData;
+		}
+
+
+		public static function getComplianceAttachment($complianceId){
+			$complianceData = DB::table('compliance_attachment')
+			->where('compliance_attachment.compliance_id', $complianceId)
+			->leftjoin('compliance_data','compliance_data.compliance_id','compliance_attachment.compliance_id')
+			->where('compliance_data.is_for_compliance', 1)
+			->leftjoin('x08','x08.uid','compliance_attachment.user_id')
+			->get();
+			
+			return $complianceData;
+		}
+
+		public static function getComplianceRemarks($complianceId){
+			$complianceData = DB::table('compliance_remarks')
+			->where('compliance_remarks.compliance_id', $complianceId)
+			->leftjoin('compliance_data','compliance_data.compliance_id','compliance_remarks.compliance_id')
+			->where('compliance_data.is_for_compliance', 1)
+			->leftjoin('x08','x08.uid','compliance_remarks.user_id')
+			->get();
+			
+			return $complianceData;
+		}
+
+
 		public static function getAllApplicantsProcessFlow()
 		{
 			try 
@@ -4662,7 +4740,6 @@ public static function checkConmem($appid)
 					case 'FDARF':
 
 					case 'NA':			
-							// $anotherData = DB::table('appform')->get();
 							$anotherData = DB::table('appform')
 							->leftJoin('hfaci_serv_type', 'appform.hfser_id', '=', 'hfaci_serv_type.hfser_id')
 							->leftJoin('hfaci_grp', 'appform.facid', '=', 'hfaci_grp.hgpid')
@@ -4676,12 +4753,12 @@ public static function checkConmem($appid)
 							->leftJoin('class', 'appform.classid', '=', 'class.classid')
 							->leftJoin('trans_status', 'appform.status', '=', 'trans_status.trns_id')
 							->leftjoin('ptc','ptc.appid','appform.appid')
-							->select('appform.*', 'hfaci_serv_type.*', 'ptc.propbedcap as pbedcap','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid')
+							->leftjoin('region AS asrgn','appform.assignedRgn', '=', 'asrgn.rgnid')
+							->select('appform.*', 'hfaci_serv_type.*', 'ptc.propbedcap as pbedcap','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid', 'asrgn.rgn_desc AS asrgn_desc')
 							->where('appform.draft', '=', null)
-							// ->where('appform.assignedRgn', '=', $Cur_useData['rgnid'])
 							->orderBy('appform.appid','desc')
-							->orderBy('appform.t_date','desc')
 							->get();
+							
 						break;
 					case 'FDA':
 							$anotherData = DB::table('appform')
@@ -4697,19 +4774,14 @@ public static function checkConmem($appid)
 							->leftJoin('class', 'appform.classid', '=', 'class.classid')
 							->leftJoin('trans_status', 'appform.FDAstatus', '=', 'trans_status.trns_id')
 							->leftjoin('ptc','ptc.appid','appform.appid')
-							->select('appform.*', 'hfaci_serv_type.*', 'ptc.propbedcap as pbedcap','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid')
-							// ->where([
-							// 	['appform.status','A'],
-							// 	['appform.hfser_id','LTO'],
-							// 	['isApprove',1]
-							// ])
-							->where([['appform.hfser_id','LTO']])
-							// ->where([['appform.hfser_id','LTO'],['appform.noofsatellite', '>', 0]]) 7-2-2021
+							->leftjoin('region AS asrgn','appform.assignedRgn', '=', 'asrgn.rgnid')
+							->select('appform.*', 'hfaci_serv_type.*', 'ptc.propbedcap as pbedcap','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid', 'asrgn.rgn_desc AS asrgn_desc')
+							->where([['appform.hfser_id','LTO'], ['appform.hfser_id','COA'], ['appform.hfser_id','ATO'], ['appform.hfser_id','COR'],['appform.noofsatellite', '>', 0]]) //7-2-2021
 							->orderBy('appform.appid','desc')
-							->orderBy('appform.t_date','desc')
 							->get();
 							break;
-					case 'LO':
+
+					/*case 'LO':
 						$anotherData = DB::table('appform')
 							->leftJoin('hfaci_serv_type', 'appform.hfser_id', '=', 'hfaci_serv_type.hfser_id')
 							->leftJoin('hfaci_grp', 'appform.facid', '=', 'hfaci_grp.hgpid')
@@ -4723,7 +4795,8 @@ public static function checkConmem($appid)
 							->leftJoin('class', 'appform.classid', '=', 'class.classid')
 							->leftJoin('trans_status', 'appform.status', '=', 'trans_status.trns_id')
 							->leftjoin('ptc','ptc.appid','appform.appid')
-							->select('appform.*', 'hfaci_serv_type.*', 'ptc.propbedcap as pbedcap','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid')
+							->leftjoin('region AS asrgn','appform.assignedRgn', '=', 'asrgn.rgnid')
+							->select('appform.*', 'hfaci_serv_type.*', 'ptc.propbedcap as pbedcap','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid', 'asrgn.rgn_desc AS asrgn_desc')
 							// ->where('appform.assignedLO', '=', $Cur_useData['cur_user'])
 							->where('appform.assignedRgn', '=', $Cur_useData['rgnid']) //bring back after
 							->orderBy('appform.appid','desc')
@@ -4746,7 +4819,8 @@ public static function checkConmem($appid)
 							->leftJoin('class', 'appform.classid', '=', 'class.classid')
 							->leftJoin('trans_status', 'appform.status', '=', 'trans_status.trns_id')
 							->leftjoin('ptc','ptc.appid','appform.appid')
-							->select('appform.*', 'hfaci_serv_type.*', 'ptc.propbedcap as pbedcap','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid')
+							->leftjoin('region AS asrgn','appform.assignedRgn', '=', 'asrgn.rgnid')
+							->select('appform.*', 'hfaci_serv_type.*', 'ptc.propbedcap as pbedcap','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid', 'asrgn.rgn_desc AS asrgn_desc')
 							// ->where('appform.assignedLO', '=', $Cur_useData['cur_user'])
 							->where('appform.assignedRgn', '=', $Cur_useData['rgnid']) //bring back after
 							->orderBy('appform.appid','desc')
@@ -4755,7 +4829,7 @@ public static function checkConmem($appid)
 							->get();
 							
 							//dd($anotherData);
-							break;
+							break;*/
 							
 					case 'HFERC':
 						$anotherData = DB::table('appform')
@@ -4772,15 +4846,17 @@ public static function checkConmem($appid)
 							->leftJoin('trans_status', 'appform.status', '=', 'trans_status.trns_id')
 							->leftjoin('hferc_evaluation','hferc_evaluation.appid','appform.appid')
 							->leftjoin('ptc','ptc.appid','appform.appid')
+							->leftjoin('region AS asrgn','appform.assignedRgn', '=', 'asrgn.rgnid')
 							->join('hferc_team', 'appform.appid', '=', 'appform.appid')
-							->select('appform.*', 'hfaci_serv_type.*', 'ptc.propbedcap as pbedcap','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid')
+							->select('appform.*', 'hfaci_serv_type.*', 'ptc.propbedcap as pbedcap','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid', 'asrgn.rgn_desc AS asrgn_desc')
 							->orderBy('appform.appid','desc')
-							->orderBy('appform.t_date','desc')
 							
 							->distinct()
 							->get();
 							break;
 					default:		
+
+						
 						$anotherData = DB::table('appform');
 							$anotherData->leftJoin('hfaci_serv_type', 'appform.hfser_id', '=', 'hfaci_serv_type.hfser_id');
 							$anotherData->leftJoin('hfaci_grp', 'appform.facid', '=', 'hfaci_grp.hgpid');
@@ -4793,16 +4869,17 @@ public static function checkConmem($appid)
 							$anotherData->leftJoin('ownership', 'appform.ocid', '=', 'ownership.ocid');
 							$anotherData->leftJoin('class', 'appform.classid', '=', 'class.classid');
 							$anotherData->leftJoin('trans_status', 'appform.status', '=', 'trans_status.trns_id');
-							$anotherData->leftjoin('ptc','ptc.appid','appform.appid');
-							$anotherData->select('appform.*', 'ptc.propbedcap as pbedcap', 'hfaci_serv_type.*','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid');
+							$anotherData->leftjoin('ptc','ptc.appid','appform.appid');							
+							$anotherData->leftjoin('region AS asrgn','appform.assignedRgn', '=', 'asrgn.rgnid');
+							$anotherData->select('appform.*', 'ptc.propbedcap as pbedcap', 'hfaci_serv_type.*','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid', 'asrgn.rgn_desc AS asrgn_desc');
 							
 							if($Cur_useData['rgnid']){
 								$anotherData->where('appform.assignedRgn', '=', $Cur_useData['rgnid']); //bring back after
 							}
 
 							$anotherData->orderBy('appform.appid','desc');
-							$anotherData->orderBy('appform.t_date','desc');
 							$anotherData = $anotherData->get();
+
 						break;
 				}
 				for ($i=0; $i < count($anotherData); $i++) {
@@ -4811,8 +4888,13 @@ public static function checkConmem($appid)
 					$newT = Carbon::parse($time);
 					$anotherData[$i]->formattedTime = $newT->format('g:i A');
 					$date = $anotherData[$i]->t_date;
-					$newD = Carbon::parse($date);
-					$anotherData[$i]->formattedDate = $newD->toFormattedDateString();
+
+					if($date){
+						$newD = Carbon::parse($date);
+						$anotherData[$i]->formattedDate = $newD->toFormattedDateString();
+					} else {
+						$anotherData[$i]->formattedDate = 'N/A';
+					}					
 					
 					//updated
 					$time = $anotherData[$i]->updated_at;
@@ -4820,9 +4902,7 @@ public static function checkConmem($appid)
 					$anotherData[$i]->formattedUpatedTime = $newT->format('g:i A');
 					$date = $anotherData[$i]->updated_at;
 					$newD = Carbon::parse($date);
-					$anotherData[$i]->formattedUpdatedDate = $newD->toFormattedDateString();
-					
-					
+					$anotherData[$i]->formattedUpdatedDate = $newD->toFormattedDateString();				
 					
 					/////  Applied
 					/////  Evaluated
@@ -4878,6 +4958,8 @@ public static function checkConmem($appid)
 						$anotherData[$i]->hasAssessors = 'F';
 					}
 				}
+				
+				//dd($anotherData);
 				return $anotherData;
 			} 
 			catch (Exception $e) 
@@ -5096,10 +5178,9 @@ public static function checkConmem($appid)
 					$Cur_useData = AjaxController::getCurrentUserAllData();
 					$settings = AjaxController::getAllSettings();
 					$selected = AjaxController::getUidFrom($request->apid);
+
 					if ($request->selected == 0)  // Rejected
 					{
-
-
 						$updateData = array(
 											'isrecommended'=>0,
 											'recommendedby' => $Cur_useData['cur_user'],
@@ -5107,17 +5188,34 @@ public static function checkConmem($appid)
 											'recommendeddate' =>  $Cur_useData['date'],
 											'recommendedippaddr' =>$Cur_useData['ip'],
 											'status' => 'RE',
+											'isReadyForInspec' => 0
 										);
-
 					}
-					else if ($request->selected == 1)  // Approved
+					// Approved Documentary Evaluation
+					else if ($request->selected == 1)  
 					{
 						$stat = null;
+						
 						switch ($clienthfser_id) {
 							case 'LTO':
 								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
 								$stat = 'FI';
-								// $stat = $curStat;
+								break;
+							case 'COA':
+								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
+								$stat = 'FI';
+								break;
+							case 'ATO':
+								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
+								$stat = 'FI';
+								break;
+							case 'COR':
+								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
+								$stat = 'FI';
+								break;
+							case 'LTO':
+								$curStat = DB::table('appform')->where('appid',$request->apid)->select('status')->first()->status;
+								$stat = 'FI';
 								break;
 							case 'PTC':
 								if(DB::table('appform')->where([['appid',$request->apid],['isAcceptedFP','<>',1]])->doesntExist()){
@@ -5132,37 +5230,25 @@ public static function checkConmem($appid)
 								break;
 
 						}
-						// (strtolower($clienthfser_id) == 'lto' ? 'FI' : 'FPE')
 						$hfser = DB::table('appform')->where('appid',$request->apid)->select('hfser_id')->first()->hfser_id;
 						$updateData = array(
-											// 'isPayEval'=>1,// updated 5-31-2021
 											'isrecommended'=>1,
 											'recommendedby' => $Cur_useData['cur_user'],
 											'recommendedtime' => $Cur_useData['time'],
 											'recommendeddate' =>  $Cur_useData['date'],
 											'recommendedippaddr' =>$Cur_useData['ip'],
-										//	// 'proposedInspectiontime' => $request->proptime,
-										//	// 'proposedInspectiondate' =>  $request->propdate,
-											// 'status'=> $stat,// updated 5-31-2021
-									// updated 5-31-2021
-										'isPayEval' => 1,
-										'payEvalby' => $Cur_useData['cur_user'],
-										'payEvaldate' => $Cur_useData['date'],
-										'payEvaltime' => $Cur_useData['time'],
-										'payEvalip'=> $Cur_useData['ip'],
-										// 'status' => 'FP'
-										'status' => (strtolower($hfser) == 'lto' || strtolower($hfser) == 'coa' ? 'FI' : 'P'),
-										'isReadyForInspec' => 1
-										// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' :  'FP')
-										// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' :  'FI')
-										// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' : (strtolower($hfser) == 'lto' ? 'FI' :'CE'))
-										// 'status' => (strtolower($hfser) == 'ptc' ? 'FPPR' : 'CE')
-										// 'FDAStatMach' => 'For Evaluation'
-
-
+											'isPayEval' => 1,
+											'payEvalby' => $Cur_useData['cur_user'],
+											'payEvaldate' => $Cur_useData['date'],
+											'payEvaltime' => $Cur_useData['time'],
+											'payEvalip'=> $Cur_useData['ip'],
+											'status' => (strtolower($hfser) == 'lto' || strtolower($hfser) == 'coa' ? 'FI' : 'P'),
+											'isReadyForInspec' => 1
+											// 'FDAStatMach' => 'For Evaluation'
 										);
 					}
-					else if ($request->selected == 2)  // Revised
+					// Revised Documentary Evaluation
+					else if ($request->selected == 2)  
 					{
 						$getTimeChck = DB::table('appform')->where('appid', '=', $request->apid)->first();
 						$chkUpd = $getTimeChck->no_chklist + 1;
@@ -5180,14 +5266,16 @@ public static function checkConmem($appid)
 											'isReadyForInspec' => 0
 											// 'FDAStatMach' => 'Evaluated, but for Revision'
 										);
-
-
-
 					}
+					
 					$userInf = DB::table('appform')->select('hfser_id','uid')->where('appid',$request->apid)->first();
 					$idForNotify = self::getNotificationIDfromCases($userInf->hfser_id,'eval',$updateData['isrecommended']);
-					if(isset($request->requestFor) && strtolower($request->requestFor) != 'hfsrb'){
+					
+					//FDA
+					if(isset($request->requestFor) && strtolower($request->requestFor) != 'hfsrb')
+					{
 						$suffix = '';
+
 						if(strtolower($request->requestFor) == 'pharma'){
 							$suffix = 'pharma';
 						}
@@ -5200,9 +5288,7 @@ public static function checkConmem($appid)
 							'ispreassessedip'.$suffix =>$Cur_useData['ip'],
 							'FDAstatus' => $updateData['status']
 						);
-
 						$curappf = DB::table('appform')->where('appid',$request->apid)->first();
-
 
 						if($request->selected == 2){
 							$updateData['isReadyForInspecFDA'] = 0;
@@ -5216,8 +5302,8 @@ public static function checkConmem($appid)
 								$updateData['machDocNeedRev'] = 1;
 								$updateData['machDocRevcount'] = $curappf->machDocRevcount + 1;
 							}
-
-						}else{
+						}
+						else{
 							$updateData['isReadyForInspecFDA'] = 1;
 
 							if(strtolower($request->requestFor) == 'pharma'){
@@ -5227,11 +5313,7 @@ public static function checkConmem($appid)
 								$updateData['FDAStatMach'] = "For Payment";
 								// $updateData['FDAStatMach'] = "For Inspection";
 							}
-						}
-
-
-
-						
+						}						
 					}
 					if(isset($request->isCoa) && !isset($appform->coaflag)){
 						$updateData = array(
@@ -5239,6 +5321,7 @@ public static function checkConmem($appid)
 						);
 					}
 					$test = DB::table('appform')->where('appid', '=', $request->apid)->update($updateData);
+
 					try {
 						if ($test) {
 							AjaxController::notifyClient($request->apid,$userInf->uid,$idForNotify);
@@ -5273,10 +5356,6 @@ public static function checkConmem($appid)
 	
 			return $ex;
 		}
-	
-
-
-
 
 		public static function JudgeApplicationFDA(Request $request)
 		{
@@ -5671,7 +5750,7 @@ public static function checkConmem($appid)
 				$assignedRgn = (DB::table('appform')->select('assignedRgn')->where('appid',$request->id)->first()->assignedRgn ?? $request->rgn);
 				$query = 	"SELECT x08.uid, x08.fname, x08.mname, x08.lname, x08.position, x08.team, x07.grp_desc
 						  	FROM x08 LEFT JOIN  x07 ON x08.grpid = x07.grp_id 
-							WHERE x08.grpid <> 'C' AND x08.team IS null AND x08.rgnid = '$assignedRgn' AND  x08.uid NOT IN (SELECT uid FROM app_team WHERE appid = '$request->id') AND x08.grpid IN ('LO1','LO2','RLO') ";
+							WHERE x08.grpid <> 'C' AND x08.team IS null AND x08.rgnid = '$assignedRgn' AND  x08.uid NOT IN (SELECT uid FROM app_team WHERE appid = '$request->id') AND x08.grpid IN ('LO1','LO2','LO4','RLO','DC','01','HFERC','HFSRBLO','LO','LO3','CM') ";
 				$data = DB::select($query);			
 					if ($data) {
 						for ($i=0; $i < count($data) ; $i++) { 
@@ -5711,12 +5790,12 @@ public static function checkConmem($appid)
 				if($check == 'hfsrb'){
 					$query = 	"SELECT x08.uid, x08.fname, x08.mname, x08.lname, x08.position, x08.team, x07.grp_desc
 					FROM x08 LEFT JOIN  x07 ON x08.grpid = x07.grp_id 
-				  WHERE x08.grpid IN ('LO1','LO2') AND x08.team = '$request->teamid' AND  x08.uid NOT IN (SELECT uid FROM app_team WHERE teamid = '$request->teamid' AND appid = '$request->id')";
+				  WHERE x08.team = '$request->teamid' AND  x08.uid NOT IN (SELECT uid FROM app_team WHERE teamid = '$request->teamid' AND appid = '$request->id')";
   
 				}else{
 					$query = 	"SELECT x08.uid, x08.fname, x08.mname, x08.lname, x08.position, x08.team, x07.grp_desc
 					FROM x08 LEFT JOIN  x07 ON x08.grpid = x07.grp_id 
-				  WHERE x08.grpid IN ('RLO','LO') AND x08.team = '$request->teamid' AND  x08.uid NOT IN (SELECT uid FROM app_team WHERE teamid = '$request->teamid' AND appid = '$request->id')";
+				  WHERE x08.team = '$request->teamid' AND  x08.uid NOT IN (SELECT uid FROM app_team WHERE teamid = '$request->teamid' AND appid = '$request->id')";
   
 				}
 
@@ -5875,76 +5954,73 @@ public static function checkConmem($appid)
 			try 
 			{
 				$data0 = DB::table('appform')
-												->join('x08', 'appform.uid', '=', 'x08.uid')
-												->leftJoin('x08 AS comeval', 'appform.concommittee_evalby', '=', 'comeval.uid')
-												->leftJoin('x08 AS cashval', 'appform.CashierApproveByFDA', '=', 'cashval.uid')
-												->leftJoin('x08 AS recfdaval', 'appform.recommendedbyFDA', '=', 'recfdaval.uid')
-												->leftJoin('x08 AS recbyfda', 'appform.RecobyFDA', '=', 'recbyfda.uid')
-												->leftJoin('x08 AS recbyfdaphar', 'appform.RecobyFDAPhar', '=', 'recbyfdaphar.uid')
-												->leftJoin('x08 AS recbyfdaph', 'appform.CashierApproveByPharma', '=', 'recbyfdaph.uid')
-												->leftJoin('x08 AS evalby', 'appform.recommendedby', '=', 'evalby.uid')
-												->leftJoin('x07', 'comeval.grpid', '=', 'x07.grp_id')
-												->join('barangay', 'appform.brgyid', '=', 'barangay.brgyid')
-												->join('city_muni', 'appform.cmid', '=', 'city_muni.cmid')
-												->join('province', 'appform.provid', '=', 'province.provid')
-												// ->join('type_facility', 'appform.hfser_id', '=', 'type_facility.hfser_id') 
-												->leftjoin('trans_status', 'appform.status', '=', 'trans_status.trns_id')
-												// ->join('orderofpayment', 'type_facility.oop_id', '=', 'orderofpayment.oop_id')
-												// , 'orderofpayment.*'
-												->select('appform.*', 
-												'appform.street_number',  
-												'x08.*',  
-												'comeval.fname as com_fname',  
-												'comeval.pre as com_pre',  
-												'comeval.suf as com_suf',  
-												'comeval.mname as com_mname', 
-												 'comeval.lname as com_lname', 
+						->join('x08', 'appform.uid', '=', 'x08.uid')
+						->leftJoin('x08 AS comeval', 'appform.concommittee_evalby', '=', 'comeval.uid')
+						->leftJoin('x08 AS cashval', 'appform.CashierApproveByFDA', '=', 'cashval.uid')
+						->leftJoin('x08 AS recfdaval', 'appform.recommendedbyFDA', '=', 'recfdaval.uid')
+						->leftJoin('x08 AS recbyfda', 'appform.RecobyFDA', '=', 'recbyfda.uid')
+						->leftJoin('x08 AS recbyfdaphar', 'appform.RecobyFDAPhar', '=', 'recbyfdaphar.uid')
+						->leftJoin('x08 AS recbyfdaph', 'appform.CashierApproveByPharma', '=', 'recbyfdaph.uid')
+						->leftJoin('x08 AS evalby', 'appform.recommendedby', '=', 'evalby.uid')
+						->leftJoin('x07', 'comeval.grpid', '=', 'x07.grp_id')
+						->leftJoin('barangay', 'appform.brgyid', '=', 'barangay.brgyid')
+						->leftJoin('city_muni', 'appform.cmid', '=', 'city_muni.cmid')
+						->leftJoin('province', 'appform.provid', '=', 'province.provid')
+						// ->join('type_facility', 'appform.hfser_id', '=', 'type_facility.hfser_id') 
+						->leftjoin('trans_status', 'appform.status', '=', 'trans_status.trns_id')
+						// ->join('orderofpayment', 'type_facility.oop_id', '=', 'orderofpayment.oop_id')
+						// , 'orderofpayment.*'
+						->select('appform.*', 'appform.street_number',  'x08.*',  'comeval.fname as com_fname',  'comeval.pre as com_pre',  'comeval.suf as com_suf',  'comeval.mname as com_mname', 'comeval.lname as com_lname', 
 
-												 'cashval.fname as cash_fname',  
-												  'cashval.pre as cash_pre',  
-												'cashval.suf as cash_suf',  
-												'cashval.mname as cash_mname', 
-												 'cashval.lname as cash_lname', 
+						'cashval.fname as cash_fname',  
+						'cashval.pre as cash_pre',  
+						'cashval.suf as cash_suf',  
+						'cashval.mname as cash_mname', 
+						'cashval.lname as cash_lname', 
 
-												  'recfdaval.fname as recfdaval_fname',  
-												  'recfdaval.pre as recfdaval_pre',  
-												'recfdaval.suf as recfdaval_suf',  
-												'recfdaval.mname as recfdaval_mname', 
-												 'recfdaval.lname as recfdaval_lname',   
-												 
-												 'evalby.fname as evalby_fname',  
-												  'evalby.pre as evalby_pre',  
-												'evalby.suf as evalby_suf',  
-												'evalby.mname as evalby_mname', 
-												 'evalby.lname as evalby_lname', 
+						'recfdaval.fname as recfdaval_fname',  
+						'recfdaval.pre as recfdaval_pre',  
+						'recfdaval.suf as recfdaval_suf',  
+						'recfdaval.mname as recfdaval_mname', 
+						'recfdaval.lname as recfdaval_lname',   
+							
+						'evalby.fname as evalby_fname',  
+						'evalby.pre as evalby_pre',  
+						'evalby.suf as evalby_suf',  
+						'evalby.mname as evalby_mname', 
+						'evalby.lname as evalby_lname', 
 
-												  'recbyfda.fname as recbyfda_fname',  
-												  'recbyfda.pre as recbyfdal_pre',  
-												'recbyfda.suf as recbyfda_suf',  
-												'recbyfda.mname as recbyfda_mname', 
-												 'recbyfda.lname as recbyfda_lname',  
+						'recbyfda.fname as recbyfda_fname',  
+						'recbyfda.pre as recbyfdal_pre',  
+						'recbyfda.suf as recbyfda_suf',  
+						'recbyfda.mname as recbyfda_mname', 
+						'recbyfda.lname as recbyfda_lname',  
 
- 												 'recbyfdaphar.fname as recbyfdaphar_fname',  
-												  'recbyfdaphar.pre as recbyfdalphar_pre',  
-												'recbyfdaphar.suf as recbyfdaphar_suf',  
-												'recbyfdaphar.mname as recbyfdaphar_mname', 
-												 'recbyfdaphar.lname as recbyfdaphar_lname',  
+						'recbyfdaphar.fname as recbyfdaphar_fname',  
+						'recbyfdaphar.pre as recbyfdalphar_pre',  
+						'recbyfdaphar.suf as recbyfdaphar_suf',  
+						'recbyfdaphar.mname as recbyfdaphar_mname', 
+						'recbyfdaphar.lname as recbyfdaphar_lname',  
 
-												  'recbyfdaph.fname as recbyfdaph_fname',  
-												  'recbyfdaph.pre as recbyfdaph_pre',  
-												'recbyfdaph.suf as recbyfdaph_suf',  
-												'recbyfdaph.mname as recbyfdaph_mname', 
-												 'recbyfdaph.lname as recbyfdaph_lname',  
-												 
-												 'x07.grp_desc', 
-												 'barangay.brgyname', 
-												 'city_muni.cmname',
-												  'province.provname',
-												   'trans_status.trns_desc') //, 'type_facility.*'
-												->where('appform.appid', '=', $appid)
-												// , 'type_facility.*', 'orderofpayment.*'
-												// ->where('type_facility.facid', '=', 'appform.facid')
-												->first();
+						'recbyfdaph.fname as recbyfdaph_fname',  
+						'recbyfdaph.pre as recbyfdaph_pre',  
+						'recbyfdaph.suf as recbyfdaph_suf',  
+						'recbyfdaph.mname as recbyfdaph_mname', 
+						'recbyfdaph.lname as recbyfdaph_lname',  
+							
+						'x07.grp_desc', 
+						'barangay.brgyname', 
+						'city_muni.cmname',
+						'province.provname',
+						'trans_status.trns_desc') //, 'type_facility.*'
+						->where('appform.appid', '=', $appid)
+						// , 'type_facility.*', 'orderofpayment.*'
+						// ->where('type_facility.facid', '=', 'appform.facid')
+						->first();
+						
+						if($data0 != null)
+						{
+							
 						/////  Evaluation
 						if ($data0->isrecommended != null) {
 							$time1 = $data0->recommendedtime;
@@ -6151,6 +6227,8 @@ public static function checkConmem($appid)
 								$data0->FDAAprovalApproverPharma = 'Not Available' ;
 							}
 						}
+						
+					}
 				return $data0;
 			} 
 			catch (Exception $e) 
@@ -8699,6 +8777,7 @@ public static function getAllUidByRegFac($regfac_id) {
 		$h1 = $h2 = $h3 = $h4 = array();
 		$monid = ($monid ? $monid : null);
 		$selfAssess = ($selfAssess ? 1 : null);
+
 		if(!$isPtc){
 			$table = 'assessmentcombinedduplicate';
 			$whereClause = [['appid',$appid],['monid',$monid],['selfassess',$selfAssess]];
@@ -8707,6 +8786,7 @@ public static function getAllUidByRegFac($regfac_id) {
 			$whereClause = [['appid',$appid],['evaluatedBy',session()->get('employee_login')->uid],['revision',$revision]];
 		}
 		$db = DB::table($table)->where($whereClause)->select('asmtH3ID_FK','asmtH2ID_FK','asmtH1ID_FK','partID')->distinct()->get();
+		
 		foreach ($db as $key => $value) {
 			for ($i=0; $i < 4; $i++) { 
 				
@@ -8844,6 +8924,7 @@ public static function forDoneHeadersNew($appid,$monid,$selfAssess,$isPtc = fals
 
 	public static function assessedDone($cond,$appid,$monid = null,$selfAssess = null, $isPtc = false){
 		$arrayToSend = array();
+
 		if(isset($cond)){
 
 			$arrAssessd = array();
@@ -8988,6 +9069,7 @@ public static function forDoneHeadersNew($appid,$monid,$selfAssess,$isPtc = fals
 		try {
 			$arrRet = array();
 			$toPush = false;
+			
 			if(is_array($session) && count($session) > 0){
 
 				foreach ($session as $key) {
@@ -9007,6 +9089,7 @@ public static function forDoneHeadersNew($appid,$monid,$selfAssess,$isPtc = fals
 	public static function isRequestForFDA($request){
 		$selection = array('machines','pharma');
 		$selected = null;
+
 		if(!in_array($request, $selection)){
 			$selected = 'machines';
 		} else {
@@ -9047,17 +9130,15 @@ public static function forDoneHeadersNew($appid,$monid,$selfAssess,$isPtc = fals
 			->get();
 
 			$st = 1;
+			
 			foreach($check as $c){
 				if($c->hgpid == 6 && !is_null($c->specified)){
 					$st = $c->servtype_id;
 				}
-			}
+			}			
 			
-			
-			return DB::table('x08_ft')->join('facilitytyp','x08_ft.facid','facilitytyp.facid')->join('hfaci_grp','facilitytyp.hgpid','hfaci_grp.hgpid')
-			->where([['x08_ft.appid',$appid],['facilitytyp.servtype_id',$st]])
-			->orderBy('x08_ft.id', 'ASC')
-			->first();
+			return DB::table('x08_ft')->join('facilitytyp','x08_ft.facid','facilitytyp.facid')->join('hfaci_grp','facilitytyp.hgpid','hfaci_grp.hgpid')->where([['x08_ft.appid',$appid],['facilitytyp.servtype_id',$st]])
+			->orderBy('x08_ft.id', 'ASC')->first();
 			// return DB::table('x08_ft')->join('facilitytyp','x08_ft.facid','facilitytyp.facid')->join('hfaci_grp','facilitytyp.hgpid','hfaci_grp.hgpid')->where([['x08_ft.appid',$appid],['facilitytyp.servtype_id',1]])->first();
 		}
 	}
@@ -9066,6 +9147,18 @@ public static function forDoneHeadersNew($appid,$monid,$selfAssess,$isPtc = fals
 		if(!empty($appid)){
 			return ( isset( self::getHighestApplicationFromX08FT($appid)->hgpid ) ? DB::table('hfaci_grp')->where('hgpid',self::getHighestApplicationFromX08FT($appid)->hgpid)->first() : null);
 		}
+	}
+	//All authorization except CON and PTC
+	public static function getAuthorizationTypeExceptCONPTC($appid){
+		$hfser_id="";
+		$data = DB::select("SELECT facl_grp.hfser_id FROM x08_ft LEFT JOIN facilitytyp ON x08_ft.facid=facilitytyp.facid LEFT JOIN facl_grp ON facl_grp.hgpid=facilitytyp.hgpid WHERE x08_ft.appid!='NULL' AND facl_grp.hfser_id!='PTC' AND facl_grp.hfser_id!='CON' AND x08_ft.appid='$appid' ORDER BY ABS(appid)");		
+		
+		if(count($data)){
+			foreach($data AS $each){
+				$hfser_id = $each->hfser_id;
+			}
+		}
+		return $hfser_id;
 	}
 
 	public static function deleteUploadedOnPublic($filename){

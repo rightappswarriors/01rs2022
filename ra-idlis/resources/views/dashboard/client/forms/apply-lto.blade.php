@@ -92,18 +92,13 @@
                           @include('dashboard.client.forms.parts.num-dialysis')
                         
                         {{-- LTO Add-On Services --}}
-                        @include('dashboard.client.forms.parts.license-to-operate.add-on-services')
-
-                       
+                        @include('dashboard.client.forms.parts.license-to-operate.add-on-services')                       
 
                         {{-- LTO For Ambulance Details --}}
                         @include('dashboard.client.forms.parts.license-to-operate.for-ambulance-details')
 
-
-
                         {{-- LTO Other Clinical Service(s) --}}
                         @include('dashboard.client.forms.parts.license-to-operate.other-clinic-services')
-
 
                         {{-- LTO For Clinical Laboratory --}}
                         @include('dashboard.client.forms.parts.license-to-operate.for-clinical-laboratory')
@@ -116,10 +111,6 @@
 
                         {{-- LTO For Pharmacy --}}
                         @include('dashboard.client.forms.parts.license-to-operate.for-pharmacy')
-
-                     
-
-                      
                        
                         <div class="form-group row col-md-12 mt-5">
                             <div class="col-lg-3 col-md-3 col-xs-12"></div>
@@ -155,47 +146,40 @@
                 </div>
               
                 @endif
-                
-                
+                                
                 <div class="col-md-12"> &nbsp;</div>
 
-                          
-
-
                             @if($grpid == 'RLO')
+
                                 @if(app('request')->input('grp') != 'c'  && app('request')->input('cont') != 'yes' && app('request')->input('grpn') != 'c' )
-                                            <!-- <div class="col-lg-3 col-md-3 col-xs-12 mb-5">
-                                            <div class="col-md-12" id="divRem" >
+                                        <!-- <div class="col-lg-3 col-md-3 col-xs-12 mb-5">
+                                        <div class="col-md-12" id="divRem" >
+                                            <label for="remarks" >Remarks</label>
+                                            <textarea class="form-control" name="remarks" id="remarks" >
+                                            
+                                            </textarea>
+                                        </div>
+                                            <button id="update"  class="btn btn-primary btn-block" type="button" onClick="savePartialLto('update')">
+                                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                                Update
+                                            </button>
+                                        </div> -->
+                                        <div class="col-md-12" id="divRem" >
                                                 <label for="remarks" >Remarks</label>
                                                 <textarea class="form-control" name="remarks" id="remarks" >
                                                 
                                                 </textarea>
                                             </div>
+                                            <div class="col-md-12"> &nbsp;</div>
+                                            <div class="col-lg-3 col-md-3 col-xs-12 mb-5">
                                                 <button id="update"  class="btn btn-primary btn-block" type="button" onClick="savePartialLto('update')">
                                                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                                                    Update
+                                                    Update 
                                                 </button>
-                                            </div> -->
-                                            <div class="col-md-12" id="divRem" >
-                                                    <label for="remarks" >Remarks</label>
-                                                    <textarea class="form-control" name="remarks" id="remarks" >
-                                                    
-                                                    </textarea>
-                                                </div>
-                                                <div class="col-md-12"> &nbsp;</div>
-                                                <div class="col-lg-3 col-md-3 col-xs-12 mb-5">
-                                                        <button id="update"  class="btn btn-primary btn-block" type="button" onClick="savePartialLto('update')">
-                                                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                                                            Update 
-                                                        </button>
-                                                </div>
+                                        </div>
                                     @endif
                              @endif
-
-                        </div>
-
-                        
-                       
+                        </div> 
                     </form>
                 </div>
             </div>

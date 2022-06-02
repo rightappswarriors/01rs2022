@@ -48,9 +48,6 @@
 						</div>
 					</div>
 				</div>
-				{{-- <div class="container pt-1">
-					Head of the Facility/Medical Director: <span class="font-weight-bold text-uppercase">Reancy Quincy</span> 
-				</div> --}}
 				<div class="container pt-1">
 					Owner: <span class="font-weight-bold text-uppercase">{{$neededData[0]->owner}}</span> 
 				</div>

@@ -339,6 +339,12 @@
                                             <li><a href="{{ asset('/employee/dashboard/mf/charges') }}">&nbsp;&nbsp;&nbsp;&nbsp;Charges</a></li>
 
                                         </span>
+
+                                        <span class="PY004_allow">
+
+                                            <li><a href="{{ asset('/employee/dashboard/mf/charge_fees') }}">&nbsp;&nbsp;&nbsp;&nbsp;Charges Fees</a></li>
+
+                                        </span> 
                                         
                                         <span class="PY004_allow">
 
@@ -631,6 +637,12 @@
                              <span class="PF002_allow">
 
                                 <li><a href="{{asset('/employee/dashboard/processflow/evaluate/technical')}}">&nbsp;&nbsp;&nbsp;&nbsp;Technical Evaluation</a></li>
+
+                            </span>
+
+                            <span class="PF002_allow">
+
+                            <li><a href="{{asset('/employee/dashboard/processflow/compliance')}}">&nbsp;&nbsp;&nbsp;&nbsp;For Compliance</a></li>
 
                             </span>
 

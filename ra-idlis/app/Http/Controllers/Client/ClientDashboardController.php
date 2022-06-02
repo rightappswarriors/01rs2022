@@ -13,8 +13,6 @@ use App\Models\Barangay;
 use App\Models\HFACIGroup;
 use App\Models\FACLGroup;
 use AjaxController;
-
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
@@ -139,9 +137,9 @@ class ClientDashboardController extends Controller
         $user_data = session()->get('uData');
         $nameofcomp = DB::table('x08')->where([['uid', $user_data->uid]])->first()->nameofcompany;
         $hfser_id = 'COA';
-
         $faclArr = [];
         $facl_grp = FACLGroup::where('hfser_id', $hfser_id)->select('hgpid')->get();
+
         foreach ($facl_grp as $f) {
             array_push($faclArr, $f->hgpid);
         }

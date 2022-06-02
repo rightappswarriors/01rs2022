@@ -75,12 +75,22 @@ function xucwords($string)
 				</div>
 				<div class="row">
 					<div class="col-md-2">
-						<p style="float: left;" class="leftHeader">Name of Facility </p><span style="float: right">:</span>
+						<p style="float: left;" class="leftHeader">Name of Health Facility </p><span style="float: right">:</span>
 					</div>
 					<div class="col-md-8">
 						<p  class="rightHeader"><strong>{{((isset($retTable[0]->facilityname)) ? strtoupper($retTable[0]->facilityname)  : 'No facility name')}}</strong></p>
 					</div>
 				</div>
+				
+				<div class="row">
+					<div class="col-md-2">
+						<p style="float: left;" class="leftHeader">Type of Health Facility </p><span style="float: right">:</span>
+					</div>
+					<div class="col-md-8">
+						<p  class="rightHeader"><strong>{{(ajaxController::getFacilitytypeFromHighestApplicationFromX08FT($retTable[0]->appid)->hgpdesc ?? 'NOT FOUND')}}</strong></p>
+					</div>
+				</div>
+
 				<div class="row">
 					<div class="col-md-2">
 						<p style="float: left;" class="leftHeader">Location </p><span style="float: right">:</span>

@@ -115,6 +115,14 @@ Route::prefix('client1')->group(function() {
 		Route::match(['get', 'post'], '/new', 'NewClientController@__applyNew')->name('client1.applynew');
 		Route::match(['get', 'post'], '/assessmentSend/{appid}/{apptype}', 'NewClientController@AssessmentSend');
 
+		Route::match(['get', 'post'], '/compliance/{appid}', 'NewClientController@__complianceDetails');
+		Route::match(['get', 'post'], '/complianceattachment/{complianceid}/{appid}', 'NewClientController@__complianceAttachment');
+		Route::match(['get', 'post'], '/complianceremarks/{complianceid}/{appid}', 'NewClientController@__complianceRemarks');
+		Route::match(['get', 'post'], '/complianceaddremarks', 'NewClientController@__complianceAddRemarks');
+		Route::match(['get', 'post'], '/complianceaddattachment', 'NewClientController@__complianceAddAttachment');
+
+		
+
 		Route::match(['get', 'post'], '/assessmentReady/{appid}', 'NewClientController@assessmentReady');
 		Route::match(['get', 'post'], '/HeaderOne/{appid}/{part}/{montype?}', 'NewClientController@assessmentHeaderOne'); // View each
 

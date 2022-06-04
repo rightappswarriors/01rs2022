@@ -208,6 +208,157 @@ class NewClientController extends Controller {
 			return redirect('client1/home')->with('errRet', ['errAlt'=>'danger', 'errMsg'=>'Error on page Apply. Contact the admin']);
 		}
 	}
+
+	public function __complianceDetails(Request $request, $appid) {
+
+
+		try {
+			$cSes = FunctionsClientController::checkSession(true);
+			if(count($cSes) > 0) {
+				return redirect($cSes[0])->with($cSes[1], $cSes[2]);
+			}
+
+			$data = FunctionsClientController::getComplianceDetails($appid);
+
+			
+
+			$array = $data->all();
+
+			// dd($array);
+
+			return view('client1.compliance', ['BigData'=>$data, 'complianceId' => $array[0]->compliance_id, 'appid' => $appid, 'type'=>'technical', 'isdocumentary'=>'false']);
+
+		} catch(Exception $e) {
+			return redirect('client1/home')->with('errRet', ['errAlt'=>'danger', 'errMsg'=>'Error on page Apply. Contact the admin']);
+			
+		}
+
+
+	}
+
+	public function __complianceAttachment(Request $request, $complianceId, $appid){
+
+		try {
+			$cSes = FunctionsClientController::checkSession(true);
+			if(count($cSes) > 0) {
+				return redirect($cSes[0])->with($cSes[1], $cSes[2]);
+			}
+
+		
+
+			$data = FunctionsClientController::getComplianceAttachment($complianceId);
+
+		
+
+			return view('client1.complianceattachment', ['BigData'=>$data, 'complianceId' => $complianceId, 'appid' => $appid, 'type'=>'technical', 'isdocumentary'=>'false']);
+
+		} catch(Exception $e) {
+
+			return redirect('client1/home')->with('errRet', ['errAlt'=>'danger', 'errMsg'=>'Error on page Apply. Contact the admin']);
+			
+		}
+
+	}
+
+	public function __complianceAddAttachment(Request $request){
+
+		
+		if ($request->isMethod('post')) {
+			
+			
+
+			if($request->has('attachment')){
+
+					$attachment = FunctionsClientController::uploadFileNew($request->attachment);
+					$curForm = FunctionsClientController::getUserDetails();
+
+					$data = array(
+						'compliance_id'=> $request->compliance_id, 
+						'app_id'=> $request->appid, 
+						'file_real_name' => $attachment['fileNameToStore'], 
+						'description' => $request->description,
+						'attachment_name' => $request->attachment_name,
+						'date_submitted'=>date('Y-m-d'), 
+						'user_id' => $curForm[0]->uid,
+						'type' =>  $attachment['mime'], 
+						'path' =>  $attachment['path'], 
+					);
+
+					DB::table('compliance_attachment')->insert($data);
+
+					// dd($data);
+
+			} else {
+				return back()->with('errRet', ['errAlt'=>'danger', 'errMsg'=>'No file selected']);
+			}
+
+
+
+			return redirect()->back()->with('errRet', ['errAlt'=>'success', 'errMsg'=>'Added new entry Successfully.']);
+
+
+		}
+
+		
+	}
+
+	public function __complianceAddRemarks(Request $r){
+
+		if ($r->isMethod('post')) {
+			$currData = $email = null;		
+
+			
+			// $currentuser = AjaxController::getCurrentUserAllData();
+
+			$curForm = FunctionsClientController::getUserDetails();
+
+			// dd($curForm);
+
+			$data = array(
+				'remarks_date'=>date('Y-m-d'), 
+				'compliance_id'=>$r->compliance_id, 
+				'message'=>$r->message, 
+				'user_id' => $curForm[0]->uid
+			);
+
+
+			DB::table('compliance_remarks')->insert($data);
+
+
+
+			return redirect()->back()->with('errRet', ['errAlt'=>'success', 'errMsg'=>'Added new entry Successfully.']);
+
+
+		}
+		
+	}
+
+	public function __complianceRemarks(Request $request, $complianceId, $appid){
+
+
+		try {
+			$cSes = FunctionsClientController::checkSession(true);
+			if(count($cSes) > 0) {
+				return redirect($cSes[0])->with($cSes[1], $cSes[2]);
+			}
+
+			$data = FunctionsClientController::getComplianceRemarks($complianceId);
+
+			$array = $data->all();
+
+			return view('client1.complianceremarks', ['BigData'=>$data, 'complianceId' => $complianceId, 'appid' => $appid, 'type'=>'technical', 'isdocumentary'=>'false']);
+
+		} catch(Exception $e) {
+			return redirect('client1/home')->with('errRet', ['errAlt'=>'danger', 'errMsg'=>'Error on page Apply. Contact the admin']);
+			
+		}
+
+	}
+
+
+
+
+
 	public function __applyNew(Request $request) {
 		try {
 			$cSes = FunctionsClientController::checkSession(true);
@@ -789,6 +940,9 @@ class NewClientController extends Controller {
 		}
 		return redirect('client1/home')->with('errRet', ['errAlt'=>'warning', 'errMsg'=>$errMsg]);
 	}
+
+	
+
 	public function __change_request(Request $request, $appid) {
 		// try {
 			$cSes = FunctionsClientController::checkSession(true);

@@ -51,7 +51,6 @@
 
                             <a href="#" class="btn btn-primary"> 
                             <i class="fa fa-fw fa-eye"></i>
-                            </td>
                             <a href="#" class="btn btn-success"> 
                             <i class="fa fa-fw fa-download"></i>
                             </td>

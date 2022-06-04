@@ -7076,6 +7076,16 @@ use FunctionsClientController;
 						'date_for_compliance' => $mytime,
 						'valid_until' => $expiry
 					]);
+
+					DB::table('appform')
+					->where('appid', $request->appid)
+					->update([
+						'status' => 'FC'
+					]);
+
+
+
+
 				}
 
 				// if(!isset($monid)){

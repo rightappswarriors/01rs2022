@@ -109,6 +109,48 @@ class FunctionsClientController extends Controller {
 			return $e;
 		}
 	}
+
+	public static function getComplianceDetails($appid){
+
+		$complianceData = DB::table('compliance_item')
+			->leftjoin('compliance_data','compliance_data.compliance_id','compliance_item.compliance_id')
+			->where('compliance_data.app_id', $appid)
+			->leftjoin('assessmentcombinedduplicate','assessmentcombinedduplicate.dupID','compliance_item.assesment_id')
+			->leftjoin('asmt_h1','asmt_h1.asmtH1ID','assessmentcombinedduplicate.asmtH1ID_FK')
+			->leftjoin('asmt_h2','asmt_h2.asmtH2ID','assessmentcombinedduplicate.asmtH2ID_FK')
+			->leftjoin('asmt_h3','asmt_h3.asmtH3ID','assessmentcombinedduplicate.asmtH3ID_FK')
+			->get();
+			
+			return $complianceData;
+	}
+
+
+	public static function getComplianceRemarks($complianceId){
+		$complianceData = DB::table('compliance_remarks')
+		->where('compliance_remarks.compliance_id', $complianceId)
+		->leftjoin('compliance_data','compliance_data.compliance_id','compliance_remarks.compliance_id')
+		->where('compliance_data.is_for_compliance', 1)
+		->leftjoin('x08','x08.uid','compliance_remarks.user_id')
+		->orderBy('remarks_id', 'DESC')
+		->get();
+
+		
+		return $complianceData;
+	}
+
+	public static function getComplianceAttachment($complianceId){
+
+		$complianceData = DB::table('compliance_attachment')
+		->where('compliance_attachment.compliance_id', $complianceId)
+		->leftjoin('compliance_data','compliance_data.compliance_id','compliance_attachment.compliance_id')
+		->where('compliance_data.is_for_compliance', 1)
+		->leftjoin('x08','x08.uid','compliance_attachment.user_id')
+		->get();
+		
+		return $complianceData;
+	}
+
+
 	public static function getUserDetailsByAppform($appid = "", $curUid = "",$choice = 'default') {
 		try {
 			$retArr = [];
@@ -926,6 +968,23 @@ class FunctionsClientController extends Controller {
 	    }
         return $retArr;
 	}
+
+	public static function uploadFileNew($dFile) {
+		$retArr = [];
+		if(isset($dFile)) {
+			$_file = $dFile;
+			$filename = $_file->getClientOriginalName(); 
+	        $filenameOnly = pathinfo($filename,PATHINFO_FILENAME); 
+	        $fileExtension = $_file->getClientOriginalExtension();
+	        $fileNameToStore = (session()->has('employee_login') ? self::getSessionParamObj("employee_login", "uid") : self::getSessionParamObj("uData", "uid")).'_'.Str::random(10).'_'.date('Y_m_d_i_s').'.'.$fileExtension;
+	        $filemMIME = $_file->getMimeType();
+	        $path = $_file->storeAs('public/uploaded', $fileNameToStore);
+	        $fileSize = $_file->getClientSize();
+	        $retArr = ['fileExtension'=>$fileExtension, 'fileNameToStore'=>$fileNameToStore, 'fileSize'=>$fileSize, 'mime'=> $filemMIME, 'path'=> $path];
+	    }
+        return $retArr;
+	}
+
 
 	public static function hasEmptyDBFields($table = null, $where = [], $fields = []){
 		$haslist = false;

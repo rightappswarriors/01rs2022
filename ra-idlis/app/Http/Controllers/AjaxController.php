@@ -4680,6 +4680,7 @@ public static function checkConmem($appid)
 			->leftjoin('compliance_data','compliance_data.compliance_id','compliance_attachment.compliance_id')
 			->where('compliance_data.is_for_compliance', 1)
 			->leftjoin('x08','x08.uid','compliance_attachment.user_id')
+			->orderBy('attachment_id', 'DESC')
 			->get();
 			
 			return $complianceData;
@@ -4691,6 +4692,7 @@ public static function checkConmem($appid)
 			->leftjoin('compliance_data','compliance_data.compliance_id','compliance_remarks.compliance_id')
 			->where('compliance_data.is_for_compliance', 1)
 			->leftjoin('x08','x08.uid','compliance_remarks.user_id')
+			->orderBy('remarks_id', 'DESC')
 			->get();
 			
 			return $complianceData;

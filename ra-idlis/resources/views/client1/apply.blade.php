@@ -324,6 +324,13 @@
 									    <a  href="{{asset('client1/printPayment')}}/{{FunctionsClientController::getToken()}}/{{$each[0]->appid}}" class="dropdown-item ddi bg-{{$_tColor}}" style="border-radius: 3px;" onclick="remAppHiddenId('chgfil{{$each[0]->appid}}')" href="#">View Order of Payment on DOH </a>
 									  </div>
 									@endif 
+
+									@if($each[0]->trns_desc == "For Compliance")
+										<div class="dropdown-divider"></div>
+										<div style="margin-left: 10px;margin-right: 10px;">
+										<a class="dropdown-item ddi bg-{{$_tColor}}" style="border-radius: 3px;" href="{{asset('client1/apply/compliance')}}/{{$each[0]->appid}}">For Compliance</a>
+										</div>	
+									@endif	
 							</div>
 							
 							<div class="modal fade" id="chgfil-{{$each[0]->appid}}" role="dialog"  tabindex="-1">

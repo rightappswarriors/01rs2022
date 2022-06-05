@@ -6730,12 +6730,24 @@ use FunctionsClientController;
 						}
 					}	
 
-					$compliance = array(
-						'app_id' => $request->appid,
-						'is_for_compliance' => 0,
-					);
+					$complianceCheck = DB::table('compliance_data')->where('app_id',$request->appid)->get();
+				
 
-					$complianceId = DB::table('compliance_data')->insertGetId($compliance);
+			
+					if($complianceCheck->isNotEmpty()) {
+
+						$complianceId = $complianceCheck[0]->compliance_id;
+
+					} else {
+
+						$compliance = array(
+							'app_id' => $request->appid,
+							'is_for_compliance' => 0,
+						);
+
+						$complianceId = DB::table('compliance_data')->insertGetId($compliance);
+					}
+					
 
 					if($newcheck){
 					// if(DB::table('assessmentcombinedduplicate')->where([['x08_id',$request->xid],['selfassess',($isSelfAssess ? 1 : null)]])->count() <= 0){

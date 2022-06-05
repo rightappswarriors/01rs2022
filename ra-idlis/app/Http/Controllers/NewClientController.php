@@ -278,7 +278,6 @@ class NewClientController extends Controller {
 						'file_real_name' => $attachment['fileNameToStore'], 
 						'description' => $request->description,
 						'attachment_name' => $request->attachment_name,
-						'date_submitted'=>date('Y-m-d'), 
 						'user_id' => $curForm[0]->uid,
 						'type' =>  $attachment['mime'], 
 						'path' =>  $attachment['path'], 
@@ -315,7 +314,6 @@ class NewClientController extends Controller {
 			// dd($curForm);
 
 			$data = array(
-				'remarks_date'=>date('Y-m-d'), 
 				'compliance_id'=>$r->compliance_id, 
 				'message'=>$r->message, 
 				'user_id' => $curForm[0]->uid

@@ -634,6 +634,7 @@ Route::match(['get', 'post'], 'employee/dashboard/processflow/complianceattachme
 Route::match(['get', 'post'], 'employee/dashboard/processflow/complianceremarks/{compliance_id}', 'DOHController@complianceRemarks');
 
 Route::match(['get', 'post'], 'employee/dashboard/processflow/complianceaddremarks', 'DOHController@complianceAddRemarks');
+Route::match(['get', 'post'], 'employee/dashboard/processflow/complianceaddattachment', 'DOHController@complianceAddAttachment');
 Route::match(['get', 'post'], 'employee/dashboard/processflow/complianceChecker/{compliance_item_id}/{assesment_status}', 'DOHController@complianceChecker');
 Route::match(['get', 'post'], 'employee/dashboard/processflow/complianceSubmit/{status}/{complianceId}', 'DOHController@complianceSubmit');
 

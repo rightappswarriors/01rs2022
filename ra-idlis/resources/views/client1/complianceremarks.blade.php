@@ -78,7 +78,7 @@
 				<thead class="thead-dark">
                 <tr>
                       <td scope="col" class="text-center">Timestamp</td>
-                      <td scope="col" class="text-center">From</td>
+                      <td scope="col" class="text-center">Client</td>
                       <td scope="col" class="text-center">Message</td>
                   </tr>
 				</thead>
@@ -88,7 +88,7 @@
                       
                           <tr>
                             <td class="text-center">{{$data->remarks_date}}</td>
-                            <td class="text-center">{{$data->fname}} {{$data->lname}}</td>
+                            <td class="text-center">{{$data->authorizedsignature}}</td>
                             <td class="text-center">{!!$data->message!!}</td>
                  
                             </td>

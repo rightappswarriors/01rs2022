@@ -7393,7 +7393,6 @@ use FunctionsClientController;
 			
 
 				$data = array(
-					'remarks_date'=>date('Y-m-d'), 
 					'compliance_id'=>$r->compliance_id, 
 					'message'=>$r->message, 
 					'user_id' => $currentuser['cur_user']
@@ -7410,6 +7409,42 @@ use FunctionsClientController;
 
 			}
 			
+		}
+
+		public function complianceAddAttachment(Request $request){
+			if ($request->isMethod('post')) {
+
+				if($request->has('attachment')){
+	
+						$attachment = AjaxController::uploadFileNew($request->attachment);
+						// dd($attachment);
+						$currentuser = AjaxController::getCurrentUserAllData();
+	
+						$data = array(
+							'compliance_id'=> $request->compliance_id, 
+							'app_id'=> $request->appid, 
+							'file_real_name' => $attachment['fileNameToStore'], 
+							'description' => $request->description,
+							'attachment_name' => $request->attachment_name,
+							'user_id' =>  $currentuser['cur_user'],
+							'type' =>  $attachment['mime'], 
+							'path' =>  $attachment['path'], 
+						);
+	
+						DB::table('compliance_attachment')->insert($data);
+	
+						// dd($data);
+	
+				} else {
+					return back()->with('errRet', ['errAlt'=>'danger', 'errMsg'=>'No file selected']);
+				}
+	
+	
+	
+				return redirect()->back()->with('errRet', ['errAlt'=>'success', 'errMsg'=>'Added new entry Successfully.']);
+	
+	
+			}
 		}
 
 		public function complianceSubmit($status = 1, $complianceId ){
@@ -7437,9 +7472,10 @@ use FunctionsClientController;
 			{
 				$data = AjaxController::getComplianceAttachment($complianceId);
 
-				// dd($data);
+
+				$array = $data->all();
 				// exit;
-				return view('employee.processflow.pfcomplianceattachment', ['BigData'=>$data, 'complianceId' => $complianceId, 'type'=>'technical', 'isdocumentary'=>'false']);
+				return view('employee.processflow.pfcomplianceattachment', ['BigData'=>$data, 'appid'=>$array[0]->app_id, 'complianceId' => $complianceId, 'type'=>'technical', 'isdocumentary'=>'false']);
 			} 
 			catch (Exception $e) 
 			{

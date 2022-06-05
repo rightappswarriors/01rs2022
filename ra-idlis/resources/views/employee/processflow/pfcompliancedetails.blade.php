@@ -20,7 +20,7 @@
           <div class="card-body table-responsive">
 
 
-          	<table class="table table-hover" style="font-size:13px;" id="example">
+          	<table class="table table-bordered table-striped dataTable" style="font-size:13px;" id="example">
                   <thead>
               
                   <tr>
@@ -98,11 +98,11 @@
       });
      
 
-      if(jQuery('.compliance_complied').not(':checked').length == 0){
-          jQuery('.complied-btn').css('display', 'block');
-      } else {
-          jQuery('.complied-btn').css('display', 'none');
-      }
+      // if(jQuery('.compliance_complied').not(':checked').length == 0){
+      //     jQuery('.complied-btn').css('display', 'block');
+      // } else {
+      //     jQuery('.complied-btn').css('display', 'none');
+      // }
 
     });
 

@@ -77,7 +77,7 @@
                       <td scope="col" class="text-center">File Name</td>
                       <td scope="col" class="text-center">Description</td>
                       <td scope="col" class="text-center">Type</td>
-                      <td scope="col" class="text-center">Uploaded By</td>
+                      <td scope="col" class="text-center">Client</td>
                       <td scope="col" class="text-center">Action</td>
                   </tr>
 				</thead>
@@ -91,14 +91,14 @@
                        <td class="text-center">{{$data->attachment_name}}</td>
                        <td class="text-center">{{$data->description}}</td>
                        <td class="text-center">{{$data->type}}</td>
-                       <td class="text-center">{{$data->fname}} {{$data->lname}}</td>
+                       <td class="text-center">{{$data->authorizedsignature}}</td>
                       
                        <td>
 
-                       <a href="{{ route('DownloadFile', $data->path) }}" class="btn btn-primary"> 
+                       <a href="{{asset('file/open')}}/{{$data->file_real_name}}" target="_blank" class="btn btn-primary"> 
                        <i class="fa fa-fw fa-eye"></i>
 
-                       <a href="{{ route('DownloadFile', $data->path) }}" download class="btn btn-success"> 
+                       <a href="{{asset('file/open')}}/{{$data->file_real_name}}" download class="btn btn-success"> 
                        <i class="fa fa-fw fa-download"></i>
                        </td>
    

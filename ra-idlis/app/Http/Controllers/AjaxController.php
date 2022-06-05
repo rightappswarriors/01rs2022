@@ -2,6 +2,7 @@
 	namespace App\Http\Controllers;
 	use Illuminate\Support\Facades\Response;
 	use Illuminate\Http\Request;
+	use Illuminate\Support\Str;
 	use Illuminate\Support\Facades\DB;
 	use Illuminate\Database\Query\Builder;
 	use Illuminate\Support\Facades\Hash;
@@ -90,6 +91,26 @@
 				$name = $fname.' '.$mid.''.$lname;
 				return $name;
 		}
+
+		public static function uploadFileNew($dFile) {
+
+			$retArr = [];
+			if(isset($dFile)) {
+				$_file = $dFile;
+				$filename = $_file->getClientOriginalName(); 
+				$filenameOnly = pathinfo($filename,PATHINFO_FILENAME); 
+				$fileExtension = $_file->getClientOriginalExtension();
+				$fileNameToStore = self::getCurrentUserAllData()['cur_user'].'_'.Str::random(10).'_'.date('Y_m_d_i_s').'.'.$fileExtension;
+				$filemMIME = $_file->getMimeType();
+				$path = $_file->storeAs('public/uploaded', $fileNameToStore);
+				$fileSize = $_file->getClientSize();
+				$retArr = ['fileExtension'=>$fileExtension, 'fileNameToStore'=>$fileNameToStore, 'fileSize'=>$fileSize, 'mime'=> $filemMIME, 'path'=> $path];
+			}
+			return $retArr;
+		}
+
+		
+
 		public static function DownloadFile($id)
 		{
 			try 

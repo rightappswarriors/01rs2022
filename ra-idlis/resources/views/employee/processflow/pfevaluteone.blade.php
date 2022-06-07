@@ -1,6 +1,7 @@
 @if (session()->exists('employee_login'))     
     @php
     $triggerThis = ($forhfsrb ? ($AppData->isrecommended == 2 || $AppData->isrecommended == null) : ($office == 'xray' ? ($AppData->ispreassessed == 2 || $AppData->ispreassessed == null) : ($AppData->ispreassessedpharma == 2 || $AppData->ispreassessedpharma == null)));
+    
     @endphp 
     @extends('mainEmployee')
     @section('title', 'Evaluate Process Flow')

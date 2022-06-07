@@ -36,7 +36,7 @@
                   </thead>
                   <tbody id="FilterdBody">
                    @if (isset($BigData))
-                        @foreach ($BigData as $data)
+                   @foreach ($BigData as $data)
                           @php
                           $preassess = (strtolower($request) == 'machines' ? $data->ispreassessed : $data->ispreassessedpharma);
                           $oop = (strtolower($request) == 'machines' ? $data->isPayEvalFDA : $data->isPayEvalFDAPharma);
@@ -44,7 +44,7 @@
                           // $cashier = (strtolower($request) == 'machines' ? $data->isCashierApproveFDA : $data->isCashierApprovePharma);
                           @endphp
                         @if($preassess == null || $preassess == 2)
-                          @if(in_array(strtolower($data->hfser_id), ['lto','coa', 'ato', 'cor']) &&( $data->isReadyForInspecFDA == 1 || $data->isReadyForInspecFDA == 0)/* && $oop == 1 && $cashier == 1*/)
+                          @if(in_array(strtolower($data->hfser_id), ['lto','coa']) &&( $data->isReadyForInspecFDA == 1 || $data->isReadyForInspecFDA == 0) && $oop == 1/* && $cashier == 1*/)
                             @php
                               $toCheck = ($request == 'machines' ? 'cdrrhr' : 'cdrr');
                             @endphp
@@ -60,6 +60,7 @@
                               //   $ifdisabled = 'disabled';
                               // }
                             @endphp
+
                             <tr>
                               <!-- <td class="text-center">{{$data->ispreassessedpharma}}</td> -->
                               <td class="text-center">{{$data->hfser_id}}</td>

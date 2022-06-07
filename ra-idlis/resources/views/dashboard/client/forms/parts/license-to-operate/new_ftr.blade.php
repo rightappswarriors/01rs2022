@@ -366,6 +366,7 @@ function getFacServCharge (val = null){
 
     let serv_chg = document.getElementById('serv_chg');
 
+    //Ambulatory Surgical Clinic
     if( ascType.checked) 
     {
         var ta=[];
@@ -384,6 +385,7 @@ function getFacServCharge (val = null){
             serv_chg.innerHTML += '<tr><td>[<strong>'  + distinctArr[i]['chgapp_id'] + '</strong>] ' + distinctArr[i]['facname'] + '</td><td>&#8369;&nbsp;<span>' + numberWithCommas(subclass == "ND" ? 0 : (parseInt(amt)).toFixed(2)) + '</span></td></tr>';
         }
     }
+    //Ambulance Service Provider
     else if (document.getElementById("34").checked)
     {
         var ta=[];

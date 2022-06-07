@@ -3631,6 +3631,7 @@ use FunctionsClientController;
 			{
 				$clientChoice = AjaxController::isRequestForFDA($clientChoice);
 				$data = AjaxController::getAllApplicantsProcessFlow();
+				
 				return view('employee.FDA.pfpreassessment', ['BigData'=>$data,'request' => $clientChoice]);
 			} 
 			catch (Exception $e) 
@@ -3703,11 +3704,7 @@ use FunctionsClientController;
 				$boolRedirect = true;
 				$coaFlag = '';
 				$data = AjaxController::getAllDataEvaluateOne($appid);
-				//dd($appid);
-				if($appid != null)
-				{
-					$coaFlag = ($forhfsrb && strtolower($data->hfser_id) == 'coa');
-				}
+				$coaFlag = ($forhfsrb && strtolower($data->hfser_id) == 'coa');
 				
 				if ($request->isMethod('get')) 
 				{
@@ -3739,7 +3736,7 @@ use FunctionsClientController;
 					} while ($test == false);
 
 					if($coaFlag && !isset($data->coaflag)){
-
+						$boolFlag = true;
 					} else {
 						$boolRedirect = false;
 					}
@@ -3750,6 +3747,12 @@ use FunctionsClientController;
 						$boolRedirect = false;
 					}
 
+					if($office == 'xray' || $office == 'pharma')
+					{
+						$boolFlag = false;
+					}
+					//dd($boolFlag);
+					//dd($boolRedirect);
 					if($boolFlag){
 						try 
 						{
@@ -3760,6 +3763,8 @@ use FunctionsClientController;
 							$data5 = AjaxController::getAllDataEvaluateOneUploads($appid, 4);
 							$data6 = AjaxController::getAllOrderOfPayment();
 							$test = false;
+
+							//dd($data1);
 							$isApproved = [1, null]; $isAllUpload = []; $isTrue = true;
 							$acceptedExt = array('pdf','jpg','png','jpeg','gif');
 							//dd($data);

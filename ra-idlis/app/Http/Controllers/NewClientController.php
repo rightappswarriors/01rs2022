@@ -2738,6 +2738,7 @@ public function fdacertN(Request $request, $appid, $requestOfClient = null) {
 	public function assessmentReady(Request $request, $appid)
 	{
 		$curForm = FunctionsClientController::getUserDetailsByAppform($appid);
+		
 		if(count($curForm) < 1) {
 			return redirect('client1/apply')->with('errRet', ['errAlt'=>'warning', 'errMsg'=>'No application selected.']);
 		}

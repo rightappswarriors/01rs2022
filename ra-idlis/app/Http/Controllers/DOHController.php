@@ -7100,8 +7100,8 @@ use FunctionsClientController;
 						'status' => 'FC'
 					]);
 
-
-
+					$uid = AjaxController::getUidFrom($request->appid);
+			  		AjaxController::notifyClient($request->appid,$uid,75);
 
 				}
 

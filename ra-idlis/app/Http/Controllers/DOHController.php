@@ -7463,13 +7463,23 @@ use FunctionsClientController;
 				->where('compliance_id', $complianceId)
 				->update($data);
 
+				$compliance = DB::table('compliance_data')
+					->where('compliance_id', $complianceId)
+					->get();
 
+				$applicationId = $compliance[0]->app_id;
+
+				$dataFR = array(
+					'status'=> 'FR', 
+				);
+
+				DB::table('appform')
+				->where('appid', $applicationId)
+				->update($dataFR);
 
 
 				return redirect()->back()->with('errRet', ['errAlt'=>'success', 'errMsg'=>'Compliance Updated Successfully.']);
 
-
-			
 		}
 
 		public function complianceAttachment($complianceId = false){

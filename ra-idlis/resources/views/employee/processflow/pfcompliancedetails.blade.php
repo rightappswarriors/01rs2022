@@ -27,6 +27,7 @@
                       <!-- <td scope="col" class="text-center"></td> -->
                       <td scope="col" class="text-center">ID</td>
                       <td scope="col" class="text-center">For Compliance</td>
+                      <td scope="col" class="text-center">Compliance Notes</td>
                       <td scope="col" class="text-center">Area of Concern</td>
                       <td scope="col" class="text-center">Complied?</td>
                   </tr>
@@ -41,6 +42,7 @@
                           <tr>
                             <td class="text-center">{{$index}}</td>
                             <td class="text-center">{!!$data->assessmentName!!}</td>
+                            <td class="text-center">{!!$data->remarks!!}</td>
                             <td class="text-center">
                             {!!$data->h1name!!}
                             <br>

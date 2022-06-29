@@ -415,12 +415,10 @@ class EvaluationController extends Controller
 
 		// $revision = 1;
 
-
 		// $revision = $revision == 1 ? 1 : $revision + 1 ;
 		// $revision = 1 ? 1 : 0;
 		// $revision += 1;//6-14-2021
 		// $revision += 1;//6-14-2021
-
 
 		if(FunctionsClientController::isExistOnAppform($appid) && FunctionsClientController::existOnDB('assessmentcombinedduplicateptc',array(['assessmentcombinedduplicateptc.appid',$appid],['evaluatedBy',$uid],['revision',$revision]))){
 			$uInf = AjaxController::getAllDataEvaluateOne($appid);

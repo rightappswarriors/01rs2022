@@ -2323,7 +2323,6 @@ public function fdacertN(Request $request, $appid, $requestOfClient = null) {
 		}
 	}
 
-
 	//hfsrb requirements
 	public function annexa(Request $request, $appid){
 		if(FunctionsClientController::isUserApplication($appid)){

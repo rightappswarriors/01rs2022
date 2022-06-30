@@ -53,7 +53,8 @@
 				@if (isset($BigData))
             @foreach ($BigData as $data)
             @php 
-              if(($grpid != 'NA' && $grpid != 'DC') && AjaxController::checkConmem($data->appid) == 'no'){
+              if((($grpid != 'NA' && $grpid != 'DC') && AjaxController::checkConmem($data->appid) == 'no')
+              ||($data->isCashierApprove != '1')){
                 continue;
               }
               @endphp

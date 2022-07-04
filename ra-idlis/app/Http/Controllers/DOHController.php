@@ -3509,6 +3509,7 @@ use FunctionsClientController;
 				{
 					$arrType = array();
 					$data = AjaxController::getAllApplicantsProcessFlow();
+				
 					if(!$filter){
 						$allType = DB::table('hfaci_serv_type')->select('hfser_id')->get();
 						foreach ($allType as $key) {
@@ -5417,16 +5418,20 @@ use FunctionsClientController;
 					if( (count($request->existHospabc) + count($request->locabc)) == (count($request->abc) + count($request->typeabc)) ){
 
 						DB::table('con_evalsave')->where([['appid',$appid],['draft',1]])->delete();
+						
 
 						for ($i=0; $i < (isset($request->existHospcde) ? (count($request->existHospabc) > count($request->existHospcde) ? count($request->existHospabc) : count($request->existHospcde)) : count($request->existHospabc)) ; $i++) { 
 							if(isset($request->existHospabc[$i])){
+								$insert = array();
+								
 								if(isset($request->tya)){
 									$insert = ['appid'=> $appid,'facilityname' => $request->existHospabc[$i],'location' => $request->locabc[$i],'cat_hos' => $request->typeabc[$i],'noofbed' => $request->abc[$i], 'tya' => $request->tya[$i], 'aya' => $request->aya[$i], 'apty' => $request->apty[$i], 'ttph' => $request->ttph[$i], 'fromWhere' => 'dib'];
+									
 								}
 
 								if($request->has('draft')){
 									$insert['draft'] = 1;
-								}
+								}								
 
 								DB::table('con_evalsave')->insert($insert);
 							}	
@@ -10687,7 +10692,7 @@ use FunctionsClientController;
 			  		} elseif($request->action == 'evalute') {
 						$status = 'FDE';
 
-						if($data->hfser_id == 'PTC'){
+						if($data->hfser_id == 'PTC' || $data->hfser_id == 'CON'){
 							$status = 'FPE';
 						}
 

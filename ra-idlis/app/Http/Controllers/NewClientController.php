@@ -481,7 +481,7 @@ class NewClientController extends Controller {
 							DB::table('appform')->where('appid',$appid)->update(['isReadyForInspec' => 0, 'status'=>'FDE', 'submittedReq'=>1]);
 						}
 						else {
-							DB::table('appform')->where('appid',$appid)->update(['isReadyForInspec' => 0, 'status'=>'FSR', 'submittedReq'=>1]);
+							DB::table('appform')->where('appid',$appid)->update(['isReadyForInspec' => 0, 'status'=>'FDE', 'submittedReq'=>1]);
 						}
 					}
 					foreach($request->upload AS $uKey => $uValue) {

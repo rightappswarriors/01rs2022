@@ -4750,8 +4750,10 @@ public static function checkConmem($appid)
 							->leftjoin('ptc','ptc.appid','appform.appid')
 							->leftjoin('region AS asrgn','appform.assignedRgn', '=', 'asrgn.rgnid')
 							->select('appform.*', 'hfaci_serv_type.*', 'ptc.propbedcap as pbedcap','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid', 'asrgn.rgn_desc AS asrgn_desc')
-							->where('appform.draft', '=', null)
+							//->where('appform.draft', '=', null)
 							->orderBy('appform.appid','desc')
+							
+							->distinct()
 							->get();
 							
 						break;
@@ -4849,9 +4851,7 @@ public static function checkConmem($appid)
 							->distinct()
 							->get();
 							break;
-					default:		
-
-						
+					default:								
 						$anotherData = DB::table('appform');
 							$anotherData->leftJoin('hfaci_serv_type', 'appform.hfser_id', '=', 'hfaci_serv_type.hfser_id');
 							$anotherData->leftJoin('hfaci_grp', 'appform.facid', '=', 'hfaci_grp.hgpid');
@@ -4867,6 +4867,7 @@ public static function checkConmem($appid)
 							$anotherData->leftjoin('ptc','ptc.appid','appform.appid');							
 							$anotherData->leftjoin('region AS asrgn','appform.assignedRgn', '=', 'asrgn.rgnid');
 							$anotherData->select('appform.*', 'ptc.propbedcap as pbedcap', 'hfaci_serv_type.*','region.rgn_desc', 'x08.authorizedsignature', 'x08.email', 'x08.streetname', 'x08.barangay', 'x08.city_muni', 'x08.province', 'x08.zipcode', 'x08.rgnid as aprgnid', 'appform.rgnid', 'hfaci_grp.hgpdesc', 'city_muni.cmname', 'apptype.aptdesc', 'province.provname', 'barangay.brgyname', 'ownership.ocdesc', 'class.classname', 'trans_status.trns_desc', 'x08.uid', 'asrgn.rgn_desc AS asrgn_desc');
+							
 							
 							if($Cur_useData['rgnid']){
 								$anotherData->where('appform.assignedRgn', '=', $Cur_useData['rgnid']); //bring back after

@@ -61,9 +61,6 @@
                 @foreach ($LotsOfDatas as $data)
                   @if(in_array($data->hfser_id, $serv))
 
-                    @if(!isset($data->t_date))
-                      @php continue; @endphp
-                    @endif
                     <tr>
                       <td>
                         <center>

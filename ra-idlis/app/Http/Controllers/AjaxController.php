@@ -4684,11 +4684,25 @@ public static function checkConmem($appid)
 			$complianceData = DB::table('compliance_item')
 			->where('compliance_item.compliance_id', $complianceId)
 			->leftjoin('compliance_data','compliance_data.compliance_id','compliance_item.compliance_id')
-			->where('compliance_data.is_for_compliance', 1)
+			// ->where('compliance_data.is_for_compliance', 0)
 			->leftjoin('assessmentcombinedduplicate','assessmentcombinedduplicate.dupID','compliance_item.assesment_id')
 			->leftjoin('asmt_h1','asmt_h1.asmtH1ID','assessmentcombinedduplicate.asmtH1ID_FK')
 			->leftjoin('asmt_h2','asmt_h2.asmtH2ID','assessmentcombinedduplicate.asmtH2ID_FK')
 			->leftjoin('asmt_h3','asmt_h3.asmtH3ID','assessmentcombinedduplicate.asmtH3ID_FK')
+			->get();
+			
+			return $complianceData;
+		}
+
+		public static function getComplianceDetailsByAppId($appid){
+			$complianceData = DB::table('compliance_data')
+			->where('compliance_data.app_id', $appid)
+			// ->leftjoin('compliance_item', 'compliance_item.compliance_id','compliance_data.compliance_id')
+			// ->where('compliance_data.is_for_compliance', 0)
+			// ->leftjoin('assessmentcombinedduplicate','assessmentcombinedduplicate.dupID','compliance_item.assesment_id')
+			// ->leftjoin('asmt_h1','asmt_h1.asmtH1ID','assessmentcombinedduplicate.asmtH1ID_FK')
+			// ->leftjoin('asmt_h2','asmt_h2.asmtH2ID','assessmentcombinedduplicate.asmtH2ID_FK')
+			// ->leftjoin('asmt_h3','asmt_h3.asmtH3ID','assessmentcombinedduplicate.asmtH3ID_FK')
 			->get();
 			
 			return $complianceData;

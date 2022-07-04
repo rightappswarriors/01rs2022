@@ -9,10 +9,14 @@
 
 
       <div class="card-header bg-white font-weight-bold">
-       For Compliance Details / 
+       For Compliance Details
+       @if ( request()->has('from') )
+
+       @else
+       / 
       <a href="{{asset('employee/dashboard/processflow/complianceattachment/')}}/{{$complianceId}}"> Attachment</a> / 
       <a href="{{asset('employee/dashboard/processflow/complianceremarks/')}}/{{$complianceId}}"> Remarks </a> / 
-
+      @endif
        
       </div>
         
@@ -52,9 +56,14 @@
                             </td>
                             <td>
 
+                            @if ( request()->has('from') )
+                            <input type="checkbox" value="0" disabled class="complianceChecker" {{$data->assesment_status == 0 ? 'checked' : '' }}> No
+                            <input type="checkbox" value="1" disabled class="complianceChecker compliance_complied" {{$data->assesment_status == 1 ? 'checked' : '' }} > Yes
+                            
+                            @else
                             <input type="checkbox" value="0" class="complianceChecker" {{$data->assesment_status == 0 ? 'checked' : '' }} onclick="complianceChecker({{$data->compliance_item_id}}, 0, {{$data->compliance_id}})"> No
                             <input type="checkbox" value="1" class="complianceChecker compliance_complied" {{$data->assesment_status == 1 ? 'checked' : '' }} onclick="complianceChecker({{$data->compliance_item_id}}, 1, {{$data->compliance_id}})"> Yes
-                            
+                            @endif
                             </td>
         
                  
@@ -67,8 +76,10 @@
               </table>
 
               <div class="complied-btn mt-3" style="display: inline-block;text-align: right;width: 100%;/* display: inline-flex; */">
+    
+              @if ( request()->has('from') )
 
-                
+              @else
                 <div class="" style="display:inline-block;">
                   <button type="button" onclick="complied(2, {{$complianceId}})" class="btn btn-info w-100">
                     <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;
@@ -81,7 +92,7 @@
                     For Denial
                   </button>
                 </div>
-
+              @endif
 
 
                 </div>

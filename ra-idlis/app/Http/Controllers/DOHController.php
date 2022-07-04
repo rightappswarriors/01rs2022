@@ -8221,9 +8221,12 @@ use FunctionsClientController;
 				//dd($apdata);
 				$data = AjaxController::getRecommendationData($appid);
 				// $data1 = AjaxController::getPreAssessment($data->uid);
+				$complianceDetails = AjaxController::getComplianceDetailsByAppId($appid);
+				// dd($complianceDetails);
 				$data2 = AjaxController::getAssignedMembersInTeam4Recommendation($appid);
 				$canView = AjaxController::canViewFDAOOP($appid);
 				$otherDetails = [];
+				
 				
 				try 
 				{
@@ -8259,13 +8262,13 @@ use FunctionsClientController;
 					// 	$canView = AjaxController::canViewFDAOOP($appid);
 					// }
 					//dd($data);
-					return view('employee.processflow.pfrecommendationone', ['AppData'=>$data,'apdat'=>$apdata,/*'PreAss'=>$data1,*/ 'APPID' => $appid, 'Teams4theApplication' => $data2, 'canView' => $canView, 'otherDetails' => $otherDetails]);
+					return view('employee.processflow.pfrecommendationone', ['AppData'=>$data,'apdat'=>$apdata,/*'PreAss'=>$data1,*/ 'APPID' => $appid, 'Teams4theApplication' => $data2, 'canView' => $canView, 'otherDetails' => $otherDetails, 'complianceDetails' => $complianceDetails]);
 				} 
 				catch (Exception $e) 
 				{
 					AjaxController::SystemLogs($e);
 					session()->flash('system_error','ERROR');
-					return view('employee.processflow.pfrecommendationone', ['AppData'=>$data,'apdat'=>$apdata,/*'PreAss'=>$data1,*/ 'APPID' => $appid, 'Teams4theApplication' => $data2, 'canView' => $canView, 'otherDetails' => $otherDetails]);
+					return view('employee.processflow.pfrecommendationone', ['AppData'=>$data,'apdat'=>$apdata,/*'PreAss'=>$data1,*/ 'APPID' => $appid, 'Teams4theApplication' => $data2, 'canView' => $canView, 'otherDetails' => $otherDetails, 'complianceDetails' => $complianceDetails]);
 				}
 			}
 			if ($request->isMethod('post')) {

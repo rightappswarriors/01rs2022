@@ -333,7 +333,7 @@
           </div>
              @endif
           @endif
-          @if(isset($complianceDetails))                 
+          @if(isset($complianceDetails[0]))             
           <div class="card">
             {{-- START HEAD --}}
             <div class="card-header @isset($complianceDetails) @if($complianceDetails[0]->is_for_compliance == 1) list-group-item-info @elseif($complianceDetails[0]->is_for_compliance  == 2) list-group-item-success  @else list-group-item-danger @endif @endisset" id="headingThree" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseOne" style="">

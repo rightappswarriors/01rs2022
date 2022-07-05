@@ -294,6 +294,7 @@ function submitProper (e){
         appchargenew:             $('#tempAppChargenew').val(),//appchargetemp
         appchargeHgpnew:             $('#tempAppChargeHgpidnew').val(),//appchargetemp
         // aptid: "IN"
+        status: "FSR"
     }
     console.log(data)
     callApi('/api/application/con/save', data, 'POST').then(d => {

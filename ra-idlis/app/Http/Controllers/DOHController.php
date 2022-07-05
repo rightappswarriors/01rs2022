@@ -5395,10 +5395,12 @@ use FunctionsClientController;
 		
 
 		public function coneval(Request $request, $appid){
+
 			$data = AjaxController::getAllDataEvaluateOne($appid);
 			if(isset($data->concommittee_eval)){
 				return redirect('employee/dashboard/processflow/view/conevalution/'.$appid);
 			}
+
 			try {
 				if($request->isMethod('get')){
 					$members = AjaxController::getMembersIncommittee($data->appid,$data->rgnid,2);
@@ -5457,9 +5459,7 @@ use FunctionsClientController;
 						if(!is_null($ccatch)){
 							DB::table('con_catch')->where([['appid', $appid]])->delete();//6-12-2021
 						}
-							// DB::table('con_catch')->where([['appid', $appid]])->delete();//6-12-2021
-
-							
+							// DB::table('con_catch')->where([['appid', $appid]])->delete();//6-12-2021							
 
 							for ($j=0; $j < count($request->addr); $j++) { 
 							// for ($j=0; $j < count($request->addr); $j++) { 
@@ -5469,9 +5469,7 @@ use FunctionsClientController;
 						
 						
 							}
-
 						}
-
 							 DB::table('con_evaluate')->where([['appid', $appid]])->delete(); 
 
 							DB::table('con_evaluate')->insert(['appid' => $appid, 'acc' => $request->acc, 'remarksacc' => $request->remarksacc, 'st' => $request->st, 'remarksst' => $request->remarksst, 'hdp' => $request->hdp, 'remarkshdp' => $request->remarkshdp, 'tph' => $request->tph, 'remarkstph' => $request->remarkstph ,'ihb' => $request->ihbval, 'bpr' => $request->bprval, 'pbn' => $request->pbnval, 'ubn' => $request->ubnval, 'psc' => $request->pscaval, 'bpp' => $request->bpp, 'remarksbpp' => $request->remarksbpp, 'tt' => $request->tt, 'remarkstt' => $request->remarkstt, 'asl' => $request->asl, 'remarksasl' => $request->remarksasl, 'ilh' => $request->ilh, 'remarksilh' => $request->remarksilh, 'atr' => $request->atr, 'remarksatr' => $request->remarksatr, 'comments' => $request->comments,'membersPart' => (isset($request->membersPart) ? implode(',',$request->membersPart) : null) ]);

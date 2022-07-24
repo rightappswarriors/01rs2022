@@ -11,7 +11,7 @@
 
       <div class="card-header bg-white font-weight-bold">
        For Compliance Details
-
+      /
       <a href="{{asset('employee/dashboard/processflow/complianceattachment/')}}/{{$complianceId}}"> Attachment</a> / 
       <a href="{{asset('employee/dashboard/processflow/complianceremarks/')}}/{{$complianceId}}"> Remarks </a> / 
 

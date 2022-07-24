@@ -514,12 +514,8 @@
             @endif
             {{-- END BODY --}}
           </div>
-          @if(strtolower($AppData->hfser_id) == 'lto' && isset($canView[1]) && $canView[1])
-          {{-- fda start --}}
 
-
-
-          
+                 
           @if(isset($complianceDetails[0]))             
           <div class="card">
             {{-- START HEAD --}}
@@ -546,7 +542,7 @@
                           </tr>
                           <tr>
                             <th scope="row">Date :</th>
-                            <td>@isset($complianceDetails[0]->last_update) <span style="color:green;font-weight: bolder">{{$complianceDetails[0]->last_update ?  $complianceDetails[0]->last_update :  'Not Available'}}</span> @else <span style="color:red;font-weight: bolder">Not Available</span> @endisset</td>
+                            <td>@isset($complianceDetails[0]->last_update) <span style="color:green;font-weight: bolder">{{$complianceDetails[0]->last_update ?   date('M d, Y', strtotime($complianceDetails[0]->last_update)) :  'Not Available'}}</span> @else <span style="color:red;font-weight: bolder">Not Available</span> @endisset</td>
                           </tr>
                           <tr>
                             <th scope="row">Evaluated by:</th>
@@ -577,6 +573,14 @@
             {{-- END BODY --}}
           </div>
           @endif
+
+
+          @if(strtolower($AppData->hfser_id) == 'lto' && isset($canView[1]) && $canView[1])
+          {{-- fda start --}}
+
+
+
+   
 
           <div class="card">
             {{-- START HEAD --}}

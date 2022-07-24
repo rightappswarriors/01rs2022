@@ -7477,11 +7477,9 @@ use FunctionsClientController;
 
 			$applicationId = $compliance[0]->app_id;
 
-			if($status == 1) {
-				
+			if($status == 2) {
 				$isSent = DB::table('assessmentrecommendation')->where('appid', $applicationId )->update([  'valfrom' => $request->vf, 'valto' => Date('Y-m-d',strtotime($request->vto)),  'noofbed' => $request->noofbed, 'noofdialysis' => $request->noofdialysis,  'evaluatedby' => $uData['cur_user']]);
 			}
-
 
 			$dataFR = array(
 				'status'=> 'FR', 

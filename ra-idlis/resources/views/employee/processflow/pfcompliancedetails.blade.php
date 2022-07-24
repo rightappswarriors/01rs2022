@@ -12,8 +12,8 @@
       <div class="card-header bg-white font-weight-bold">
        For Compliance Details
       /
-      <a href="{{asset('employee/dashboard/processflow/complianceattachment/')}}/{{$complianceId}}"> Attachment</a> / 
-      <a href="{{asset('employee/dashboard/processflow/complianceremarks/')}}/{{$complianceId}}"> Remarks </a> / 
+      <a href="{{asset('employee/dashboard/processflow/complianceattachment/')}}/{{$complianceId}}{{ app('request')->input('from') ? '/?from=rec'  : '' }}"> Attachment</a> / 
+      <a href="{{asset('employee/dashboard/processflow/complianceremarks/')}}/{{$complianceId}}{{ app('request')->input('from') ? '/?from=rec'  : ''}}"> Remarks </a> / 
 
        
       </div>
@@ -42,7 +42,7 @@
                       @foreach ($BigData as $index => $data)
                       
                           <tr>
-                            <td class="text-center">{{$index}}</td>
+                            <td class="text-center">{{$index+1}}</td>
                             <td class="text-center">{!!$data->assessmentName!!}</td>
                             <td class="text-center">{!!$data->remarks!!}</td>
                             <td class="text-center">

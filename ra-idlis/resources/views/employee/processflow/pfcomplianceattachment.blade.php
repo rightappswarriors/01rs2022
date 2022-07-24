@@ -9,9 +9,9 @@
 
 
       <div class="card-header bg-white font-weight-bold">
-      <a href="{{asset('employee/dashboard/processflow/compliancedetails/')}}/{{$complianceId}}"> For Compliance Details</a> / 
+      <a href="{{asset('employee/dashboard/processflow/compliancedetails/')}}/{{$complianceId}}{{ app('request')->input('from') ? '/?from=rec' : '' }}"> For Compliance Details</a> / 
       Attachment / 
-      <a href="{{asset('employee/dashboard/processflow/complianceremarks/')}}/{{$complianceId}}"> Remarks </a> / 
+      <a href="{{asset('employee/dashboard/processflow/complianceremarks/')}}/{{$complianceId}}{{ app('request')->input('from') ? '/?from=rec' : '' }}"> Remarks </a> / 
 
      
       <div class="row mt-3">

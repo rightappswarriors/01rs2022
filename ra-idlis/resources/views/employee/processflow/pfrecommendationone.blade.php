@@ -540,6 +540,13 @@
                             <td>@isset($AppData) @if($complianceDetails[0]->is_for_compliance == 1) <span style="color:blue;font-weight: bolder">For Compliance</span> @elseif($complianceDetails[0]->is_for_compliance == 2)<span style="color:green;font-weight: bolder">Complied</span>@else<span style="color:red;font-weight: bolder">Not Inspected</span>@endif @endisset</td>
                             <!-- <td>@isset($AppData) @if($AppData->isCashierApprove == null) <span style="color:blue;font-weight: bolder">Not Evaluated Payment</span> @elseif($AppData->isCashierApprove == 1)<span style="color:green;font-weight: bolder">Accepted Payment Evaluation</span>@else<span style="color:red;font-weight: bolder">Disapproved Payment Evaluation</span>@endif @endisset</td> -->
                           </tr>
+
+                          <tr>
+                            <th scope="row">Time :</th>
+                            <td>@isset($complianceDetails[0]->last_update) <span style="color:green;font-weight: bolder">{{$complianceDetails[0]->last_update ?  date('h:i A', strtotime($complianceDetails[0]->last_update)) :  'Not Available'}}</span> @else <span style="color:red;font-weight: bolder">Not Available</span> @endisset</td>
+                          </tr>
+
+
                           <tr>
                             <th scope="row">Date :</th>
                             <td>@isset($complianceDetails[0]->last_update) <span style="color:green;font-weight: bolder">{{$complianceDetails[0]->last_update ?   date('M d, Y', strtotime($complianceDetails[0]->last_update)) :  'Not Available'}}</span> @else <span style="color:red;font-weight: bolder">Not Available</span> @endisset</td>

@@ -7464,7 +7464,7 @@ use FunctionsClientController;
 			$data = array(
 				'is_for_compliance'=> $status, 
 				'evaluatedby' => $uData['cur_user'],
-				'last_update' => $request->vf
+				'last_update' => date('Y-m-d H:i:s')
 			);
 			
 			DB::table('compliance_data')

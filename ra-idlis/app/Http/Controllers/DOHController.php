@@ -7479,7 +7479,7 @@ use FunctionsClientController;
 
 			if($status == 1) {
 				
-				$isSent = DB::table('assessmentrecommendation')->where('appid', $applicationId )->update([ 'valfrom' => $request->vf, 'valto' => $request->vto,  'noofbed' => $request->noofbed, 'noofdialysis' => $request->noofdialysis,  'evaluatedby' => $uData['cur_user']]);
+				$isSent = DB::table('assessmentrecommendation')->where('appid', $applicationId )->update([  'valfrom' => $request->vf, 'valto' => Date('Y-m-d',strtotime($request->vto)),  'noofbed' => $request->noofbed, 'noofdialysis' => $request->noofdialysis,  'evaluatedby' => $uData['cur_user']]);
 			}
 
 
@@ -8458,8 +8458,10 @@ use FunctionsClientController;
 					}
 					$canView = AjaxController::canViewFDAOOP($appid);
 					$data2 = AjaxController::getAssignedMembersInTeam4Recommendation($appid);
+
+					$complianceDetails = AjaxController::getComplianceDetailsByAppId($appid);
 					 //dd($data);
-					return view('employee.processflow.pfapprovalone', ['AppData'=>$data,'apdat'=>$apdata,/*'PreAss'=>$data1, */'APPID' => $appid, 'Teams4theApplication' => $data2, 'otherDetails' => $otherDetails, 'canView' => $canView, 'hfser_id' => $data->hfser_id]);
+					return view('employee.processflow.pfapprovalone', ['AppData'=>$data,'apdat'=>$apdata,/*'PreAss'=>$data1, */'APPID' => $appid, 'Teams4theApplication' => $data2, 'otherDetails' => $otherDetails,  'complianceDetails' => $complianceDetails, 'canView' => $canView, 'hfser_id' => $data->hfser_id]);
 				} 
 				catch (Exception $e) 
 				{
@@ -8573,15 +8575,11 @@ use FunctionsClientController;
 							$canView[0] = false;
 						}
 
-						
-
 						if($chk->isRecoDecision != "Return for Correction"){
 
 						DB::table('appform')->where('appid', '=', $appid)->update(['FDAStatMach'=>'For Final Decision']);
 						}
 
-						
-						
 					} else{
 						$typeOfRequest = 'cdrr';
 						if(isset($canView[1])){

@@ -22,14 +22,16 @@
                   Add Licensed Facility
                 </button>
               </div> -->
-               
+              @if ( request()->has('from') )
+
+@else
                <div class="col-sm-3">
                 <button type="button"  class="btn btn-info w-100" data-toggle="modal" data-target="#unregModal">
                   <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;
                   Add Remarks
                 </button>
               </div>
-
+@endif
       
               
              </div>

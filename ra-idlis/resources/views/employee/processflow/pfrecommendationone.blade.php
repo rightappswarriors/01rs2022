@@ -550,7 +550,7 @@
                           </tr>
                           <tr>
                             <th scope="row">Evaluated by:</th>
-                            <td>@isset($complianceDetails[0]->evaluated_by) <span style="color:green;font-weight: bolder">{{$complianceDetails[0]->evaluated_by ?  $complianceDetails[0]->evaluated_by:  'Not Available'}}</span> @else <span style="color:red;font-weight: bolder">Not Available</span> @endisset</td>
+                            <td>@isset($complianceDetails[0]->evaluatedby) <span style="color:green;font-weight: bolder">{{$complianceDetails[0]->evaluatedby ?  $complianceDetails[0]->evaluatedby:  'Not Available'}}</span> @else <span style="color:red;font-weight: bolder">Not Available</span> @endisset</td>
                           </tr>
                         </tbody>
                       </table>  

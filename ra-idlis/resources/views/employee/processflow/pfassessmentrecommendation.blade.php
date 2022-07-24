@@ -98,11 +98,11 @@
 						case 'issuance':
 							dom.append(
 								'<div class="row">'+
-									'<div class="col-md-6">'+
+									'<div hidden>'+
 										'<small style="color:red">Validity From*</small>'+
 										'<input name="vf" type="date" class="form-control" required="" placeholder="validity from">'+
 									'</div>'+
-									'<div class="col-md-6">'+
+									'<div class="col-md-12">'+
 										'<small style="color:red">Validity To*</small>'+
 										'<input name="vto" type="date" class="form-control" required="" placeholder="validity to">'+
 									'</div>'+
@@ -127,7 +127,7 @@
 								'<div class="row">'+
 									'<div class="col-md-12">'+
 										// '<small style="color:red">Days*</small>'+
-										'<span>Issuance depends upon compliance to the recommendations given and submission of the following within <input name="days" type="number" class="" required="" value="" style="width:4em">  days from the date of inspection</span>'+
+										'<span>Issuance depends upon compliance to the recommendations given and submission of the following within<input name="days" type="hidden" class="" required="" value="30" style="width:4em"> 30  days from the date of inspection</span>'+
 									'</div>'+
 								'</div>'
 							)

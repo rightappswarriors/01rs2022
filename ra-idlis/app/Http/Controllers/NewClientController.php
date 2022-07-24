@@ -1114,7 +1114,7 @@ class NewClientController extends Controller {
 						break;
 
 					case 'LTO':
-						$otherDetails = [DB::table('assessmentrecommendation')->where([['appid',$appid],['choice','issuance']])->first(), DB::table('x08_ft')->where('appid',$appid)->whereIn('facid',['H','H2','H3'])->exists()];
+						$otherDetails = [DB::table('assessmentrecommendation')->where('appid',$appid)->first(), DB::table('x08_ft')->where('appid',$appid)->whereIn('facid',['H','H2','H3'])->exists()];
 						break;
 
 					case 'CON':

@@ -7087,7 +7087,7 @@ use FunctionsClientController;
 				if($request->choice == 'compliance'){
 
 					$mytime = Carbon::now();
-					$expiry = Carbon::now()->addDays($request->days);
+					$expiry = Carbon::now()->addDays(30);
 					
 					DB::table('compliance_data')
 					->where('app_id', $request->appid)
@@ -7455,12 +7455,54 @@ use FunctionsClientController;
 			}
 		}
 
+		public function complianceApprove(Request $request) {
+
+
+			$status = intval($request->status);
+			$uData = AjaxController::getCurrentUserAllData();
+
+			$data = array(
+				'is_for_compliance'=> $status, 
+				'evaluatedby' => $uData['cur_user'],
+				'last_update' => $request->vf
+			);
+			
+			DB::table('compliance_data')
+			->where('compliance_id', intval($request->compliance_id))
+			->update($data);
+
+			$compliance = DB::table('compliance_data')
+				->where('compliance_id', intval($request->compliance_id))
+				->get();
+
+			$applicationId = $compliance[0]->app_id;
+
+			if($status == 1) {
+				
+				$isSent = DB::table('assessmentrecommendation')->where('appid', $applicationId )->update([ 'valfrom' => $request->vf, 'valto' => $request->vto,  'noofbed' => $request->noofbed, 'noofdialysis' => $request->noofdialysis,  'evaluatedby' => $uData['cur_user']]);
+			}
+
+
+			$dataFR = array(
+				'status'=> 'FR', 
+			);
+
+			DB::table('appform')
+			->where('appid', $applicationId)
+			->update($dataFR);
+
+			// dd($applicationId);
+
+
+			return redirect()->back()->with('errRet', ['errAlt'=>'success', 'errMsg'=>'Compliance Updated Successfully.']);
+		}
+
 		public function complianceSubmit($status = 1, $complianceId ){
 			
 				$data = array(
 					'is_for_compliance'=> $status, 
 				);
-
+				
 				
 				DB::table('compliance_data')
 				->where('compliance_id', $complianceId)

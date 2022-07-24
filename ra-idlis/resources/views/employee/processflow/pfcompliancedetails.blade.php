@@ -2,6 +2,7 @@
   @extends('mainEmployee')
   @section('title', 'Evaluate Process Flow')
   @section('content')
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <input type="text" id="CurrentPage" hidden="" value="PF002">
   <div class="content p-4">
   	<div class="card">
@@ -81,7 +82,7 @@
 
               @else
                 <div class="" style="display:inline-block;">
-                  <button type="button" onclick="complied(2, {{$complianceId}})" class="btn btn-info w-100">
+                  <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-info w-100">
                     <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;
                     Complied
                   </button>
@@ -92,6 +93,65 @@
                     For Denial
                   </button>
                 </div>
+
+
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                      <div class="modal-content" style="border-radius: 0px;border: none;">
+                          <div class="modal-body text-justify" style=" background-color: #272b30;color: white;">
+                              <h5 class="modal-title text-center"><strong>Compliance</strong></h5>
+                              <hr>
+                              <div class="container">
+                                <form id="compliance_form">
+                                  <div class="col-md-12">
+                                    <div hidden >
+                                      
+                                    <input type="hidden" name="status" value="2">
+                                    <input type="hidden" name="compliance_id" value="{{$complianceId}}">
+                                    <small style="color:red">Validity From*</small>
+                                    <input name="vf" value="{{date('Y-m-d')}}" type="date" class="form-control"  placeholder="validity from">
+                                    <!-- <input name="vf" type="date" class="form-control" required="" placeholder="validity from"> -->
+
+                                    </div>
+                                    <small style="color:red">Note: If approved, the validity of the application starts on the day of the Director's Approval.</small>
+                                    <br>
+                                    <br>
+                                  </div>
+                                  <div class="col-md-12">
+                                    <small style="color:red">Validity Until*</small>
+                                    <input name="vto" type="date" value="{{date('Y-m-d', strtotime('Last day of December', strtotime(date('Y-m-d'))))}}" class="form-control"  placeholder="validity Until">
+                                    <!-- <input name="vto" type="date" class="form-control" required="" placeholder="validity Until"> -->
+                                  </div>
+                                  <div class="col-md-12 mt-5 mb-3">
+                                    <!-- <input name="noofbed" type="number" class="form-control" placeholder="Total number of beds"> -->
+                                    <input name="noofbed" type="number" class="form-control" placeholder="Authorized bed capacity">
+                                    <small style="color:red">Authorized bed capacity</small>
+                                    <!-- <small style="color:red">Total number of beds</small> -->
+                                  </div>
+                                  <div class="col-md-12 mt-5 mb-3">
+                                    <!-- <input name="noofdialysis" type="number" class="form-control" placeholder="Total number of Dialysis Station"> -->
+                                    <input name="noofdialysis" type="number" class="form-control" placeholder="Authorized Dialysis Station">
+                                    <small style="color:red">Authorized Dialysis Station</small>
+                                    <!-- <small style="color:red">Total number of Dialysis Station</small> -->
+                                  </div>
+                                <form>
+                                <div class="col-md-12 mt-5" style="display:inline-block; text-align: right;">
+                                <div class="" style="display:inline-block;">
+                                  <button type="button" class="btn btn-info w-100" id="compliance-id">
+                                    Complied
+                                  </button>
+                                </div>
+                                <div class="" style="display:inline-block;">
+                                  <button type="button" data-dismiss="modal" class="btn btn-danger w-100">
+                                    Cancel
+                                  </button>
+                                </div>
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
               @endif
 
 
@@ -100,6 +160,9 @@
             </div>
   	</div>
   </div>
+
+
+
   <script type="text/javascript">
   	$(document).ready(function(){
 
@@ -108,6 +171,30 @@
 
       jQuery('.complianceChecker').click(function(e){
            e.preventDefault();
+      });
+
+      jQuery('#compliance-id').click(function(e){
+
+           data = jQuery('#compliance_form');
+
+           $.ajax({
+              url: '{{asset('employee/dashboard/processflow/complianceApprove')}}',
+              type: 'POST',
+              headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+              data: data.serialize(),
+              success: function(){
+                Swal.fire({
+                  type: 'success',
+                  title: 'Success',
+                  text: 'Successfully Updated Compliance',
+                  timer: 2000,
+                }).then(() => {
+                    window.location.href = '{{asset('employee/dashboard/processflow/compliance')}}';
+                });
+              }
+            })
       });
      
 

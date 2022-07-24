@@ -7532,13 +7532,20 @@ use FunctionsClientController;
 			{
 				$data = AjaxController::getComplianceAttachment($complianceId);
 
-
 				$array = $data->all();
-				// exit;
-				return view('employee.processflow.pfcomplianceattachment', ['BigData'=>$data, 'appid'=>$array[0]->app_id, 'complianceId' => $complianceId, 'type'=>'technical', 'isdocumentary'=>'false']);
+
+				$compliance = DB::table('compliance_data')
+					->where('compliance_id', $complianceId)
+					->get();
+
+				$applicationId = $compliance[0]->app_id;
+
+				
+				return view('employee.processflow.pfcomplianceattachment', ['BigData'=>$data, 'appid'=>$applicationId, 'complianceId' => $complianceId, 'type'=>'technical', 'isdocumentary'=>'false']);
 			} 
 			catch (Exception $e) 
 			{
+				// dd($e);
 				AjaxController::SystemLogs($e);
 				session()->flash('system_error','ERROR');
 				return view('employee.processflow.pfcomplianceattachment');

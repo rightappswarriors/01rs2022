@@ -14,16 +14,17 @@
       <a href="{{asset('employee/dashboard/processflow/complianceremarks/')}}/{{$complianceId}}"> Remarks </a> / 
 
      
-
-
       <div class="row mt-3">
+      @if ( request()->has('from') )
 
+@else
       <div class="col-sm-3">
         <button type="button"  class="btn btn-info w-100" data-toggle="modal" data-target="#unregModal">
             <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;
             Add Attachments
         </button>
       </div>
+      @endif
 </div>
 
 
